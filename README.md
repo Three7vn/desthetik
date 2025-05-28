@@ -34,3 +34,50 @@ The interface uses Figma-style draggable cards for the frontend, keeping it visu
 ## Development Focus
 
 The initial MVP focuses on making one or two graph types to start off with.
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+- Python 3.8+ (for backend)
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Three7vn/desthetik.git
+cd desthetik
+```
+
+2. Install frontend dependencies:
+```bash
+npm install
+```
+
+3. Install backend dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+### Running the Application
+
+#### Frontend
+Start the Next.js development server:
+```bash
+npm run dev
+```
+This will run the application on [http://localhost:3000](http://localhost:3000)
+
+#### Backend
+Start the FastAPI server:
+```bash
+cd backend
+uvicorn main:app --reload
+```
+The API will be available at [http://localhost:8000](http://localhost:8000)
+
+### Development Notes
+- The frontend uses TypeScript and Next.js
+- @xyflow/react (React Flow) is used for the flowchart visualization
+- The backend uses FastAPI and will connect to an LLM for generating system designs
