@@ -19,7 +19,7 @@ Desthetik combines a multi-turn input flow—like a conversational form—with b
 <p align="center">
   <img src="./Desthetik.png" alt="Desthetik system design screenshot" width="700" />
   <br />
-  <em>Desthetik: From idea to system design in seconds</em>
+  <em>Natural language --> System design with full control </em>
 </p>
 
 ### Technical Implementation
