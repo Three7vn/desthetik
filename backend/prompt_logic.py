@@ -1,6 +1,7 @@
 from typing import Dict, Any
 import json
 from openai import OpenAI
+import os 
 
 async def generate_graph_structure(request: Dict[str, Any]) -> Dict[str, Any]:
     """
@@ -38,19 +39,26 @@ async def generate_graph_structure(request: Dict[str, Any]) -> Dict[str, Any]:
     
     try:
         # TODO: Implement actual GPT call
-        # response = await openai.ChatCompletion.create(
-        #     model="gpt-4",
-        #     messages=[{"role": "user", "content": prompt}]
-        # )
+        openai = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        response = await openai.ChatCompletion.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}]
+        )
         
         # For now, return example data
         return {
+            
+            
+            
             "nodes": [
                 {"id": "1", "position": {"x": 0, "y": 0}, "data": {"label": "Example Node 1"}},
                 {"id": "2", "position": {"x": 0, "y": 100}, "data": {"label": "Example Node 2"}}
             ],
             "edges": [
                 {"id": "e1-2", "source": "1", "target": "2"}
+
+
+            x
             ]
         }
     except Exception as e:

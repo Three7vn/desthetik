@@ -14,6 +14,8 @@ import '@xyflow/react/dist/style.css';
 
 // PLACEHOLDER: Default example nodes shown before user submits the form
 // These will be replaced with dynamically generated nodes after form submission
+// Each system design will have a unique set of nodes and edges
+// There will be around 10-15 nodes in total for each system design, these are the initial nodes pre-design
 const initialNodes = [
   { id: '1', position: { x: 150, y: 50 }, data: { label: 'Enter your requirements above' } },
   { id: '2', position: { x: 150, y: 150 }, data: { label: 'Click "Generate System Design"' } },

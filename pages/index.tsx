@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FlowCanvas from '../components/FlowCanvas';
+import LoadingSkeleton from '../components/LoadingSkeleton';
 import { generateSystemDesign } from '../utils/api';
 
 // Main application page that combines:
@@ -27,6 +28,17 @@ export default function Home() {
   // State for active question
   const [activeQuestion, setActiveQuestion] = useState(0);
   const totalQuestions = 8;
+
+  // State for page loading
+  const [isPageLoading, setIsPageLoading] = useState(true);
+
+  // Simulate initial page load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsPageLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -277,6 +289,11 @@ export default function Home() {
     </div>,
   ];
 
+  // If page is loading, show skeleton
+  if (isPageLoading) {
+    return <LoadingSkeleton />;
+  }
+
   return (
     <div className="container">
       <div className="form-container">
@@ -284,9 +301,8 @@ export default function Home() {
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px' }}>
             <path d="M15.7276 0.818098C15.6441 0.484223 15.3442 0.25 15 0.25C14.6558 0.25 14.3559 0.484223 14.2724 0.818098C14.0436 1.73333 13.7192 2.34514 13.2822 2.78217C12.8451 3.2192 12.2333 3.54358 11.3181 3.77239C10.9842 3.85586 10.75 4.15585 10.75 4.5C10.75 4.84415 10.9842 5.14414 11.3181 5.22761C12.2333 5.45642 12.8451 5.7808 13.2822 6.21783C13.7192 6.65486 14.0436 7.26667 14.2724 8.1819C14.3559 8.51578 14.6558 8.75 15 8.75C15.3442 8.75 15.6441 8.51578 15.7276 8.1819C15.9564 7.26667 16.2808 6.65486 16.7178 6.21783C17.1549 5.7808 17.7667 5.45642 18.6819 5.22761C19.0158 5.14414 19.25 4.84415 19.25 4.5C19.25 4.15585 19.0158 3.85586 18.6819 3.77239C17.7667 3.54358 17.1549 3.2192 16.7178 2.78217C16.2808 2.34514 15.9564 1.73333 15.7276 0.818098Z" fill="#292556"/>
             <path d="M8.72761 4.8181C8.64414 4.48422 8.34415 4.25 8 4.25C7.65585 4.25 7.35586 4.48422 7.27239 4.8181C6.8293 6.59048 6.18349 7.84514 5.26431 8.76431C4.34514 9.68349 3.09048 10.3293 1.3181 10.7724C0.984223 10.8559 0.75 11.1558 0.75 11.5C0.75 11.8442 0.984223 12.1441 1.3181 12.2276C3.09048 12.6707 4.34513 13.3165 5.26431 14.2357C6.18349 15.1549 6.8293 16.4095 7.27239 18.1819C7.35586 18.5158 7.65585 18.75 8 18.75C8.34415 18.75 8.64414 18.5158 8.72761 18.1819C9.1707 16.4095 9.81651 15.1549 10.7357 14.2357C11.6549 13.3165 12.9095 12.6707 14.6819 12.2276C15.0158 12.1441 15.25 11.8442 15.25 11.5C15.25 11.1558 15.0158 10.8559 14.6819 10.7724C12.9095 10.3293 11.6549 9.68349 10.7357 8.76431C9.81651 7.84514 9.1707 6.59048 8.72761 4.8181Z" fill="#292556"/>
-            <path d="M14.4776 15.3181C14.3941 14.9842 14.0942 14.75 13.75 14.75C13.4058 14.75 13.1059 14.9842 13.0224 15.3181C12.9186 15.7333 12.7817 15.9701 12.6259 16.1259C12.4701 16.2817 12.2333 16.4186 11.8181 16.5224C11.4842 16.6059 11.25 16.9058 11.25 17.25C11.25 17.5942 11.4842 17.8941 11.8181 17.9776C12.2333 18.0814 12.4701 18.2183 12.6259 18.3741C12.7817 18.5299 12.9186 18.7667 13.0224 19.1819C13.1059 19.5158 13.4058 19.75 13.75 19.75C14.0942 19.75 14.3941 19.5158 14.4776 19.1819C14.5814 18.7667 14.7183 18.5299 14.8741 18.3741C15.0299 18.2183 15.2667 18.0814 15.6819 17.9776C16.0158 17.8941 16.25 17.5942 16.25 17.25C16.25 16.9058 16.0158 16.6059 15.6819 16.5224C15.2667 16.4186 15.0299 16.2817 14.8741 16.1259C14.7183 15.9701 14.5814 15.7333 14.4776 15.3181Z" fill="#292556"/>
           </svg>
-        Idea to System Design in Seconds, Not Weeks
+          Desthetik
         </h1>
         <form onSubmit={handleSubmit}>
           {/* Progress indicator */}
