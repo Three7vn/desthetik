@@ -16,6 +16,12 @@ Many non-technical founders either spend too much time trying to figure out how 
 
 Desthetik combines a multi-turn input flow—like a conversational form—with backend logic that turns structured responses into flowchart-like visual diagrams. The system dynamically chooses a graph structure based on the user's context (e.g., experience level, goal, etc.), with predefined graph "types" that map user inputs to the right visualization.
 
+<p align="center">
+  <img src="./Desthetik.png" alt="Desthetik system design screenshot" width="700" />
+  <br />
+  <em>Desthetik: From idea to system design in seconds</em>
+</p>
+
 ### Technical Implementation
 
 The stack includes:
@@ -81,3 +87,7 @@ The API will be available at [http://localhost:8000](http://localhost:8000)
 - The frontend uses TypeScript and Next.js
 - @xyflow/react (React Flow) is used for the flowchart visualization
 - The backend uses FastAPI and will connect to an LLM for generating system designs
+
+
+### Contact
+— Abraham (Avram) Dada: abraham@stoado.com

@@ -145,7 +145,7 @@ export default function Home() {
         name="productIntent"
         value={formData.productIntent}
         onChange={handleInputChange}
-        style={{ width: '100%', padding: '0.5rem', minHeight: '60px' }}
+        style={{ width: '100%', padding: '0.5rem', minHeight: '60px', borderRadius: '10px' }}
         placeholder="Describe what you're building..."
       />
     </div>,
