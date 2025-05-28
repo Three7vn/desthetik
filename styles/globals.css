@@ -1,13 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  height: 100%;
+  overflow: hidden;
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Ensure placeholder text uses Poppins */
+::placeholder {
+  font-family: 'Poppins', sans-serif;
+  opacity: 0.7;
+}
+
+/* Firefox */
+::-moz-placeholder {
+  font-family: 'Poppins', sans-serif;
+  opacity: 0.7;
+}
+
+/* Edge and other browsers */
+:-ms-input-placeholder,
+::-ms-input-placeholder {
+  font-family: 'Poppins', sans-serif;
+  opacity: 0.7;
+}
+
+/* Make sure all form elements explicitly use Poppins */
+input, 
+select, 
+textarea, 
+button,
+option {
+  font-family: 'Poppins', sans-serif;
 }
 
 .container {
@@ -17,8 +49,16 @@ body {
   flex-direction: column;
 }
 
+.form-container {
+  height: 40%;
+  min-height: 300px;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  overflow-y: auto;
+}
+
 .canvas-container {
-  flex: 1;
-  min-height: 500px;
+  height: 60%;
   width: 100%;
 } 

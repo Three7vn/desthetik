@@ -1,0 +1,23 @@
+	1.	“What are you trying to build?”
+Free-text, core intent of product (e.g., a mobile app for freelancers to manage time).
+	
+    2.	“Who is your ideal user?”
+Persona + pain points (e.g., freelance designers who struggle with time tracking).
+	
+    3.	“What is the core problem you’re solving?”
+Get to the underlying utility, not just the product (e.g., procrastination, lack of structure).
+	
+    4.	“Do you have an idea of how the solution should work?”
+Early mental model: features, flow, interface, or lack thereof.
+	
+    5.	“Are you thinking of launching as a web app, mobile app, or both?”
+Platform affects stack and system suggestions.
+
+	6.	“Do you need user accounts or login functionality?”
+Yes/No/Maybe.
+	
+    7.	“Will you collect user data or require backend storage?”
+Yes/No → Triggers DB design vs static frontends.
+
+	8.	“What are similar products or inspirations?”
+Can guide user flow, features, or tradeoff mappings.

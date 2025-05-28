@@ -1,32 +1,356 @@
 import React, { useState } from 'react';
 import FlowCanvas from '../components/FlowCanvas';
+import { generateSystemDesign } from '../utils/api';
 
 // Main application page that combines:
 // 1. Input form for system design requirements
 // 2. FlowCanvas component for visualization
 export default function Home() {
-  // State for form inputs
+  // State for form inputs based on input.txt questions
   const [formData, setFormData] = useState({
-    projectType: '',
-    scale: '',
-    requirements: '',
+    productIntent: '',
+    idealUser: '',
+    coreProblem: '',
+    solutionIdea: '',
+    platform: '',
+    userAccounts: '',
+    dataStorage: '',
+    inspirations: ''
   });
 
   // State for graph data
   const [graphData, setGraphData] = useState(null);
+  
+  // State for loading status
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // State for active question
+  const [activeQuestion, setActiveQuestion] = useState(0);
+  const totalQuestions = 8;
+
+  // Handle form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  
+  // Navigate between questions
+  const nextQuestion = () => {
+    if (activeQuestion < totalQuestions - 1) {
+      setActiveQuestion(activeQuestion + 1);
+    }
+  };
+  
+  const prevQuestion = () => {
+    if (activeQuestion > 0) {
+      setActiveQuestion(activeQuestion - 1);
+    }
+  };
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Call API to get graph data
-    // TODO: Update graphData state
+    setIsLoading(true);
+    
+    try {
+      // In a real implementation, this would call the API
+      // For now, we're just simulating a delay
+      // const data = await generateSystemDesign(formData);
+      // setGraphData(data);
+      
+      // Simulate API call with a timeout
+      setTimeout(() => {
+        setIsLoading(false);
+        // Sample graph data
+        setGraphData({
+          nodes: [
+            { 
+              id: 'product', 
+              position: { x: 250, y: 50 }, 
+              data: { label: formData.productIntent.substring(0, 30) + '...' } 
+            },
+            { 
+              id: 'frontend', 
+              position: { x: 100, y: 150 }, 
+              data: { label: `Frontend (${formData.platform})` } 
+            },
+            { 
+              id: 'backend', 
+              position: { x: 250, y: 150 }, 
+              data: { label: 'API Layer' } 
+            },
+            { 
+              id: 'database', 
+              position: { x: 400, y: 150 }, 
+              data: { label: formData.dataStorage === 'Yes' ? 'Database' : 'Static Storage' } 
+            },
+            {
+              id: 'auth',
+              position: { x: 250, y: 250 },
+              data: { label: formData.userAccounts === 'Yes' ? 'Authentication' : 'No Auth Required' }
+            }
+          ],
+          edges: [
+            { id: 'e-product-frontend', source: 'product', target: 'frontend' },
+            { id: 'e-product-backend', source: 'product', target: 'backend' },
+            { id: 'e-product-database', source: 'product', target: 'database' },
+            { id: 'e-frontend-backend', source: 'frontend', target: 'backend' },
+            { id: 'e-backend-database', source: 'backend', target: 'database' },
+            { id: 'e-backend-auth', source: 'backend', target: 'auth' },
+          ],
+        });
+      }, 1000);
+    } catch (error) {
+      console.error('Error generating system design:', error);
+      setIsLoading(false);
+    }
   };
+
+  // Question components based on input.txt
+  const questions = [
+    // Question 1
+    <div key="q1">
+      <label htmlFor="productIntent" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+        1. What are you trying to build?
+      </label>
+      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+        Free-text, core intent of product (e.g., a mobile app for freelancers to manage time).
+      </p>
+      <textarea
+        id="productIntent"
+        name="productIntent"
+        value={formData.productIntent}
+        onChange={handleInputChange}
+        style={{ width: '100%', padding: '0.5rem', minHeight: '60px' }}
+        placeholder="Describe what you're building..."
+      />
+    </div>,
+    
+    // Question 2
+    <div key="q2">
+      <label htmlFor="idealUser" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+        2. Who is your ideal user?
+      </label>
+      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+        Persona + pain points (e.g., freelance designers who struggle with time tracking).
+      </p>
+      <textarea
+        id="idealUser"
+        name="idealUser"
+        value={formData.idealUser}
+        onChange={handleInputChange}
+        style={{ width: '100%', padding: '0.5rem', minHeight: '60px' }}
+        placeholder="Describe your ideal user..."
+      />
+    </div>,
+    
+    // Question 3
+    <div key="q3">
+      <label htmlFor="coreProblem" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+        3. What is the core problem you're solving?
+      </label>
+      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+        Get to the underlying utility, not just the product (e.g., procrastination, lack of structure).
+      </p>
+      <textarea
+        id="coreProblem"
+        name="coreProblem"
+        value={formData.coreProblem}
+        onChange={handleInputChange}
+        style={{ width: '100%', padding: '0.5rem', minHeight: '60px' }}
+        placeholder="Describe the core problem..."
+      />
+    </div>,
+    
+    // Question 4
+    <div key="q4">
+      <label htmlFor="solutionIdea" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+        4. Do you have an idea of how the solution should work?
+      </label>
+      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+        Early mental model: features, flow, interface, or lack thereof.
+      </p>
+      <textarea
+        id="solutionIdea"
+        name="solutionIdea"
+        value={formData.solutionIdea}
+        onChange={handleInputChange}
+        style={{ width: '100%', padding: '0.5rem', minHeight: '60px' }}
+        placeholder="Describe your solution idea..."
+      />
+    </div>,
+    
+    // Question 5
+    <div key="q5">
+      <label htmlFor="platform" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+        5. Are you thinking of launching as a web app, mobile app, or both?
+      </label>
+      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+        Platform affects stack and system suggestions.
+      </p>
+      <select
+        id="platform"
+        name="platform"
+        value={formData.platform}
+        onChange={handleInputChange}
+        style={{ width: '100%', padding: '0.5rem' }}
+      >
+        <option value="">Select platform</option>
+        <option value="Web App">Web App</option>
+        <option value="Mobile App">Mobile App</option>
+        <option value="Both">Both (Web + Mobile)</option>
+        <option value="Desktop">Desktop Application</option>
+      </select>
+    </div>,
+    
+    // Question 6
+    <div key="q6">
+      <label htmlFor="userAccounts" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+        6. Do you need user accounts or login functionality?
+      </label>
+      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+        Yes/No/Maybe.
+      </p>
+      <select
+        id="userAccounts"
+        name="userAccounts"
+        value={formData.userAccounts}
+        onChange={handleInputChange}
+        style={{ width: '100%', padding: '0.5rem' }}
+      >
+        <option value="">Select option</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+        <option value="Maybe">Maybe (undecided)</option>
+      </select>
+    </div>,
+    
+    // Question 7
+    <div key="q7">
+      <label htmlFor="dataStorage" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+        7. Will you collect user data or require backend storage?
+      </label>
+      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+        Yes/No → Triggers DB design vs static frontends.
+      </p>
+      <select
+        id="dataStorage"
+        name="dataStorage"
+        value={formData.dataStorage}
+        onChange={handleInputChange}
+        style={{ width: '100%', padding: '0.5rem' }}
+      >
+        <option value="">Select option</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+    </div>,
+    
+    // Question 8
+    <div key="q8">
+      <label htmlFor="inspirations" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+        8. What are similar products or inspirations?
+      </label>
+      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+        Can guide user flow, features, or tradeoff mappings.
+      </p>
+      <textarea
+        id="inspirations"
+        name="inspirations"
+        value={formData.inspirations}
+        onChange={handleInputChange}
+        style={{ width: '100%', padding: '0.5rem', minHeight: '60px' }}
+        placeholder="List similar products or inspirations..."
+      />
+    </div>,
+  ];
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit}>
-        {/* TODO: Add form fields */}
-      </form>
+      <div className="form-container">
+        <h1 style={{ marginBottom: '1rem', fontSize: '1.5rem', display: 'flex', alignItems: 'center' }}>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px' }}>
+            <path d="M15.7276 0.818098C15.6441 0.484223 15.3442 0.25 15 0.25C14.6558 0.25 14.3559 0.484223 14.2724 0.818098C14.0436 1.73333 13.7192 2.34514 13.2822 2.78217C12.8451 3.2192 12.2333 3.54358 11.3181 3.77239C10.9842 3.85586 10.75 4.15585 10.75 4.5C10.75 4.84415 10.9842 5.14414 11.3181 5.22761C12.2333 5.45642 12.8451 5.7808 13.2822 6.21783C13.7192 6.65486 14.0436 7.26667 14.2724 8.1819C14.3559 8.51578 14.6558 8.75 15 8.75C15.3442 8.75 15.6441 8.51578 15.7276 8.1819C15.9564 7.26667 16.2808 6.65486 16.7178 6.21783C17.1549 5.7808 17.7667 5.45642 18.6819 5.22761C19.0158 5.14414 19.25 4.84415 19.25 4.5C19.25 4.15585 19.0158 3.85586 18.6819 3.77239C17.7667 3.54358 17.1549 3.2192 16.7178 2.78217C16.2808 2.34514 15.9564 1.73333 15.7276 0.818098Z" fill="#292556"/>
+            <path d="M8.72761 4.8181C8.64414 4.48422 8.34415 4.25 8 4.25C7.65585 4.25 7.35586 4.48422 7.27239 4.8181C6.8293 6.59048 6.18349 7.84514 5.26431 8.76431C4.34514 9.68349 3.09048 10.3293 1.3181 10.7724C0.984223 10.8559 0.75 11.1558 0.75 11.5C0.75 11.8442 0.984223 12.1441 1.3181 12.2276C3.09048 12.6707 4.34513 13.3165 5.26431 14.2357C6.18349 15.1549 6.8293 16.4095 7.27239 18.1819C7.35586 18.5158 7.65585 18.75 8 18.75C8.34415 18.75 8.64414 18.5158 8.72761 18.1819C9.1707 16.4095 9.81651 15.1549 10.7357 14.2357C11.6549 13.3165 12.9095 12.6707 14.6819 12.2276C15.0158 12.1441 15.25 11.8442 15.25 11.5C15.25 11.1558 15.0158 10.8559 14.6819 10.7724C12.9095 10.3293 11.6549 9.68349 10.7357 8.76431C9.81651 7.84514 9.1707 6.59048 8.72761 4.8181Z" fill="#292556"/>
+            <path d="M14.4776 15.3181C14.3941 14.9842 14.0942 14.75 13.75 14.75C13.4058 14.75 13.1059 14.9842 13.0224 15.3181C12.9186 15.7333 12.7817 15.9701 12.6259 16.1259C12.4701 16.2817 12.2333 16.4186 11.8181 16.5224C11.4842 16.6059 11.25 16.9058 11.25 17.25C11.25 17.5942 11.4842 17.8941 11.8181 17.9776C12.2333 18.0814 12.4701 18.2183 12.6259 18.3741C12.7817 18.5299 12.9186 18.7667 13.0224 19.1819C13.1059 19.5158 13.4058 19.75 13.75 19.75C14.0942 19.75 14.3941 19.5158 14.4776 19.1819C14.5814 18.7667 14.7183 18.5299 14.8741 18.3741C15.0299 18.2183 15.2667 18.0814 15.6819 17.9776C16.0158 17.8941 16.25 17.5942 16.25 17.25C16.25 16.9058 16.0158 16.6059 15.6819 16.5224C15.2667 16.4186 15.0299 16.2817 14.8741 16.1259C14.7183 15.9701 14.5814 15.7333 14.4776 15.3181Z" fill="#292556"/>
+          </svg>
+        Idea to System Design in Seconds, Not Weeks
+        </h1>
+        <form onSubmit={handleSubmit}>
+          {/* Progress indicator */}
+          <div style={{ display: 'flex', marginBottom: '1rem' }}>
+            {Array.from({ length: totalQuestions }).map((_, i) => (
+              <div 
+                key={i}
+                style={{ 
+                  height: '8px', 
+                  flex: 1, 
+                  backgroundColor: i <= activeQuestion ? '#0070f3' : '#e1e1e1',
+                  marginRight: i < totalQuestions - 1 ? '4px' : 0,
+                  borderRadius: '4px'
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Current question */}
+          {questions[activeQuestion]}
+          
+          {/* Navigation buttons */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
+            <button 
+              type="button"
+              onClick={prevQuestion}
+              disabled={activeQuestion === 0}
+              style={{ 
+                padding: '0.5rem 1rem', 
+                backgroundColor: activeQuestion === 0 ? '#e1e1e1' : '#f8f9fa',
+                border: '1px solid #ced4da',
+                borderRadius: '6px',
+                cursor: activeQuestion === 0 ? 'not-allowed' : 'pointer'
+              }}
+            >
+              Previous
+            </button>
+            
+            {activeQuestion < totalQuestions - 1 ? (
+              <button 
+                type="button"
+                onClick={nextQuestion}
+                style={{ 
+                  padding: '0.5rem 1rem', 
+                  backgroundColor: '#0070f3', 
+                  color: 'white', 
+                  border: 'none', 
+                  borderRadius: '6px',
+                  cursor: 'pointer'
+                }}
+              >
+                Next
+              </button>
+            ) : (
+              <button 
+                type="submit" 
+                disabled={isLoading}
+                style={{ 
+                  padding: '0.5rem 1rem', 
+                  backgroundColor: '#0070f3', 
+                  color: 'white', 
+                  border: 'none', 
+                  borderRadius: '6px',
+                  cursor: isLoading ? 'not-allowed' : 'pointer',
+                  opacity: isLoading ? 0.7 : 1
+                }}
+              >
+                {isLoading ? 'Generating...' : 'Generate System Design'}
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
       
       <div className="canvas-container">
         <FlowCanvas graphData={graphData} />
