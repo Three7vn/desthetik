@@ -1,6 +1,6 @@
 from typing import Dict, Any
 import json
-import openai  # You'll need to install openai package
+from openai import OpenAI
 
 async def generate_graph_structure(request: Dict[str, Any]) -> Dict[str, Any]:
     """
