@@ -297,7 +297,8 @@ export default function Home() {
                 style={{ 
                   height: '8px', 
                   flex: 1, 
-                  backgroundColor: i <= activeQuestion ? '#0070f3' : '#e1e1e1',
+                  backgroundColor: i <= activeQuestion ? 'transparent' : '#e1e1e1',
+                  background: i <= activeQuestion ? 'linear-gradient(to right, #0070f3, #3891ff)' : '#e1e1e1',
                   marginRight: i < totalQuestions - 1 ? '4px' : 0,
                   borderRadius: '4px'
                 }}
