@@ -83,6 +83,15 @@ uvicorn main:app --reload
 ```
 The API will be available at [http://localhost:8000](http://localhost:8000)
 
+### Next Steps
+1. Fix Bugs & Structure inputs for LLM processing
+2. Map inputs to nodes in design
+3. Allow user to download design
+4. Allow voice input
+5. User can hover over nodes for a more in-depth explanation
+
+
+
 ### Development Notes
 - The frontend uses TypeScript and Next.js
 - @xyflow/react (React Flow) is used for the flowchart visualization
