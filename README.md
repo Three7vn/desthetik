@@ -10,7 +10,7 @@ AI tools like Cursor, Copilot, or even ChatGPT can write code once you know what
 
 Most people don't have the human-level intuition necessary to translate an abstract idea into a well-designed, usable product that aligns with real-world user needs. You can tell an AI, "I want to build a productivity app," and it may generate code for one. But that doesn't mean the resulting app will be useful, usable, or desirable. The effectiveness of a product often lies in how it's designed, not just what it is.
 
-Many non-technical founders either spend too much time trying to figure out how to build their product—or worse, they skip that phase entirely because it feels ambiguous or overwhelming. There's often a lack of structured thinking about system components, user interactions, and overall architecture. And that's a core problem.
+Many founders, especially non-technical ones, either spend too much time trying to figure out how to build their product— or worse, they skip that phase entirely because it feels ambiguous or overwhelming. There's often a lack of structured thinking about system components, user interactions, and how the overall architecture fits with the philosophy of the business. And that's a core problem.
 
 ## The Solution
 
@@ -82,6 +82,15 @@ cd backend
 uvicorn main:app --reload
 ```
 The API will be available at [http://localhost:8000](http://localhost:8000)
+
+### Next Steps
+1. Fix Bugs & Structure inputs for LLM processing
+2. Map inputs to nodes in design
+3. Allow user to download design
+4. Allow voice input
+5. User can hover over nodes for a more in-depth explanation
+
+
 
 ### Development Notes
 - The frontend uses TypeScript and Next.js
