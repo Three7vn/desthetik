@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import FlowCanvas from '../components/FlowCanvas';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import Sidebar from '../components/Sidebar';
+import Voice from '../components/Voice';
 import { generateSystemDesign } from '../utils/api';
 
 // Main application page that combines:
@@ -131,6 +132,14 @@ export default function Home() {
     }
   };
 
+  // Handle voice transcription
+  const handleVoiceTranscription = (fieldName: string, transcription: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [fieldName]: transcription,
+    }));
+  };
+
   // Question components based on input.txt
   const questions = [
     // Question 1
@@ -141,14 +150,20 @@ export default function Home() {
       <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
         Free-text, core intent of product (e.g., a mobile app for freelancers to manage time).
       </p>
-      <textarea
-        id="productIntent"
-        name="productIntent"
-        value={formData.productIntent}
-        onChange={handleInputChange}
-        style={{ width: '100%', padding: '0.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
-        placeholder="Describe what you're building..."
-      />
+      <div style={{ position: 'relative' }}>
+        <textarea
+          id="productIntent"
+          name="productIntent"
+          value={formData.productIntent}
+          onChange={handleInputChange}
+          style={{ width: '100%', padding: '0.5rem', paddingRight: '2.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
+          placeholder="Describe what you're building..."
+        />
+        <Voice 
+          fieldName="productIntent"
+          onTranscription={(text) => handleVoiceTranscription('productIntent', text)}
+        />
+      </div>
     </div>,
     
     // Question 2
@@ -159,14 +174,20 @@ export default function Home() {
       <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
         Persona + pain points (e.g., freelance designers who struggle with time tracking).
       </p>
-      <textarea
-        id="idealUser"
-        name="idealUser"
-        value={formData.idealUser}
-        onChange={handleInputChange}
-        style={{ width: '100%', padding: '0.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
-        placeholder="Describe your ideal user..."
-      />
+      <div style={{ position: 'relative' }}>
+        <textarea
+          id="idealUser"
+          name="idealUser"
+          value={formData.idealUser}
+          onChange={handleInputChange}
+          style={{ width: '100%', padding: '0.5rem', paddingRight: '2.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
+          placeholder="Describe your ideal user..."
+        />
+        <Voice 
+          fieldName="idealUser"
+          onTranscription={(text) => handleVoiceTranscription('idealUser', text)}
+        />
+      </div>
     </div>,
     
     // Question 3
@@ -177,14 +198,20 @@ export default function Home() {
       <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
         Get to the underlying utility, not just the product (e.g., procrastination, lack of structure).
       </p>
-      <textarea
-        id="coreProblem"
-        name="coreProblem"
-        value={formData.coreProblem}
-        onChange={handleInputChange}
-        style={{ width: '100%', padding: '0.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
-        placeholder="Describe the core problem..."
-      />
+      <div style={{ position: 'relative' }}>
+        <textarea
+          id="coreProblem"
+          name="coreProblem"
+          value={formData.coreProblem}
+          onChange={handleInputChange}
+          style={{ width: '100%', padding: '0.5rem', paddingRight: '2.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
+          placeholder="Describe the core problem..."
+        />
+        <Voice 
+          fieldName="coreProblem"
+          onTranscription={(text) => handleVoiceTranscription('coreProblem', text)}
+        />
+      </div>
     </div>,
     
     // Question 4
@@ -195,14 +222,20 @@ export default function Home() {
       <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
         Early mental model: features, flow, interface, or lack thereof.
       </p>
-      <textarea
-        id="solutionIdea"
-        name="solutionIdea"
-        value={formData.solutionIdea}
-        onChange={handleInputChange}
-        style={{ width: '100%', padding: '0.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
-        placeholder="Describe your solution idea..."
-      />
+      <div style={{ position: 'relative' }}>
+        <textarea
+          id="solutionIdea"
+          name="solutionIdea"
+          value={formData.solutionIdea}
+          onChange={handleInputChange}
+          style={{ width: '100%', padding: '0.5rem', paddingRight: '2.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
+          placeholder="Describe your solution idea..."
+        />
+        <Voice 
+          fieldName="solutionIdea"
+          onTranscription={(text) => handleVoiceTranscription('solutionIdea', text)}
+        />
+      </div>
     </div>,
     
     // Question 5
@@ -279,14 +312,20 @@ export default function Home() {
       <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
         Can guide user flow, features, or tradeoff mappings.
       </p>
-      <textarea
-        id="inspirations"
-        name="inspirations"
-        value={formData.inspirations}
-        onChange={handleInputChange}
-        style={{ width: '100%', padding: '0.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
-        placeholder="List similar products or inspirations..."
-      />
+      <div style={{ position: 'relative' }}>
+        <textarea
+          id="inspirations"
+          name="inspirations"
+          value={formData.inspirations}
+          onChange={handleInputChange}
+          style={{ width: '100%', padding: '0.5rem', paddingRight: '2.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
+          placeholder="List similar products or inspirations..."
+        />
+        <Voice 
+          fieldName="inspirations"
+          onTranscription={(text) => handleVoiceTranscription('inspirations', text)}
+        />
+      </div>
     </div>,
   ];
 
