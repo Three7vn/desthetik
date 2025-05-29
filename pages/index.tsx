@@ -3,7 +3,6 @@ import FlowCanvas from '../components/FlowCanvas';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import Sidebar from '../components/Sidebar';
 import Voice from '../components/Voice';
-import { generateSystemDesign } from '../utils/api';
 
 // Custom hook for typing animation
 const useTypingAnimation = (text: string, speed: number = 100) => {

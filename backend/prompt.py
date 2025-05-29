@@ -63,7 +63,7 @@ Return the response in the following JSON format:
             "id": "string",
             "position": {{"x": float, "y": float}},
             "data": {{"label": "string (max one sentence)"}}
-        }}
+        }} // This represents one node in the graph
     ],
     "edges": [
         {{

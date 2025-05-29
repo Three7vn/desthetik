@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Desthetik - System Design Agent</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Generate world-class system designs in seconds" />
+        <meta name="description" content="Generate world-class system design in seconds" />
       </Head>
       <Component {...pageProps} />
     </>
