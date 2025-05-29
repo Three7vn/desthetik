@@ -330,12 +330,24 @@ export default function Home() {
                   style={{ 
                     height: '4px', 
                     flex: 1, 
-                    backgroundColor: i <= activeQuestion ? 'transparent' : '#e1e1e1',
-                    background: i <= activeQuestion ? '#1F2328' : '#e1e1e1',
+                    backgroundColor: '#e1e1e1',
                     marginRight: i < totalQuestions - 1 ? '4px' : 0,
-                    borderRadius: '4px'
+                    borderRadius: '4px',
+                    position: 'relative',
+                    overflow: 'hidden',
                   }}
-                />
+                >
+                  <div
+                    style={{
+                      height: '100%',
+                      width: i <= activeQuestion ? '100%' : '0%',
+                      backgroundColor: '#1F2328',
+                      borderRadius: '4px',
+                      transition: 'width 0.5s ease-in-out',
+                      transitionDelay: i <= activeQuestion ? `${(i) * 0.1}s` : '0s',
+                    }}
+                  />
+                </div>
               ))}
             </div>
 
