@@ -22,13 +22,13 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
           </div>
           
           <p className="modal-message">
-            Desthetik is currently in early access for selected users.
+            Desthetik is currently in beta stage.
           </p>
           
           <div className="contact-email">
             <span>Email </span>
             <strong>contact@desthetik.com</strong>
-            <span> for inquiries and early access.</span>
+            <span> for inquiries.</span>
           </div>
         </div>
       </div>
