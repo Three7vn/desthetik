@@ -21,11 +21,12 @@ const Voice: React.FC<VoiceProps> = ({ onTranscription, fieldName }) => {
     if (isRecording) {
       // Stop recording
       console.log('Stopping recording...');
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-        recognitionRef.current = null;
-      }
       setIsRecording(false);
+      if (recognitionRef.current) {
+        const recognition = recognitionRef.current;
+        recognitionRef.current = null; // Null first to prevent auto-restart
+        recognition.stop();
+      }
     } else {
       // Start recording
       console.log('Starting recording...');
@@ -34,7 +35,7 @@ const Voice: React.FC<VoiceProps> = ({ onTranscription, fieldName }) => {
       const recognition = new SpeechRecognition();
       recognitionRef.current = recognition;
       
-      recognition.continuous = false; // Changed to false for better control
+      recognition.continuous = true; // Allow continuous recording through pauses
       recognition.interimResults = true;
       recognition.lang = 'en-US';
 
@@ -46,13 +47,13 @@ const Voice: React.FC<VoiceProps> = ({ onTranscription, fieldName }) => {
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const transcript = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
-            finalTranscript += transcript;
+            finalTranscript += transcript + ' ';
             console.log('Final transcript:', transcript);
-            onTranscription(finalTranscript);
+            onTranscription(finalTranscript.trim());
           } else {
             interimTranscript += transcript;
             console.log('Interim transcript:', transcript);
-            onTranscription(finalTranscript + interimTranscript);
+            onTranscription((finalTranscript + interimTranscript).trim());
           }
         }
       };
@@ -64,8 +65,21 @@ const Voice: React.FC<VoiceProps> = ({ onTranscription, fieldName }) => {
 
       recognition.onend = () => {
         console.log('Speech recognition ended');
-        setIsRecording(false);
-        recognitionRef.current = null;
+        // Only stop if user manually stopped (recognitionRef is null)
+        // Otherwise, restart to handle browser timeouts
+        if (recognitionRef.current && isRecording) {
+          console.log('Auto-restarting recognition after timeout...');
+          try {
+            recognition.start();
+          } catch (error) {
+            console.error('Error restarting recognition:', error);
+            setIsRecording(false);
+            recognitionRef.current = null;
+          }
+        } else {
+          setIsRecording(false);
+          recognitionRef.current = null;
+        }
       };
 
       recognition.onerror = (event: any) => {
