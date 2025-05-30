@@ -134,26 +134,25 @@ const HowItWorksPage = () => {
 
       {/* Hero Image Section */}
       <div style={{
-        maxWidth: '1400px',
+        maxWidth: '1442px',
         margin: '0 auto',
         padding: '0 2rem 4rem 2rem'
       }}>
-        <div style={{
-          borderRadius: '20px',
-          overflow: 'hidden',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-        }}>
-          <img 
-            src="Desthetik.png" 
-            alt="Desthetik System Design Interface"
-            style={{
-              width: '100%',
-              height: 'auto',
-              display: 'block'
-            }}
-          />
-        </div>
+        <img 
+          src="/Desthetik.png" 
+          alt="Desthetik System Design Interface"
+          style={{
+            width: '100%',
+            maxWidth: '1236px',
+            height: 'auto',
+            display: 'block',
+            margin: '0 auto'
+          }}
+          onError={(e) => {
+            console.log('Image failed to load');
+            e.currentTarget.src = './Desthetik.png';
+          }}
+        />
       </div>
 
       {/* Content Section */}
@@ -191,7 +190,7 @@ const HowItWorksPage = () => {
 // 2. FlowCanvas component for visualization
 export default function Home() {
   // State for navigation
-  const [currentPage, setCurrentPage] = useState('playground');
+  const [currentPage, setCurrentPage] = useState('how-it-works');
 
   // State for form inputs based on input.txt questions
   const [formData, setFormData] = useState({
