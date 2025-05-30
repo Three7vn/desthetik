@@ -207,7 +207,14 @@ export default function FlowCanvas({ graphData }) {
           <Controls style={{ marginBottom: 80 }} />
           <MiniMap 
             style={{ marginBottom: 80 }}
-            nodeColor={(node: Node) => (node.style?.background as string) || '#6B7280'}
+            nodeColor={(node: Node) => {
+              const bg = node.style?.background;
+              if (!bg || bg === 'transparent') return '#d1d5db';
+              return bg as string;
+            }}
+            nodeStrokeWidth={1}
+            nodeBorderRadius={2}
+            nodeClassName={() => 'minimap-node'}
           />
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
         </ReactFlow>
@@ -235,6 +242,10 @@ export default function FlowCanvas({ graphData }) {
           transition: opacity 0.2s ease, visibility 0.2s ease;
           pointer-events: none;
           z-index: 1001;
+          user-select: none;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
         }
         
         .tooltip::before {
@@ -249,6 +260,13 @@ export default function FlowCanvas({ graphData }) {
         .tooltip-container:hover .tooltip {
           opacity: 1;
           visibility: visible;
+        }
+      `}</style>
+
+      <style jsx global>{`
+        .react-flow__minimap .minimap-node {
+          transform: scale(0.5);
+          transform-origin: center;
         }
       `}</style>
     </div>
