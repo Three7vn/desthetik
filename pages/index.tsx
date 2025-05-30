@@ -3,6 +3,7 @@ import FlowCanvas from '../components/FlowCanvas';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import Sidebar from '../components/Sidebar';
 import Voice from '../components/Voice';
+import OpenAI from 'openai';
 
 // Custom hook for rotating text animation
 const useRotatingText = (words: string[], interval: number = 3000) => {
@@ -66,6 +67,83 @@ const useTypingAnimation = (text: string, speed: number = 100) => {
   }, []);
 
   return displayText + (showCursor && currentIndex <= text.length ? '|' : '');
+};
+
+// Import the backend logic directly
+const generateGraphStructure = async (formData: any) => {
+  // Helper function to extract JSON from GPT response
+  const extractJSON = (text: string) => {
+    // Try to parse directly first
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      // If that fails, try to extract JSON from markdown code blocks
+      const jsonMatch = text.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
+      if (jsonMatch) {
+        try {
+          return JSON.parse(jsonMatch[1]);
+        } catch (e2) {
+          // If still fails, try to find JSON object in the text
+          const objectMatch = text.match(/\{[\s\S]*\}/);
+          if (objectMatch) {
+            return JSON.parse(objectMatch[0]);
+          }
+        }
+      }
+      throw new Error('Could not extract valid JSON from response');
+    }
+  };
+
+  // This will be our simplified GPT call
+  const openai = new OpenAI({
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || '',
+    dangerouslyAllowBrowser: true // Allow browser usage for this demo
+  });
+
+  // Stage 1: Generate detailed system design
+  const detailedPrompt = `Based on the following product requirements, create a comprehensive system design:
+
+Product Intent: ${formData.productIntent}
+Core Problem: ${formData.coreProblem}
+Solution Idea: ${formData.solutionIdea}
+Ideal User: ${formData.idealUser}
+Platform: ${formData.platform}
+Data Storage: ${formData.dataStorage}
+Inspirations: ${formData.inspirations}
+
+Please provide a detailed technical architecture including specific libraries, frameworks, and implementation details.`;
+
+  const detailedResponse = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages: [{"role": "user", "content": detailedPrompt}],
+    temperature: 0.7
+  });
+
+  const detailedDesign = detailedResponse.choices[0].message.content;
+
+  // Stage 2: Convert to graph structure
+  const graphPrompt = `Convert the following detailed system design into a JSON graph structure with 5-20 nodes for ReactFlow:
+
+${detailedDesign}
+
+Return ONLY valid JSON in this exact format:
+{
+  "nodes": [
+    {"id": "1", "position": {"x": 100, "y": 50}, "data": {"label": "Node Name"}},
+    {"id": "2", "position": {"x": 300, "y": 150}, "data": {"label": "Another Node"}}
+  ],
+  "edges": [
+    {"id": "e1-2", "source": "1", "target": "2"}
+  ]
+}`;
+
+  const graphResponse = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages: [{"role": "user", "content": graphPrompt}],
+    temperature: 0.3
+  });
+
+  return extractJSON(graphResponse.choices[0].message.content);
 };
 
 // How It Works component
@@ -314,8 +392,41 @@ export default function Home() {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Generation functionality temporarily removed
-    console.log('Generate button clicked - functionality disabled for now');
+    
+    // Validate that all required fields are filled
+    const requiredFields = [
+      { key: 'productIntent', min: 35, max: 200 },
+      { key: 'coreProblem', min: 100, max: 500 },
+      { key: 'solutionIdea', min: 100, max: 500 },
+      { key: 'idealUser', min: 20, max: 150 },
+      { key: 'platform', min: 1, max: 100 },
+      { key: 'inspirations', min: 100, max: 500 },
+      { key: 'dataStorage', min: 1, max: 100 }
+    ];
+
+    for (const field of requiredFields) {
+      const value = formData[field.key as keyof typeof formData];
+      if (!value || value.length < field.min || value.length > field.max) {
+        alert(`Please complete all questions with the required character limits before generating.`);
+        return;
+      }
+    }
+
+    setIsLoading(true);
+    
+    try {
+      const graphData = await generateGraphStructure(formData);
+      setGraphData(graphData);
+      
+      // Optional: Show success message
+      console.log('System design generated successfully!');
+      
+    } catch (error) {
+      console.error('Generation failed:', error);
+      alert(`Failed to generate system design: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Handle voice transcription
@@ -556,9 +667,6 @@ export default function Home() {
       <label htmlFor="dataStorage" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
         7. Will you collect user data or require backend storage?
       </label>
-      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
-        Yes/No → Triggers DB design vs static frontends.
-      </p>
       <select
         id="dataStorage"
         name="dataStorage"
@@ -626,7 +734,7 @@ export default function Home() {
         <div className="form-container">
               <h1 style={{ marginTop: '-1.5rem', marginBottom: '5rem', fontWeight: '500', fontSize: '2rem', textAlign: 'center', lineHeight: '1.3' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.5rem' }}>
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px' }}>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px' }}>
                         <defs>
                           <linearGradient id="pulsatingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stopColor="#667eea">
@@ -642,7 +750,7 @@ export default function Home() {
                         </defs>
                         <path d="M15.7276 0.818098C15.6441 0.484223 15.3442 0.25 15 0.25C14.6558 0.25 14.3559 0.484223 14.2724 0.818098C14.0436 1.73333 13.7192 2.34514 13.2822 2.78217C12.8451 3.2192 12.2333 3.54358 11.3181 3.77239C10.9842 3.85586 10.75 4.15585 10.75 4.5C10.75 4.84415 10.9842 5.14414 11.3181 5.22761C12.2333 5.45642 12.8451 5.7808 13.2822 6.21783C13.7192 6.65486 14.0436 7.26667 14.2724 8.1819C14.3559 8.51578 14.6558 8.75 15 8.75C15.3442 8.75 15.6441 8.51578 15.7276 8.1819C15.9564 7.26667 16.2808 6.65486 16.7178 6.21783C17.1549 5.7808 17.7667 5.45642 18.6819 5.22761C19.0158 5.14414 19.25 4.84415 19.25 4.5C19.25 4.15585 19.0158 3.85586 18.6819 3.77239C17.7667 3.54358 17.1549 3.2192 16.7178 2.78217C16.2808 2.34514 15.9564 1.73333 15.7276 0.818098Z" fill="url(#pulsatingGradient)"/>
                         <path d="M8.72761 4.8181C8.64414 4.48422 8.34415 4.25 8 4.25C7.65585 4.25 7.35586 4.48422 7.27239 4.8181C6.8293 6.59048 6.18349 7.84514 5.26431 8.76431C4.34514 9.68349 3.09048 10.3293 1.3181 10.7724C0.984223 10.8559 0.75 11.1558 0.75 11.5C0.75 11.8442 0.984223 12.1441 1.3181 12.2276C3.09048 12.6707 4.34513 13.3165 5.26431 14.2357C6.18349 15.1549 6.8293 16.4095 7.27239 18.1819C7.35586 18.5158 7.65585 18.75 8 18.75C8.34415 18.75 8.64414 18.5158 8.72761 18.1819C9.1707 16.4095 9.81651 15.1549 10.7357 14.2357C11.6549 13.3165 12.9095 12.6707 14.6819 12.2276C15.0158 12.1441 15.25 11.8442 15.25 11.5C15.25 11.1558 15.0158 10.8559 14.6819 10.7724C12.9095 10.3293 11.6549 9.68349 10.7357 8.76431C9.81651 7.84514 9.1707 6.59048 8.72761 4.8181Z" fill="url(#pulsatingGradient)"/>
-                  </svg>
+            </svg>
                       Turn your{' '}
                       <span 
                         style={{

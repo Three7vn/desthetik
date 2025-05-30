@@ -6,47 +6,102 @@ Desthetik is a system design agent that combines AI-powered analysis with visual
 ## Tech Stack
 - **Frontend**: React with TypeScript
 - **Flowchart UI**: @xyflow/react (formerly ReactFlow)
-- **Backend**: Python with FastAPI
-- **AI**: GPT for structured JSON generation
-- **Flow**: Python-based graph node mapping
+- **AI**: OpenAI GPT-4o (called directly from frontend)
+- **No Backend APIs**: Direct GPT integration
 
 ## Directory Structure
 ```
 desthetik/
-├── frontend/
-│   ├── pages/
-│   │   └── index.tsx               # Main UI with xyflow & input form
-│   ├── components/
-│   │   └── FlowCanvas.tsx          # Xyflow diagram + node card renderer
-│   └── utils/
-│       └── api.ts                  # Handles POST to FastAPI backend
-│
-├── backend/
-│   ├── main.py                     # FastAPI app w/ prompt building + LLM call
-│   ├── prompt_logic.py             # Maps inputs → graph structure → JSON
-│   └── example_graph.py            # (Optional) static fallback or test graph
-│
-├── requirements.txt                # Python backend dependencies
-├── package.json                    # Frontend dependencies
-└── README.md
+├── pages/
+│   └── index.tsx                   # Main UI with form, navigation & FlowCanvas + Direct GPT calls
+├── components/
+│   ├── FlowCanvas.tsx              # ReactFlow diagram renderer
+│   └── Voice.tsx                   # Voice input component with speech recognition
+├── backend/                        # Reference files (not actively used)
+│   └── prompt_logic.py             # GPT logic (for reference)
+└── STRUCTURE.md                    # This file
 ```
 
-## Component Descriptions
+## **DATA FLOW**
 
-### Frontend
-- **index.tsx**: Main application page that combines the input form and flowchart visualization
-- **FlowCanvas.tsx**: Handles the xyflow diagram rendering and node card display
-- **api.ts**: Manages communication with the FastAPI backend
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           🎯 USER INPUT COLLECTION                              │
+│                                                                                 │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                │
+│  │   Question 1    │  │   Question 2    │  │   Question 3    │                │
+│  │ Product Intent  │  │ Core Problem    │  │ Solution Idea   │                │
+│  │   (35-200)      │  │   (100-500)     │  │   (100-500)     │                │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘                │
+│                                                                                 │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                │
+│  │   Question 4    │  │   Question 5    │  │   Question 6    │                │
+│  │   Ideal User    │  │    Platform     │  │  Inspirations   │                │
+│  │   (20-150)      │  │   (dropdown)    │  │   (100-500)     │                │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘                │
+│                                                                                 │
+│  ┌─────────────────┐                                                           │
+│  │   Question 7    │                                                           │
+│  │ Data Storage    │                                                           │
+│  │   (dropdown)    │                                                           │
+│  └─────────────────┘                                                           │
+│                                                                                 │
+│                           ⬇️ FORM VALIDATION                                   │
+│                    ✅ Character limits checked                                 │
+│                    ✅ All required fields filled                               │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                        ⬇️
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                        🤖 DIRECT GPT PROCESSING                                │
+│                                                                                 │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │                          STAGE 1: DETAILED DESIGN                      │   │
+│  │                                                                         │   │
+│  │  📝 Input: formData object with all 7 answers                         │   │
+│  │  🎯 GPT-4o Call (temp: 0.7)                                           │   │
+│  │  📋 Output: Comprehensive technical architecture                       │   │
+│  │             - Libraries & frameworks                                   │   │
+│  │             - Implementation details                                   │   │
+│  │             - System reasoning                                         │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                        ⬇️                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │                         STAGE 2: GRAPH CONVERSION                      │   │
+│  │                                                                         │   │
+│  │  📝 Input: Detailed design from Stage 1                               │   │
+│  │  🎯 GPT-4o Call (temp: 0.3)                                           │   │
+│  │  📋 Output: ReactFlow JSON structure                                   │   │
+│  │             - 5-20 nodes with positions                               │   │
+│  │             - Edges connecting nodes                                   │   │
+│  │             - Ready for visualization                                  │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                        ⬇️
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                        🎨 REACTFLOW VISUALIZATION                              │
+│                                                                                 │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │                         FlowCanvas.tsx                                 │   │
+│  │                                                                         │   │
+│  │  📊 Receives: JSON graph data                                         │   │
+│  │  🎨 Renders: Interactive node diagram                                 │   │
+│  │  ✨ Features: Drag, zoom, edit connections                            │   │
+│  │  🎮 User can modify the generated graph                               │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
 
-### Backend
-- **main.py**: FastAPI application entry point, handles API routes and LLM integration
-- **prompt_logic.py**: Contains logic for converting user inputs into structured graph data
-- **example_graph.py**: Provides example graph structures for testing and fallback
+## Features
+- **Character limits** with real-time validation (35-200, 100-500, etc.)
+- **Form validation** before generation
+- **Voice input** with speech recognition
+- **Two-stage LLM processing** (detailed design → graph structure)
+- **Interactive ReactFlow** playground
+- **Rotating text animation** in header
 
-## Data Flow
-1. User input → Frontend form
-2. Frontend → Backend API call
-3. Backend processes input with GPT
-4. LLM generates structured JSON
-5. Backend maps JSON to graph structure
-6. Frontend renders graph using xyflow, which user can edit in 'playground'.
+## How It Works
+1. User fills out 7-question form with validation
+2. Frontend directly calls OpenAI GPT-4o (2 stages)
+3. GPT returns ReactFlow-compatible JSON
+4. FlowCanvas renders interactive diagram
+5. User can edit/modify the generated graph
