@@ -231,7 +231,7 @@ async def generate_graph_structure(
         )
         
         detailed_response = openai.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4.1",
             messages=[{"role": "user", "content": detailed_prompt}],
             temperature=0.7  # Add some creativity while maintaining coherence
         )
@@ -242,7 +242,7 @@ async def generate_graph_structure(
         graph_prompt = get_graph_structure_prompt(detailed_design, product_intent)
         
         graph_response = openai.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4.1",
             messages=[{"role": "user", "content": graph_prompt}],
             temperature=0.3  # Lower temperature for more structured JSON output
         )
