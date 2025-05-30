@@ -144,7 +144,7 @@ export default function Home() {
         1. What are you trying to build?
       </label>
       <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
-        Free-text, core intent of product (e.g., a mobile app for freelancers to manage time).
+        E.g., a mobile app for freelancers to manage time.
       </p>
       <div style={{ position: 'relative' }}>
         <textarea
@@ -152,13 +152,29 @@ export default function Home() {
           name="productIntent"
           value={formData.productIntent}
           onChange={handleInputChange}
-          style={{ width: '100%', padding: '0.5rem', paddingRight: '2.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
+          style={{ 
+            width: '100%', 
+            padding: '0.5rem', 
+            paddingRight: '2.5rem', 
+            minHeight: '60px', 
+            borderRadius: '10px', 
+            backgroundColor: '#F5F5F7', 
+            border: formData.productIntent.length > 200 ? '1px solid #dc3545' : '1px solid #e9ecef'
+          }}
           placeholder={currentPlaceholder}
         />
         <Voice 
           fieldName="productIntent"
           onTranscription={(text) => handleVoiceTranscription('productIntent', text)}
         />
+      </div>
+      <div style={{ 
+        fontSize: '10px', 
+        color: formData.productIntent.length > 200 ? '#dc3545' : '#666',
+        fontWeight: 'normal',
+        marginTop: '4px'
+      }}>
+        MIN 35 CHARACTERS • MAX 200 CHARACTERS
       </div>
     </div>,
     
@@ -176,13 +192,29 @@ export default function Home() {
           name="coreProblem"
           value={formData.coreProblem}
           onChange={handleInputChange}
-          style={{ width: '100%', padding: '0.5rem', paddingRight: '2.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
+          style={{ 
+            width: '100%', 
+            padding: '0.5rem', 
+            paddingRight: '2.5rem', 
+            minHeight: '60px', 
+            borderRadius: '10px', 
+            backgroundColor: '#F5F5F7', 
+            border: formData.coreProblem.length > 500 ? '1px solid #dc3545' : '1px solid #e9ecef'
+          }}
           placeholder={currentPlaceholder}
         />
         <Voice 
           fieldName="coreProblem"
           onTranscription={(text) => handleVoiceTranscription('coreProblem', text)}
         />
+      </div>
+      <div style={{ 
+        fontSize: '10px', 
+        color: formData.coreProblem.length > 500 ? '#dc3545' : '#666',
+        fontWeight: 'normal',
+        marginTop: '4px'
+      }}>
+        MIN 100 CHARACTERS • MAX 500 CHARACTERS
       </div>
     </div>,
     
@@ -192,7 +224,7 @@ export default function Home() {
         3. Do you have an idea of how the solution should work?
       </label>
       <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
-        Early mental model: features, flow, interface, or lack thereof.
+        Early mental model: features, flow, interface, or lack thereof. For example, describe a specific feature that your app might have, like a drag-and-drop task organizer or a real-time collaboration board.
       </p>
       <div style={{ position: 'relative' }}>
         <textarea
@@ -200,13 +232,29 @@ export default function Home() {
           name="solutionIdea"
           value={formData.solutionIdea}
           onChange={handleInputChange}
-          style={{ width: '100%', padding: '0.5rem', paddingRight: '2.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
+          style={{ 
+            width: '100%', 
+            padding: '0.5rem', 
+            paddingRight: '2.5rem', 
+            minHeight: '60px', 
+            borderRadius: '10px', 
+            backgroundColor: '#F5F5F7', 
+            border: formData.solutionIdea.length > 500 ? '1px solid #dc3545' : '1px solid #e9ecef'
+          }}
           placeholder={currentPlaceholder}
         />
         <Voice 
           fieldName="solutionIdea"
           onTranscription={(text) => handleVoiceTranscription('solutionIdea', text)}
         />
+      </div>
+      <div style={{ 
+        fontSize: '10px', 
+        color: formData.solutionIdea.length > 500 ? '#dc3545' : '#666',
+        fontWeight: 'normal',
+        marginTop: '4px'
+      }}>
+        MIN 100 CHARACTERS • MAX 500 CHARACTERS
       </div>
     </div>,
     
@@ -224,13 +272,29 @@ export default function Home() {
           name="idealUser"
           value={formData.idealUser}
           onChange={handleInputChange}
-          style={{ width: '100%', padding: '0.5rem', paddingRight: '2.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
+          style={{ 
+            width: '100%', 
+            padding: '0.5rem', 
+            paddingRight: '2.5rem', 
+            minHeight: '60px', 
+            borderRadius: '10px', 
+            backgroundColor: '#F5F5F7', 
+            border: formData.idealUser.length > 150 ? '1px solid #dc3545' : '1px solid #e9ecef'
+          }}
           placeholder={currentPlaceholder}
         />
         <Voice 
           fieldName="idealUser"
           onTranscription={(text) => handleVoiceTranscription('idealUser', text)}
         />
+      </div>
+      <div style={{ 
+        fontSize: '10px', 
+        color: formData.idealUser.length > 150 ? '#dc3545' : '#666',
+        fontWeight: 'normal',
+        marginTop: '4px'
+      }}>
+        MIN 20 CHARACTERS • MAX 150 CHARACTERS
       </div>
     </div>,
     
@@ -262,8 +326,8 @@ export default function Home() {
       <label htmlFor="inspirations" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
         6. What are similar products or inspirations?
       </label>
-      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
-        Can guide user flow, features, or tradeoff mappings.
+      <p style={{ fontSize: '0.8rem', marginBottom: '0.5rem', color: '#666' }}>
+        For example, Notion might be a similar product if you're building a productiity tool and you like the way Notion gives people freedom with lego-like 'blocks' to manage their time schedule very effectively while also being able to add notes and other content to the blocks.
       </p>
       <div style={{ position: 'relative' }}>
         <textarea
@@ -271,13 +335,29 @@ export default function Home() {
           name="inspirations"
           value={formData.inspirations}
           onChange={handleInputChange}
-          style={{ width: '100%', padding: '0.5rem', paddingRight: '2.5rem', minHeight: '60px', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
+          style={{ 
+            width: '100%', 
+            padding: '0.5rem', 
+            paddingRight: '2.5rem', 
+            minHeight: '60px', 
+            borderRadius: '10px', 
+            backgroundColor: '#F5F5F7', 
+            border: formData.inspirations.length > 500 ? '1px solid #dc3545' : '1px solid #e9ecef'
+          }}
           placeholder={currentPlaceholder}
         />
         <Voice 
           fieldName="inspirations"
           onTranscription={(text) => handleVoiceTranscription('inspirations', text)}
         />
+      </div>
+      <div style={{ 
+        fontSize: '10px', 
+        color: formData.inspirations.length > 500 ? '#dc3545' : '#666',
+        fontWeight: 'normal',
+        marginTop: '4px'
+      }}>
+        MIN 100 CHARACTERS • MAX 500 CHARACTERS
       </div>
     </div>,
     
@@ -302,6 +382,45 @@ export default function Home() {
       </select>
     </div>,
   ];
+
+  // Check if current question meets minimum requirements
+  const isCurrentQuestionValid = () => {
+    // Map question index to correct field name
+    const fieldMapping = [
+      'productIntent',  // Question 0
+      'coreProblem',    // Question 1
+      'solutionIdea',   // Question 2
+      'idealUser',      // Question 3
+      'platform',       // Question 4
+      'inspirations',   // Question 5
+      'dataStorage'     // Question 6
+    ];
+    
+    const currentField = fieldMapping[activeQuestion];
+    const currentValue = formData[currentField as keyof typeof formData];
+    
+    // For productIntent field (question 0), check 35-200 character count
+    if (activeQuestion === 0) {
+      return currentValue.length >= 35 && currentValue.length <= 200;
+    }
+    
+    // For idealUser field (question 3), check 20-150 character count
+    if (activeQuestion === 3) {
+      return currentValue.length >= 20 && currentValue.length <= 150;
+    }
+    
+    // For other textarea fields (questions 1, 2, 5), check 100-500 character count
+    if ([1, 2, 5].includes(activeQuestion)) {
+      return currentValue.length >= 100 && currentValue.length <= 500;
+    }
+    
+    // For select fields (questions 4, 6), just check if something is selected
+    if ([4, 6].includes(activeQuestion)) {
+      return currentValue.trim() !== '';
+    }
+    
+    return true;
+  };
 
   // If page is loading, show skeleton
   if (isPageLoading) {
@@ -379,34 +498,46 @@ export default function Home() {
                 <button 
                   type="button"
                   onClick={nextQuestion}
+                  disabled={!isCurrentQuestionValid()}
                   style={{ 
                     padding: '0.5rem 1rem', 
-                    background: 'linear-gradient(135deg, rgba(0, 112, 243, 0.9) 0%, rgba(0, 150, 255, 0.9) 50%, rgba(0, 112, 243, 0.9) 100%)',
-                    backdropFilter: 'blur(10px)',
-                    WebkitBackdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    boxShadow: '0 8px 32px rgba(0, 112, 243, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-                    color: 'white', 
+                    background: !isCurrentQuestionValid() 
+                      ? '#e1e1e1' 
+                      : 'linear-gradient(135deg, rgba(0, 112, 243, 0.9) 0%, rgba(0, 150, 255, 0.9) 50%, rgba(0, 112, 243, 0.9) 100%)',
+                    backdropFilter: !isCurrentQuestionValid() ? 'none' : 'blur(10px)',
+                    WebkitBackdropFilter: !isCurrentQuestionValid() ? 'none' : 'blur(10px)',
+                    border: !isCurrentQuestionValid() 
+                      ? '1px solid #ced4da' 
+                      : '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: !isCurrentQuestionValid() 
+                      ? 'none' 
+                      : '0 8px 32px rgba(0, 112, 243, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                    color: !isCurrentQuestionValid() ? '#666' : 'white', 
                     borderRadius: '8px',
-                    cursor: 'pointer',
+                    cursor: !isCurrentQuestionValid() ? 'not-allowed' : 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
                     transition: 'all 0.3s ease',
                     position: 'relative',
                     overflow: 'hidden',
+                    opacity: !isCurrentQuestionValid() ? 0.6 : 1,
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 112, 243, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
+                    if (isCurrentQuestionValid()) {
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                      e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 112, 243, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
+                    }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 112, 243, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)';
+                    if (isCurrentQuestionValid()) {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 112, 243, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)';
+                    }
                   }}
                 >
                   <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M1.59168 1.71245L2.38083 6.25004H7.25001C7.66422 6.25004 8.00001 6.58582 8.00001 7.00004C8.00001 7.41425 7.66422 7.75004 7.25001 7.75004H2.38083L1.59168 12.2876L13.9294 7.00004L1.59168 1.71245ZM0.988747 7.00004L0.0636748 1.68087C-0.0111098 1.25086 0.128032 0.811352 0.436661 0.502722C0.824446 0.114942 1.40926 0.00231168 1.91333 0.218342L15.3157 5.9622C15.7308 6.14013 16 6.54835 16 7.00004C16 7.45172 15.7308 7.85995 15.3157 8.03788L1.91333 13.7817C1.40926 13.9978 0.824446 13.8851 0.436661 13.4974C0.128032 13.1887 -0.01111 12.7492 0.0636748 12.3192L0.988747 7.00004Z" fill="white"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M1.59168 1.71245L2.38083 6.25004H7.25001C7.66422 6.25004 8.00001 6.58582 8.00001 7.00004C8.00001 7.41425 7.66422 7.75004 7.25001 7.75004H2.38083L1.59168 12.2876L13.9294 7.00004L1.59168 1.71245ZM0.988747 7.00004L0.0636748 1.68087C-0.0111098 1.25086 0.128032 0.811352 0.436661 0.502722C0.824446 0.114942 1.40926 0.00231168 1.91333 0.218342L15.3157 5.9622C15.7308 6.14013 16 6.54835 16 7.00004C16 7.45172 15.7308 7.85995 15.3157 8.03788L1.91333 13.7817C1.40926 13.9978 0.824446 13.8851 0.436661 13.4974C0.128032 13.1887 -0.01111 12.7492 0.0636748 12.3192L0.988747 7.00004Z" fill={!isCurrentQuestionValid() ? '#666' : 'white'}/>
                   </svg>
                 </button>
               ) : (
@@ -474,7 +605,8 @@ export default function Home() {
           padding: 2rem;
         }
         .form-container {
-          max-width: 800px;
+          max-width: 1200px;
+          min-height: 30vh;
           margin: 0 auto;
           background-color: white;
           padding: 2rem;
