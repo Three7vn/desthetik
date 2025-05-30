@@ -43,7 +43,11 @@ export default function FlowCanvas({ graphData }) {
   );
  
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div style={{ 
+      width: '100%', 
+      height: '100%',
+      cursor: 'url("data:image/svg+xml;charset=utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 16 16\'%3E%3Cpath fill=\'white\' stroke=\'black\' stroke-width=\'0.5\' d=\'M0,0 L0,10 L3,7 L5,9 L7,7 L3,3 Z\'/%3E%3C/svg%3E") 1 1, auto'
+    }}>
       {/* 
         ReactFlow renders the actual diagram
         This component handles the visualization and interaction with the nodes
