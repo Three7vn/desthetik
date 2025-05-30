@@ -50,45 +50,137 @@ const useTypingAnimation = (text: string, speed: number = 100) => {
 const HowItWorksPage = () => {
   return (
     <div style={{ 
-      padding: '2rem',
-      maxWidth: '1200px',
-      margin: '0 auto'
+      padding: '0',
+      maxWidth: '100%',
+      margin: '0',
+      background: '#ffffff',
+      overflow: 'auto'
     }}>
+      {/* Hero Section */}
       <div style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        borderRadius: '20px',
-        padding: '3rem',
-        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-        backdropFilter: 'blur(10px)'
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '4rem 2rem 2rem 2rem',
+        textAlign: 'center'
       }}>
-        <h1 style={{
-          color: '#333',
-          fontSize: '2.5rem',
-          marginBottom: '1rem',
-          textAlign: 'center'
+        {/* Date and Tags */}
+        <div style={{
+          marginBottom: '3rem',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '1rem',
+          fontSize: '0.72rem',
+          color: '#666'
         }}>
-          How it Works
+          <span>May 30, 2025</span>
+        </div>
+
+        {/* Main Heading */}
+        <h1 style={{
+          color: '#000',
+          fontSize: '3.2rem',
+          fontWeight: '600',
+          marginBottom: '2rem',
+          lineHeight: '1.1',
+          letterSpacing: '-0.02em'
+        }}>
+          Introducing Desthetik
         </h1>
+
+        {/* Description */}
         <p style={{
           color: '#666',
-          fontSize: '1.2rem',
-          textAlign: 'center',
-          marginBottom: '3rem'
+          fontSize: '1.04rem',
+          lineHeight: '1.6',
+          marginBottom: '3rem',
+          maxWidth: '800px',
+          margin: '0 auto 3rem auto'
         }}>
-          Learn how Desthetik transforms your ideas into technical designs
+          A system design agent that turns abstract startup ideas into highly structured, visual product architectures in seconds—so founders know <i>what</i> to build before they start building, without needing to be technical. It generates intuitive, editable flow diagrams in a Figma-style interface, helping users move from vague ideas to clear system-level thinking.
+        </p>
+
+        {/* CTA Button */}
+        <button style={{
+          background: '#2C2C2C',
+          border: 'none',
+          color: 'white',
+          padding: '0.6rem 1rem',
+          borderRadius: '8px',
+          fontSize: '0.8rem',
+          fontWeight: '500',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          marginBottom: '4rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          margin: '0 auto 4rem auto'
+        }}
+        onClick={() => window.location.hash = '#playground'}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = '#1A1A1A';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = '#2C2C2C';
+        }}
+        >
+          Try Desthetik
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" clipRule="evenodd" d="M4.53033 4.75C4.53033 4.33579 4.86612 4 5.28033 4H11.2907C11.705 4 12.0407 4.33579 12.0407 4.75V10.7604C12.0407 11.1746 11.705 11.5104 11.2907 11.5104C10.8765 11.5104 10.5407 11.1746 10.5407 10.7604V6.56066L5.28033 11.8211C4.98744 12.114 4.51256 12.114 4.21967 11.8211C3.92678 11.5282 3.92678 11.0533 4.21967 10.7604L9.48008 5.5H5.28033C4.86612 5.5 4.53033 5.16421 4.53033 4.75Z" fill="white"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* Hero Image Section */}
+      <div style={{
+        maxWidth: '1400px',
+        margin: '0 auto',
+        padding: '0 2rem 4rem 2rem'
+      }}>
+        <div style={{
+          borderRadius: '20px',
+          overflow: 'hidden',
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+        }}>
+          <img 
+            src="Desthetik.png" 
+            alt="Desthetik System Design Interface"
+            style={{
+              width: '100%',
+              height: 'auto',
+              display: 'block'
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div style={{
+        maxWidth: '800px',
+        margin: '0 auto',
+        padding: '2rem',
+        lineHeight: '1.8',
+        fontSize: '0.88rem',
+        color: '#333'
+      }}>
+        <p style={{ marginBottom: '2rem' }}>
+          Today we're launching Desthetik — a system design agent that helps founders turn abstract startup ideas into structured, visual product architectures in seconds. Because the truth is, some of the best ideas in the world never get built. Not because they're bad ideas, but because the people behind them never knew where to start. The early-stage product journey is riddled with ambiguity: founders pour money into consultants, waste time spinning in circles, or skip foundational thinking altogether. What they're left with is a half-baked prototype that doesn't reflect the real problem or the user's needs, or nothing at all. Desthetik bridges that gap—giving you clarity before you even write a single line of code, so you know what to build, before you build.
         </p>
         
-        <div style={{
-          textAlign: 'center',
-          color: '#999',
-          fontStyle: 'italic',
-          padding: '4rem 0',
-          border: '2px dashed #ddd',
-          borderRadius: '10px'
-        }}>
-          <p>Content coming soon...</p>
-          <p>This page will explain the step-by-step process of how Desthetik works.</p>
-        </div>
+        <p style={{ marginBottom: '2rem' }}>
+          AI tools like Cursor or Copilot can generate code, but they don't understand why something should be built a certain way. They don't know your customer, your goals, or your edge. That contextual intelligence—the "why" behind each system component—is what Desthetik captures. Through a conversational multi-step input flow, it maps your responses to pre-defined graph types and outputs a dynamic, editable system diagram in a Figma-style interface. You're not just getting code snippets—you're getting a blueprint for how your product should work based on your actual business intent.
+        </p>
+
+        <p style={{ marginBottom: '2rem' }}>
+          As software development becomes more democratized, the playing field is shifting. The difference won't be who can code—it'll be who can design systems that matter. Great system design informs great UX. It shapes how products feel, scale, and solve real-world problems. Desthetik is for those who want to build with intention from day one. More features, more graph types, and deeper reasoning layers are coming soon.
+        </p>
+
+        <p style={{ marginTop: '3rem', fontStyle: 'italic', color: '#666' }}>
+          Best,<br />
+          Desthetik Team
+        </p>
       </div>
     </div>
   );
@@ -695,6 +787,8 @@ export default function Home() {
           flex: 1;
           margin-left: 120px;
           padding: 2rem;
+          overflow-y: auto;
+          height: 100vh;
         }
         .form-container {
           max-width: 1500px;
