@@ -130,6 +130,12 @@ const Voice: React.FC<VoiceProps> = ({ onTranscription, fieldName }) => {
           backgroundColor: 'transparent',
           transition: 'all 0.2s ease',
         }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.08)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'transparent';
+        }}
       >
         {/* Pulsating animation rings when recording */}
         {isRecording && (
