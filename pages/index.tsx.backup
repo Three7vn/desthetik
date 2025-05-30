@@ -730,47 +730,49 @@ export default function Home() {
             top: '1rem', 
             right: '1rem', 
             zIndex: 1000 
-          }}
-          className="expand-tooltip-container"
-          >
-            <button
-              onClick={() => setIsFormCollapsed(!isFormCollapsed)}
-              style={{
-                background: '#ffffff',
-                border: '1px solid #e5e7eb',
-                borderRadius: '8px',
-                padding: '8px',
-                cursor: 'pointer',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#f9fafb';
-                e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#ffffff';
-                e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
-              }}
-            >
-              {isFormCollapsed ? (
-                // Expand icon
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M1.75 1.5C1.61193 1.5 1.5 1.61193 1.5 1.75V4.25C1.5 4.66421 1.16421 5 0.75 5C0.33579 5 0 4.66421 0 4.25V1.75C0 0.7835 0.7835 0 1.75 0H4.25C4.66421 0 5 0.33579 5 0.75C5 1.16421 4.66421 1.5 4.25 1.5H1.75ZM9 0.75C9 0.33579 9.3358 0 9.75 0H12.25C13.2165 0 14 0.7835 14 1.75V4.25C14 4.66421 13.6642 5 13.25 5C12.8358 5 12.5 4.66421 12.5 4.25V1.75C12.5 1.61193 12.3881 1.5 12.25 1.5H9.75C9.3358 1.5 9 1.16421 9 0.75ZM0 9.75C0 9.3358 0.33579 9 0.75 9H3.25C4.2165 9 5 9.7835 5 10.75V13.25C5 13.6642 4.66421 14 4.25 14C3.83579 14 3.5 13.6642 3.5 13.25V10.75C3.5 10.6119 3.38807 10.5 3.25 10.5H0.75C0.33579 10.5 0 10.1642 0 9.75ZM9 10.75C9 9.7835 9.7835 9 10.75 9H13.25C13.6642 9 14 9.3358 14 9.75C14 10.1642 13.6642 10.5 13.25 10.5H10.75C10.6119 10.5 10.5 10.6119 10.5 10.75V13.25C10.5 13.6642 10.1642 14 9.75 14C9.3358 14 9 13.6642 9 13.25V10.75Z" fill="#1F2328"/>
-                </svg>
-              ) : (
-                // Collapse icon
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M4.25 0C4.66421 0 5 0.33579 5 0.75V3.25C5 4.2165 4.2165 5 3.25 5H0.75C0.33579 5 0 4.66421 0 4.25C0 3.83579 0.33579 3.5 0.75 3.5H3.25C3.38807 3.5 3.5 3.38807 3.5 3.25V0.75C3.5 0.33579 3.83579 0 4.25 0ZM9.75 0C10.1642 0 10.5 0.33579 10.5 0.75V3.25C10.5 3.38807 10.6119 3.5 10.75 3.5H13.25C13.6642 3.5 14 3.83579 14 4.25C14 4.66421 13.6642 5 13.25 5H10.75C9.7835 5 9 4.2165 9 3.25V0.75C9 0.33579 9.3358 0 9.75 0ZM0 9.75C0 9.3358 0.33579 9 0.75 9H3.25C4.2165 9 5 9.7835 5 10.75V13.25C5 13.6642 4.66421 14 4.25 14C3.83579 14 3.5 13.6642 3.5 13.25V10.75C3.5 10.6119 3.38807 10.5 3.25 10.5H0.75C0.33579 10.5 0 10.1642 0 9.75ZM9 10.75C9 9.7835 9.7835 9 10.75 9H13.25C13.6642 9 14 9.3358 14 9.75C14 10.1642 13.6642 10.5 13.25 10.5H10.75C10.6119 10.5 10.5 10.6119 10.5 10.75V13.25C10.5 13.6642 10.1642 14 9.75 14C9.3358 14 9 13.6642 9 13.25V10.75Z" fill="#1F2328"/>
-                </svg>
-              )}
-            </button>
-            <div className="expand-tooltip">{isFormCollapsed ? 'Expand' : 'Collapse'}</div>
+          }}>
+            <div className="tooltip-container">
+              <button
+                onClick={() => setIsFormCollapsed(!isFormCollapsed)}
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  padding: '8px',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#f9fafb';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#ffffff';
+                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+                }}
+              >
+                {isFormCollapsed ? (
+                  // Expand icon
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 3.5L8 12.5M3.5 8L12.5 8" stroke="#1F2328" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                ) : (
+                  // Collapse icon
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.5 8L12.5 8" stroke="#1F2328" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                )}
+              </button>
+              <div className="tooltip">{isFormCollapsed ? 'Expand Form' : 'Collapse Form'}</div>
+            </div>
           </div>
 
+          {!isFormCollapsed && (
+            <>
               <h1 style={{ marginTop: '-1.5rem', marginBottom: '5rem', fontWeight: '500', fontSize: '2rem', textAlign: 'center', lineHeight: '1.3' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.5rem' }}>
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px' }}>
@@ -1000,45 +1002,9 @@ export default function Home() {
           padding: 2rem;
           border-radius: 12px;
           box-shadow: none;
-          position: relative;
         }
         .canvas-container {
           margin-top: 2rem;
-        }
-        .expand-tooltip-container {
-          position: relative;
-        }
-        
-        .expand-tooltip {
-          position: absolute;
-          top: 100%;
-          right: 0;
-          margin-top: 8px;
-          background: rgba(0, 0, 0, 0.8);
-          color: white;
-          padding: 6px 8px;
-          border-radius: 4px;
-          font-size: 12px;
-          white-space: nowrap;
-          opacity: 0;
-          visibility: hidden;
-          transition: opacity 0.2s ease, visibility 0.2s ease;
-          pointer-events: none;
-          z-index: 1001;
-        }
-        
-        .expand-tooltip::before {
-          content: '';
-          position: absolute;
-          bottom: 100%;
-          right: 12px;
-          border: 4px solid transparent;
-          border-bottom-color: rgba(0, 0, 0, 0.8);
-        }
-        
-        .expand-tooltip-container:hover .expand-tooltip {
-          opacity: 1;
-          visibility: visible;
         }
       `}</style>
     </div>
