@@ -57,8 +57,8 @@ export default function FlowCanvas({ graphData }) {
         onConnect={onConnect}
         fitView
       >
-        <Controls />
-        <MiniMap />
+        <Controls style={{ marginBottom: 80 }} />
+        <MiniMap style={{ marginBottom: 80 }} />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
       </ReactFlow>
     </div>
