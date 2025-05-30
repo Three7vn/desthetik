@@ -69,21 +69,24 @@ const useTypingAnimation = (text: string, speed: number = 100) => {
   return displayText + (showCursor && currentIndex <= text.length ? '|' : '');
 };
 
-// Import the backend logic directly
+// Import prompt functions from backend
+const getPrompts = async () => {
+  const response = await fetch('/api/prompts');
+  return response.json();
+};
+
+// Generate graph structure using backend prompts
 const generateGraphStructure = async (formData: any) => {
   // Helper function to extract JSON from GPT response
   const extractJSON = (text: string) => {
-    // Try to parse directly first
     try {
       return JSON.parse(text);
     } catch (e) {
-      // If that fails, try to extract JSON from markdown code blocks
       const jsonMatch = text.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
       if (jsonMatch) {
         try {
           return JSON.parse(jsonMatch[1]);
         } catch (e2) {
-          // If still fails, try to find JSON object in the text
           const objectMatch = text.match(/\{[\s\S]*\}/);
           if (objectMatch) {
             return JSON.parse(objectMatch[0]);
@@ -94,24 +97,23 @@ const generateGraphStructure = async (formData: any) => {
     }
   };
 
-  // This will be our simplified GPT call
   const openai = new OpenAI({
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || '',
-    dangerouslyAllowBrowser: true // Allow browser usage for this demo
+    dangerouslyAllowBrowser: true
   });
 
-  // Stage 1: Generate detailed system design
-  const detailedPrompt = `Based on the following product requirements, create a comprehensive system design:
+  // Get prompts from backend
+  const prompts = await getPrompts();
 
-Product Intent: ${formData.productIntent}
-Core Problem: ${formData.coreProblem}
-Solution Idea: ${formData.solutionIdea}
-Ideal User: ${formData.idealUser}
-Platform: ${formData.platform}
-Data Storage: ${formData.dataStorage}
-Inspirations: ${formData.inspirations}
-
-Please provide a detailed technical architecture including specific libraries, frameworks, and implementation details.`;
+  // Stage 1: Generate detailed system design using backend prompt
+  const detailedPrompt = prompts.detailed_prompt
+    .replace('{product_intent}', formData.productIntent)
+    .replace('{core_problem}', formData.coreProblem)
+    .replace('{solution_idea}', formData.solutionIdea)
+    .replace('{ideal_user}', formData.idealUser)
+    .replace('{platform}', formData.platform)
+    .replace('{inspirations}', formData.inspirations)
+    .replace('{data_storage}', formData.dataStorage);
 
   const detailedResponse = await openai.chat.completions.create({
     model: "gpt-4.1",
@@ -121,68 +123,10 @@ Please provide a detailed technical architecture including specific libraries, f
 
   const detailedDesign = detailedResponse.choices[0].message.content;
 
-  // Stage 2: Convert to graph structure
-  const graphPrompt = `Based on the following detailed system design, create a visual graph structure that represents the key components and their relationships.
-
-Product Context: ${formData.productIntent}
-
-DETAILED SYSTEM DESIGN:
-${detailedDesign}
-
-🚨 **CRITICAL INSTRUCTION: DETAILED LABELS ARE MANDATORY** 🚨
-
-You MUST create detailed, explanatory labels for every single node. This is NOT optional.
-
-❌ **ABSOLUTELY FORBIDDEN**: Short labels like "React Native", "Database", "API", "Frontend", "Backend"
-✅ **REQUIRED FORMAT**: "React Native Mobile Framework - Cross-platform development framework that enables building native iOS and Android apps with JavaScript, chosen specifically to serve freelancers who need apps on both platforms while maintaining a single codebase for faster development and lower costs"
-
-**EVERY SINGLE NODE LABEL MUST:**
-1. Start with the technology/component name
-2. Include a dash (-)
-3. Explain what it does (2-3 sentences)
-4. Explain why it's needed for this specific system
-5. Explain how it serves the target user's needs
-
-**MANDATORY LABEL EXAMPLES YOU MUST FOLLOW:**
-- "PostgreSQL Database - Relational database system that stores user time tracking records, project data, and billing information with ACID compliance and complex query capabilities. Essential for freelancers who need reliable data integrity when managing multiple client projects and generating accurate invoices for their business operations."
-
-- "JWT Authentication Service - JSON Web Token-based authentication system that securely manages user sessions and API access across mobile and web platforms. Critical for freelancers who need secure access to their sensitive time tracking and billing data from multiple devices while maintaining session persistence."
-
-- "React Native Timer Component - Custom mobile component that provides real-time time tracking with start/stop/pause functionality and background operation capabilities. Specifically designed for freelancers who need accurate billable hour tracking even when switching between apps or when the phone is locked during work sessions."
-
-Convert this into a graph structure with these requirements:
-
-1. **Node Count**: 10-20 nodes for comprehensive representation
-2. **Node Labels**: EVERY label must be 2-3 sentences following the pattern above
-3. **Positioning**: Frontend left, backend middle, databases right
-4. **Edges**: Show actual data flow and API connections
-
-🚨 **BEFORE YOU RESPOND**: Check every single label to ensure it's detailed and explanatory, not just a technology name.
-
-Return ONLY valid JSON in this exact format:
-{
-  "nodes": [
-    {
-      "id": "1",
-      "position": {"x": 100, "y": 50},
-      "data": {"label": "Technology Name - Detailed explanation of what this component does, why it's essential for this specific system, and how it directly serves the target user's workflow and business needs"}
-    },
-    {
-      "id": "2", 
-      "position": {"x": 300, "y": 50},
-      "data": {"label": "Another Technology - Another detailed explanation following the same pattern with what, why, and how it helps users"}
-    }
-  ],
-  "edges": [
-    {
-      "id": "e1-2",
-      "source": "1",
-      "target": "2"
-    }
-  ]
-}
-
-🚨 **FINAL CHECK**: Before submitting, verify that EVERY SINGLE label is detailed and explanatory, not just a technology name. If any label is short, rewrite it to be detailed.`;
+  // Stage 2: Convert to graph structure using enhanced backend prompt
+  const graphPrompt = prompts.graph_prompt
+    .replace('{detailed_design}', detailedDesign)
+    .replace('{product_intent}', formData.productIntent);
 
   const graphResponse = await openai.chat.completions.create({
     model: "gpt-4.1",

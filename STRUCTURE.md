@@ -13,12 +13,12 @@ Desthetik is a system design agent that combines AI-powered analysis with visual
 ```
 desthetik/
 ├── pages/
-│   └── index.tsx                   # Main UI with form, navigation & FlowCanvas + Direct GPT calls
+│   └── index.tsx                   # Main UI with form, navigation & FlowCanvas + LLM
 ├── components/
 │   ├── FlowCanvas.tsx              # ReactFlow diagram renderer
 │   └── Voice.tsx                   # Voice input component with speech recognition
 ├── backend/                        # Reference files (not actively used)
-│   └── prompt_logic.py             # GPT logic (for reference)
+│   └── prompt_logic.py             # llm logic (for reference)
 └── STRUCTURE.md                    # This file
 ```
 
@@ -98,6 +98,30 @@ desthetik/
 - **Two-stage LLM processing** (detailed design → graph structure)
 - **Interactive ReactFlow** playground
 - **Rotating text animation** in header
+
+## Technical Implementation
+
+### API Structure
+```
+GET /api/prompts
+Returns:
+{
+  "detailed_prompt": "Enhanced prompt with intuitive explanations...",
+  "graph_prompt": "Structured node organization prompt..."
+}
+```
+
+### Node Data Structure
+```json
+{
+  "id": "1",
+  "position": {"x": 100, "y": 50},
+  "data": {
+    "label": "React Frontend - JavaScript library for building user interfaces",
+    "color": "#3B82F6"
+  }
+}
+```
 
 ## How It Works
 1. User fills out 7-question form with validation

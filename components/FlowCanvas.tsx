@@ -8,17 +8,42 @@ import {
   useEdgesState,
   addEdge,
   BackgroundVariant,
+  Node,
 } from '@xyflow/react';
  
 import '@xyflow/react/dist/style.css';
+
+// Custom node styles based on color categories
+const getNodeStyle = (color: string) => ({
+  background: color,
+  color: color === '#6B7280' ? 'white' : 'white',
+  border: `2px solid ${color}`,
+  borderRadius: '8px',
+  padding: '10px',
+  fontSize: '12px',
+  fontWeight: '500',
+  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+  minWidth: '200px',
+  textAlign: 'center' as const,
+});
 
 // PLACEHOLDER: Default example nodes shown before user submits the form
 // These will be replaced with dynamically generated nodes after form submission
 // Each system design will have a unique set of nodes and edges
 // There will be around 10-15 nodes in total for each system design, these are the initial nodes pre-design
 const initialNodes = [
-  { id: '1', position: { x: 150, y: 50 }, data: { label: 'Enter your requirements above' } },
-  { id: '2', position: { x: 150, y: 150 }, data: { label: 'Click "Generate System Design"' } },
+  { 
+    id: '1', 
+    position: { x: 150, y: 50 }, 
+    data: { label: 'Enter your requirements above' },
+    style: getNodeStyle('#6B7280')
+  },
+  { 
+    id: '2', 
+    position: { x: 150, y: 150 }, 
+    data: { label: 'Click "Generate System Design"' },
+    style: getNodeStyle('#6B7280')
+  },
 ];
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
  
@@ -31,7 +56,16 @@ export default function FlowCanvas({ graphData }) {
   // nodes generated based on user's answers
   useEffect(() => {
     if (graphData?.nodes && graphData?.edges) {
-      setNodes(graphData.nodes);
+      const styledNodes = graphData.nodes.map((node: any) => ({
+        ...node,
+        style: getNodeStyle(node.data.color || '#6B7280'),
+        data: {
+          ...node.data,
+          label: node.data.label
+        }
+      }));
+      
+      setNodes(styledNodes);
       setEdges(graphData.edges);
     }
   }, [graphData, setNodes, setEdges]);
@@ -60,9 +94,16 @@ export default function FlowCanvas({ graphData }) {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         fitView
+        defaultEdgeOptions={{
+          type: 'smoothstep',
+          style: { strokeWidth: 2, stroke: '#64748B' }
+        }}
       >
         <Controls style={{ marginBottom: 80 }} />
-        <MiniMap style={{ marginBottom: 80 }} />
+        <MiniMap 
+          style={{ marginBottom: 80 }}
+          nodeColor={(node: Node) => (node.style?.background as string) || '#6B7280'}
+        />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
       </ReactFlow>
     </div>
