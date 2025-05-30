@@ -54,28 +54,42 @@ You are an expert system architect. Create a comprehensive system design based o
 - Inspirations: {inspirations}
 - Data Storage Needs: {data_storage}
 
+**CRITICAL REQUIREMENTS:**
+- **BE EXTREMELY DETAILED** - EXPLAIN EVERY ARCHITECTURAL DECISION WITH REASONING
+- **PROVIDE ACTUAL LINKS** - INCLUDE REAL WEBSITE URLS FOR ALL LIBRARIES AND FRAMEWORKS
+- **RELATE TO USER BEHAVIOR** - EXPLAIN HOW EACH FEATURE SERVES THE TARGET USER: "{ideal_user}"
+- **JUSTIFY AGAINST REQUIREMENTS** - CONNECT EVERY COMPONENT TO THE CORE PROBLEM: "{core_problem}"
+- **DO NOT OVER-ENGINEER** - KEEP SOLUTIONS SIMPLE AND FOCUSED ON THE ACTUAL REQUIREMENTS
+- **AVOID UNNECESSARY COMPLEXITY** - ONLY INCLUDE FEATURES THAT DIRECTLY SOLVE THE STATED PROBLEM
+
 Please provide a detailed system design that includes:
 
-1. **Architecture Overview**: Explain the overall system architecture and how components interact, specifically addressing the core problem: "{core_problem}"
+1. **Architecture Overview**: Explain the overall system architecture and how components interact, specifically addressing the core problem: "{core_problem}". EXPLAIN WHY each architectural choice directly serves the target user "{ideal_user}" and their specific needs.
 
-2. **Technology Stack**: Recommend specific libraries, frameworks, and tools with website links and reasons for selection that align with the solution idea: "{solution_idea}" and platform choice: "{platform}"
+2. **Technology Stack**: Recommend specific libraries, frameworks, and tools with ACTUAL WEBSITE LINKS and detailed reasons for selection that align with the solution idea: "{solution_idea}" and platform choice: "{platform}". For each technology choice, EXPLAIN:
+   - WHY this specific tool solves the user's problem
+   - HOW it supports the target user behavior
+   - WHAT alternatives were considered and rejected
 
-3. **Implementation Strategy**: Describe how each component should be implemented to serve the target user: "{ideal_user}"
+3. **Implementation Strategy**: Describe how each component should be implemented to serve the target user: "{ideal_user}". CONNECT each implementation detail to specific user behaviors and needs. AVOID features that don't directly address the core problem.
 
-4. **Data Flow**: Explain how data moves through the system, considering the data storage requirements: "{data_storage}"
+4. **Data Flow**: Explain how data moves through the system, considering the data storage requirements: "{data_storage}". DETAIL how this data flow supports the user's workflow and solves their specific pain points.
 
-5. **Scalability Considerations**: How the system handles growth and performance for the intended use case
+5. **Scalability Considerations**: How the system handles growth and performance for the intended use case. FOCUS ONLY on scaling needs that are realistic for the target user base and problem scope.
 
-6. **Security & Best Practices**: Important security measures and development best practices relevant to this specific product
+6. **Security & Best Practices**: Important security measures and development best practices relevant to this specific product. PRIORITIZE security measures that protect the target user's specific data and use cases.
 
-Be specific about:
-- Exact library/framework names with links (e.g., "React (https://reactjs.org/) for frontend because...")
-- Why certain architectural decisions make sense for solving "{core_problem}"
-- How the platform choice "{platform}" influences the technical stack and architecture
-- How inspiration from "{inspirations}" can inform architectural choices and feature implementation
-- Trade-offs and alternatives considered for this specific use case
+**MANDATORY REQUIREMENTS:**
+- INCLUDE ACTUAL WORKING LINKS (e.g., "React (https://reactjs.org/) for frontend because...")
+- EXPLAIN WHY each architectural decision makes sense for solving "{core_problem}"
+- DETAIL HOW the platform choice "{platform}" influences the technical stack and architecture
+- DESCRIBE HOW inspiration from "{inspirations}" can inform architectural choices and feature implementation
+- ANALYZE trade-offs and alternatives considered for this specific use case
+- CONNECT every feature to the target user's actual behavior and needs
+- KEEP THE SOLUTION SIMPLE - DO NOT ADD UNNECESSARY COMPLEXITY
+- FOCUS ON THE MINIMUM VIABLE ARCHITECTURE that solves the core problem
 
-Provide a thorough, technical explanation that demonstrates deep understanding of system design principles while staying focused on the product intent: "{product_intent}".
+Provide a thorough, technical explanation that demonstrates deep understanding of system design principles while staying laser-focused on the product intent: "{product_intent}" and avoiding over-engineering.
 """
 
 def get_graph_structure_prompt(detailed_design: str, product_intent: str = "") -> str:
@@ -101,48 +115,60 @@ Based on the following detailed system design, create a visual graph structure t
 DETAILED SYSTEM DESIGN:
 {detailed_design}
 
-Convert this into a graph structure with the following requirements:
+🚨 **CRITICAL INSTRUCTION: DETAILED LABELS ARE MANDATORY** 🚨
 
-1. **Node Count**: Minimum 5 nodes, maximum 20 nodes. Try to aim closer to 20 nodes for comprehensive representation.
-2. **Node Labels**: Each node should have a maximum of one sentence describing the component
-3. **Logical Flow Design**: 
-   - Arrange nodes to show clear data/process flow from input to output
-   - Position frontend components on the left, backend services in the middle, databases on the right
-   - Use top-to-bottom or left-to-right flow patterns that make intuitive sense
-   - Group related components (e.g., authentication services, data processing, UI components)
-4. **Edge Logic**: 
-   - Edges should represent actual data flow, API calls, or logical dependencies
-   - Connect components that genuinely interact with each other
-   - Avoid random connections - each edge should have a clear purpose
-   - Show the flow of information through the system (user input → processing → storage → output)
-   - Include bidirectional edges where data flows both ways
+You MUST create detailed, explanatory labels for every single node. This is NOT optional.
 
-Return the response in the following JSON format:
+❌ **ABSOLUTELY FORBIDDEN**: Short labels like "React Native", "Database", "API", "Frontend", "Backend"
+✅ **REQUIRED FORMAT**: "React Native Mobile Framework - Cross-platform development framework that enables building native iOS and Android apps with JavaScript, chosen specifically to serve freelancers who need apps on both platforms while maintaining a single codebase for faster development and lower costs"
+
+**EVERY SINGLE NODE LABEL MUST:**
+1. Start with the technology/component name
+2. Include a dash (-)
+3. Explain what it does (2-3 sentences)
+4. Explain why it's needed for this specific system
+5. Explain how it serves the target user's needs
+
+**MANDATORY LABEL EXAMPLES YOU MUST FOLLOW:**
+- "PostgreSQL Database - Relational database system that stores user time tracking records, project data, and billing information with ACID compliance and complex query capabilities. Essential for freelancers who need reliable data integrity when managing multiple client projects and generating accurate invoices for their business operations."
+
+- "JWT Authentication Service - JSON Web Token-based authentication system that securely manages user sessions and API access across mobile and web platforms. Critical for freelancers who need secure access to their sensitive time tracking and billing data from multiple devices while maintaining session persistence."
+
+- "React Native Timer Component - Custom mobile component that provides real-time time tracking with start/stop/pause functionality and background operation capabilities. Specifically designed for freelancers who need accurate billable hour tracking even when switching between apps or when the phone is locked during work sessions."
+
+Convert this into a graph structure with these requirements:
+
+1. **Node Count**: 10-20 nodes for comprehensive representation
+2. **Node Labels**: EVERY label must be 2-3 sentences following the pattern above
+3. **Positioning**: Frontend left, backend middle, databases right
+4. **Edges**: Show actual data flow and API connections
+
+🚨 **BEFORE YOU RESPOND**: Check every single label to ensure it's detailed and explanatory, not just a technology name.
+
+Return ONLY valid JSON in this exact format:
 {{
     "nodes": [
         {{
-            "id": "string",
-            "position": {{"x": float, "y": float}},
-            "data": {{"label": "string (max one sentence)"}}
-        }} // This represents one node in the graph
+            "id": "1",
+            "position": {{"x": 100, "y": 50}},
+            "data": {{"label": "Technology Name - Detailed explanation of what this component does, why it's essential for this specific system, and how it directly serves the target user's workflow and business needs"}}
+        }},
+        {{
+            "id": "2", 
+            "position": {{"x": 300, "y": 50}},
+            "data": {{"label": "Another Technology - Another detailed explanation following the same pattern with what, why, and how it helps users"}}
+        }}
     ],
     "edges": [
         {{
-            "id": "string",
-            "source": "string",
-            "target": "string"
+            "id": "e1-2",
+            "source": "1",
+            "target": "2"
         }}
     ]
 }}
 
-Make sure to:
-- Include all major components from the detailed design
-- Use clear, concise labels (two sentence max per node)
-- Position nodes logically based on system flow (e.g., User Interface → API Gateway → Business Logic → Database)
-- Connect related components with meaningful edges that represent actual system interactions
-- Create a visually intuitive flow that tells the story of how the system works
-- Aim for 15-20 nodes when possible to show comprehensive system detail
-- Ensure every edge represents a real connection (API calls, data flow, dependencies, etc.)
+🚨 **FINAL CHECK**: Before submitting, verify that EVERY SINGLE label is detailed and explanatory, not just a technology name. If any label is short, rewrite it to be detailed.
 """
 
 async def generate_graph_structure(
