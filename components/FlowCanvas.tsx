@@ -38,13 +38,33 @@ const initialNodes = [
     id: '1', 
     position: { x: 150, y: 50 }, 
     data: { label: 'Enter your requirements above' },
-    style: getNodeStyle('#6B7280')
+    style: {
+      background: 'transparent',
+      color: '#000000',
+      border: '1px solid #000000',
+      borderRadius: '8px',
+      padding: '10px',
+      fontSize: '12px',
+      fontWeight: '500',
+      minWidth: '200px',
+      textAlign: 'center' as const,
+    }
   },
   { 
     id: '2', 
     position: { x: 150, y: 150 }, 
     data: { label: 'Click "Generate System Design"' },
-    style: getNodeStyle('#6B7280')
+    style: {
+      background: 'transparent',
+      color: '#000000',
+      border: '1px solid #000000',
+      borderRadius: '8px',
+      padding: '10px',
+      fontSize: '12px',
+      fontWeight: '500',
+      minWidth: '200px',
+      textAlign: 'center' as const,
+    }
   },
 ];
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
