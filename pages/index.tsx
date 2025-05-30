@@ -11,11 +11,13 @@ const useRotatingText = (words: string[], interval: number = 3000) => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setIsFlipping(true);
       setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % words.length);
-        setIsFlipping(false);
-      }, 300); // Half of the flip animation duration
+        setIsFlipping(true);
+        setTimeout(() => {
+          setCurrentIndex((prev) => (prev + 1) % words.length);
+          setIsFlipping(false);
+        }, 300); // Half of the flip animation duration
+      }, 200); // 0.2 second delay before starting the flip
     }, interval);
 
     return () => clearInterval(timer);
@@ -646,7 +648,9 @@ export default function Home() {
                         style={{
                           display: 'inline-block',
                           perspective: '1000px',
-                          marginLeft: '0.3rem'
+                          marginLeft: '0.3rem',
+                          width: '85px',
+                          textAlign: 'left'
                         }}
                       >
                         <span
