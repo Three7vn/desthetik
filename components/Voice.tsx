@@ -115,95 +115,103 @@ const Voice: React.FC<VoiceProps> = ({ onTranscription, fieldName }) => {
   return (
     <>
       <div 
-        onClick={handleMicrophoneClick}
+        className="voice-tooltip-container"
         style={{ 
           position: 'absolute', 
           bottom: '8px', 
           right: '8px', 
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '32px',
-          height: '32px',
-          borderRadius: '50%',
-          backgroundColor: 'transparent',
-          transition: 'all 0.2s ease',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.08)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = 'transparent';
         }}
       >
-        {/* Pulsating animation rings when recording */}
-        {isRecording && (
-          <>
-            <div
-              style={{
-                position: 'absolute',
-                width: '48px',
-                height: '48px',
-                borderRadius: '50%',
-                backgroundColor: '#3b82f6',
-                opacity: 0.3,
-                animation: 'pulse-outer 2s infinite',
-              }}
-            />
-            <div
-              style={{
-                position: 'absolute',
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                backgroundColor: '#3b82f6',
-                opacity: 0.5,
-                animation: 'pulse-middle 2s infinite 0.3s',
-              }}
-            />
-            <div
-              style={{
-                position: 'absolute',
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                backgroundColor: '#3b82f6',
-                opacity: 0.7,
-                animation: 'pulse-inner 2s infinite 0.6s',
-              }}
-            />
-          </>
-        )}
-        
-        <svg 
-          width="20" 
-          height="20" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          xmlns="http://www.w3.org/2000/svg"
-          style={{ zIndex: 10, position: 'relative' }}
+        <div 
+          onClick={handleMicrophoneClick}
+          style={{ 
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            backgroundColor: 'transparent',
+            transition: 'all 0.2s ease',
+            position: 'relative',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.08)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+          }}
         >
-          <g clipPath="url(#clip0_2_5)">
-            <path 
-              d="M17 11C17 13.76 14.76 16 12 16C9.24 16 7 13.76 7 11H5C5 14.53 7.61 17.43 11 17.92V21H13V17.92C16.39 17.43 19 14.53 19 11H17Z" 
-              fill={isRecording ? "#3b82f6" : "#666"}
-            />
-            <path 
-              d="M12 14C13.66 14 15 12.66 15 11V5C15 3.34 13.66 2 12 2C10.34 2 9 3.34 9 5V11C9 12.66 10.34 14 12 14ZM11 5C11 4.45 11.45 4 12 4C12.55 4 13 4.45 13 5V11C13 11.55 12.55 12 12 12C11.45 12 11 11.55 11 11V5Z" 
-              fill={isRecording ? "#3b82f6" : "#666"}
-            />
-            <path 
-              d="M12 14C13.66 14 15 12.66 15 11V5C15 3.34 13.66 2 12 2C10.34 2 9 3.34 9 5V11C9 12.66 10.34 14 12 14Z" 
-              fill={isRecording ? "#3b82f6" : "#666"}
-            />
-          </g>
-          <defs>
-            <clipPath id="clip0_2_5">
-              <rect width="24" height="24" fill="white"/>
-            </clipPath>
-          </defs>
-        </svg>
+          {/* Pulsating animation rings when recording */}
+          {isRecording && (
+            <>
+              <div
+                style={{
+                  position: 'absolute',
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  backgroundColor: '#3b82f6',
+                  opacity: 0.3,
+                  animation: 'pulse-outer 2s infinite',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  backgroundColor: '#3b82f6',
+                  opacity: 0.5,
+                  animation: 'pulse-middle 2s infinite 0.3s',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  backgroundColor: '#3b82f6',
+                  opacity: 0.7,
+                  animation: 'pulse-inner 2s infinite 0.6s',
+                }}
+              />
+            </>
+          )}
+          
+          <svg 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ zIndex: 10, position: 'relative' }}
+          >
+            <g clipPath="url(#clip0_2_5)">
+              <path 
+                d="M17 11C17 13.76 14.76 16 12 16C9.24 16 7 13.76 7 11H5C5 14.53 7.61 17.43 11 17.92V21H13V17.92C16.39 17.43 19 14.53 19 11H17Z" 
+                fill={isRecording ? "#3b82f6" : "#666"}
+              />
+              <path 
+                d="M12 14C13.66 14 15 12.66 15 11V5C15 3.34 13.66 2 12 2C10.34 2 9 3.34 9 5V11C9 12.66 10.34 14 12 14ZM11 5C11 4.45 11.45 4 12 4C12.55 4 13 4.45 13 5V11C13 11.55 12.55 12 12 12C11.45 12 11 11.55 11 11V5Z" 
+                fill={isRecording ? "#3b82f6" : "#666"}
+              />
+              <path 
+                d="M12 14C13.66 14 15 12.66 15 11V5C15 3.34 13.66 2 12 2C10.34 2 9 3.34 9 5V11C9 12.66 10.34 14 12 14Z" 
+                fill={isRecording ? "#3b82f6" : "#666"}
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_2_5">
+                <rect width="24" height="24" fill="white"/>
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+        <div className="voice-tooltip">Voice Mode</div>
       </div>
 
       {/* Browser not supported popup */}
@@ -306,8 +314,44 @@ const Voice: React.FC<VoiceProps> = ({ onTranscription, fieldName }) => {
         </div>
       )}
 
-      {/* CSS animations for pulsating effect */}
+      {/* CSS animations for pulsating effect and tooltip */}
       <style jsx>{`
+        .voice-tooltip-container {
+          position: relative;
+        }
+        
+        .voice-tooltip {
+          position: absolute;
+          bottom: 100%;
+          right: 0;
+          margin-bottom: 8px;
+          background: rgba(0, 0, 0, 0.8);
+          color: white;
+          padding: 6px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          white-space: nowrap;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.2s ease, visibility 0.2s ease;
+          pointer-events: none;
+          z-index: 1001;
+        }
+        
+        .voice-tooltip::after {
+          content: '';
+          position: absolute;
+          top: 100%;
+          right: 12px;
+          border: 4px solid transparent;
+          border-top-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .voice-tooltip-container:hover .voice-tooltip {
+          opacity: 1;
+          visibility: visible;
+        }
+
         @keyframes pulse-outer {
           0% {
             transform: scale(0.8);
