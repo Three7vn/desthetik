@@ -87,8 +87,7 @@ The API will be available at [http://localhost:8000](http://localhost:8000)
 1. Fix Bugs & Structure inputs for LLM processing
 2. Map inputs to nodes in design
 3. Allow user to download design
-4. Allow voice input
-5. User can hover over nodes for a more in-depth explanation
+4. User can hover over nodes for a more in-depth explanation
 
 
 
