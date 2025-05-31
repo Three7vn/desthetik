@@ -36,26 +36,8 @@ The stack includes:
 - Frontend: React/Next.js with a visual layout library (React Flow)
 - Backend: Handles prompt generation and LLM interaction
 - Voice Input: Captures natural speech to eliminate typing bottlenecks and enable stream-of-consciousness ideation
-- Process:
-  1. Take structured user inputs (via voice or text)
-  2. Convert into composite prompt
-  3. Process through LLM
-  4. Parse structured output
-  5. Match to graph template
-  6. Convert nodes into interactive cards
-
-The interface uses Figma-style draggable cards for the frontend, keeping it visual and editable for iteration and clarity. This approach is significantly more intuitive than static graph outputs.
-
-## Development Focus
-
-The initial MVP focuses on making one or two graph types to start off with.
 
 ## Getting Started
-
-### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
-- Python 3.8+ (for backend)
 
 ### Installation
 
@@ -65,45 +47,17 @@ git clone https://github.com/Three7vn/desthetik.git
 cd desthetik
 ```
 
-2. Install frontend dependencies:
-```bash
-npm install
-```
+npm install && npm run dev
 
-3. Install backend dependencies:
-```bash
-pip install -r requirements.txt
-```
 
-### Running the Application
+This will install the dependencies and run the application on [http://localhost:3000](http://localhost:3000)
 
-#### Frontend
-Start the Next.js development server:
-```bash
-npm run dev
-```
-This will run the application on [http://localhost:3000](http://localhost:3000)
-
-#### Backend
-Start the FastAPI server:
-```bash
-cd backend
-uvicorn main:app --reload
-```
-The API will be available at [http://localhost:8000](http://localhost:8000)
 
 ### Next Steps
-1. Fix Bugs & Structure inputs for LLM processing
-2. Map inputs to nodes in design
-3. Allow user to download design
-4. User can hover over nodes for a more in-depth explanation
+1. Users can ask follow up questions on design
+2. More user-behaviour/feature context
+3. User can hover over nodes for a more in-depth explanation
 
-
-
-### Development Notes
-- The frontend uses TypeScript and Next.js
-- @xyflow/react (React Flow) is used for the flowchart visualization
-- The backend uses FastAPI and will connect to an LLM for generating system designs
 
 
 ### Contact
