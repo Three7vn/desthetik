@@ -1,6 +1,6 @@
 # Idea to world-class system design in seconds, not weeks.
 
-Desthetik is an open-source system design agent.
+Desthetik is an open-source system design co-pilot.
 
 ## The Problem
 
