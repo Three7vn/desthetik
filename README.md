@@ -33,7 +33,7 @@ Desthetik combines a multi-turn input flow—like a conversational form—with b
 Desthetik uses a voice-based approach to allow the rawest ideas—even if unstructured, unclear, or highly abstract—to be transformed into comprehensive and structured technical designs that can be immediately used for development.
 
 The stack includes:
-- Frontend: React/Next.js with a visual layout library (React Flow or custom Figma-like canvas)
+- Frontend: React/Next.js with a visual layout library (React Flow)
 - Backend: Handles prompt generation and LLM interaction
 - Voice Input: Captures natural speech to eliminate typing bottlenecks and enable stream-of-consciousness ideation
 - Process:
