@@ -188,7 +188,7 @@ const HowItWorksPage = () => {
           maxWidth: '800px',
           margin: '0 auto 3rem auto'
         }}>
-          A system design agent that turns abstract startup ideas into highly structured, visual product architectures in seconds—so founders know <i>what</i> to build before they start building, without needing to be technical. It generates intuitive, editable flow diagrams in a Figma-style interface, helping users move from vague ideas to clear system-level thinking.
+          A system design co-pilot that turns abstract startup ideas into highly structured, visual product architectures in seconds—so founders know <i>what</i> to build before they start building, without needing to be technical. It generates intuitive, editable flow diagrams in a Figma-style interface, helping users move from vague ideas to clear system-level thinking.
         </p>
 
         {/* CTA Button */}
@@ -345,6 +345,9 @@ export default function Home() {
         setCurrentPage('how-it-works');
       } else if (hash === '#playground') {
         setCurrentPage('playground');
+      } else {
+        // Default to 'how-it-works' when no hash is present
+        setCurrentPage('how-it-works');
       }
     };
 
