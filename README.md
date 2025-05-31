@@ -25,7 +25,7 @@ Desthetik combines a multi-turn input flow—like a conversational form—with b
 <p align="center">
   <img src="./Screenshot 2025-05-31 at 20.24.32.png" alt="AI scam detection system architecture" width="700" />
   <br />
-  <em>From abstract concept to concrete architecture: The business idea was to solve the emerging problem of AI-powered phone scams that will be indistinguishable from legitimate calls—whether from banks, institutions, or services. As AI becomes sophisticated enough to reason and sound completely human, people won't know what's real anymore. Desthetik transforms this abstract threat into a comprehensive technical product: a real-time AI scam detection system with authentication layers, voice analysis, user verification flows, and privacy safeguards—complete with exportable architecture ready for implementation in AI IDEs like Cursor, Windsurf, or any development environment.</em>
+  <em>From abstract concept to concrete architecture: The business idea was to solve the emerging problem of AI-powered phone scams that will be indistinguishable from legitimate calls—whether from banks, institutions, or services. As AI becomes sophisticated enough to reason and sound completely human, people won't know what's real anymore. Desthetik transforms this abstract business idea into a comprehensive technical product: a real-time AI scam detection system with authentication layers, voice analysis, user verification flows, and privacy safeguards—complete with exportable architecture ready for implementation in AI IDEs like Cursor and Windsurf</em>
 </p>
 
 ### Technical Implementation
