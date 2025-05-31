@@ -284,7 +284,7 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState('how-it-works');
 
   // Rotating text animation for the heading
-  const rotatingWords = ['idea', 'dreams', 'vision', 'concept'];
+  const rotatingWords = ['idea', 'dreams', 'vision', 'concept', 'thoughts'];
   const { currentWord, isFlipping } = useRotatingText(rotatingWords, 3000);
 
   // State for form inputs based on input.txt questions
