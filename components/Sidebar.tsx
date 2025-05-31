@@ -5,7 +5,7 @@ import ContactModal from './ContactModal';
 const Sidebar = () => {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [currentPage, setCurrentPage] = useState('playground');
+  const [currentPage, setCurrentPage] = useState('how-it-works');
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -17,8 +17,11 @@ const Sidebar = () => {
       const hash = window.location.hash;
       if (hash === '#how-it-works') {
         setCurrentPage('how-it-works');
-      } else {
+      } else if (hash === '#playground') {
         setCurrentPage('playground');
+      } else {
+        // Default to 'how-it-works' when no hash is present
+        setCurrentPage('how-it-works');
       }
     };
 
