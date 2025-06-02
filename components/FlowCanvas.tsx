@@ -128,38 +128,18 @@ export default function FlowCanvas({ graphData }) {
       if (controls) (controls as HTMLElement).style.display = 'none';
       if (minimap) (minimap as HTMLElement).style.display = 'none';
 
-      // Wait longer for ReactFlow to fully render all elements including edges
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Force all SVG elements to be visible before capture
-      const svgElements = flowRef.current.querySelectorAll('svg');
-      svgElements.forEach((svg) => {
-        (svg as unknown as HTMLElement).style.display = 'block';
-        (svg as unknown as HTMLElement).style.visibility = 'visible';
-      });
-
-      // Force all edge elements to be visible
-      const edgeElements = flowRef.current.querySelectorAll('.react-flow__edge, .react-flow__edge-path');
-      edgeElements.forEach((element) => {
-        (element as HTMLElement).style.display = 'block';
-        (element as HTMLElement).style.visibility = 'visible';
-        (element as HTMLElement).style.opacity = '1';
-      });
-
-      // Capture the canvas with basic options
+      // Capture the canvas
       const canvas = await html2canvas(flowRef.current, {
         useCORS: true,
         allowTaint: true,
-        background: '#ffffff',
-        logging: false
       });
 
       // Restore controls and minimap
       if (controls) (controls as HTMLElement).style.display = originalControlsDisplay;
       if (minimap) (minimap as HTMLElement).style.display = originalMinimapDisplay;
 
-      // Create PDF with better quality
-      const imgData = canvas.toDataURL('image/png', 1.0);
+      // Create PDF
+      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
         unit: 'px',
@@ -167,10 +147,9 @@ export default function FlowCanvas({ graphData }) {
       });
 
       pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-      pdf.save('desthetik-system-design.pdf');
+      pdf.save('system-design.pdf');
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('Error generating PDF. Please try again.');
     }
   }, []);
  
