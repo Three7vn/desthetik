@@ -15,10 +15,25 @@ import jsPDF from 'jspdf';
  
 import '@xyflow/react/dist/style.css';
 
-// Custom node styles based on color categories
+// Function to determine if a color is light or dark
+const isLightColor = (color: string): boolean => {
+  // Convert hex to RGB
+  const hex = color.replace('#', '');
+  const r = parseInt(hex.substr(0, 2), 16);
+  const g = parseInt(hex.substr(2, 2), 16);
+  const b = parseInt(hex.substr(4, 2), 16);
+  
+  // Calculate luminance using the relative luminance formula
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  
+  // Return true if the color is light (luminance > 0.5)
+  return luminance > 0.5;
+};
+
+// Custom node styles based on color categories with proper text contrast
 const getNodeStyle = (color: string) => ({
   background: color,
-  color: color === '#6B7280' ? 'white' : 'white',
+  color: isLightColor(color) ? '#000000' : '#ffffff',
   border: `2px solid ${color}`,
   borderRadius: '8px',
   padding: '10px',
