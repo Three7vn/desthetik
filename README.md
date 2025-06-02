@@ -57,6 +57,8 @@ This will install the dependencies and run the application on [http://localhost:
 1. Users can ask follow up questions on design
 2. More user-behaviour/feature context
 3. User can hover over nodes for a more in-depth explanation
+4. Ensure edges are shown when downloaded + add PNG download option
+5. Users can edit text
 
 
 
