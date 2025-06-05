@@ -269,7 +269,7 @@ const HowItWorksPage = () => {
 
         <p style={{ marginTop: '3rem', fontStyle: 'italic', color: '#666' }}>
           Best,<br />
-          Desthetik Team
+          Avram Dada, Creator
         </p>
       </div>
     </div>
