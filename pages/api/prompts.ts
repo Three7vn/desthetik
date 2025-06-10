@@ -87,10 +87,12 @@ Please provide a detailed system design that includes:
 - EXPLAIN the behavioral reasoning behind each technical choice
 - KEEP THE SOLUTION SIMPLE - DO NOT ADD UNNECESSARY COMPLEXITY
 - FOCUS ON THE MINIMUM VIABLE ARCHITECTURE that solves the core problem
-- PROVIDE A DETAILED IMPLEMENTATION TIMELINE, including:
-  * Timeline for an 8-person development team WITHOUT AI coding tools
-  * Timeline WITH AI coding tools like Cursor or GitHub Copilot, emphasizing dramatic acceleration (at least 70-80% faster)
-  * Note that AI tools dramatically accelerate front-end and back-end development but database configuration may still need manual work
+- PROVIDE A DETAILED IMPLEMENTATION TIMELINE, specifically:
+  * Timeline for an 8-person development team WITH AI coding tools like Cursor or GitHub Copilot
+  * Emphasize how this represents a realistic timeline for even a SINGLE developer using AI tools
+  * Assume AI dramatically accelerates development (at least 90% faster than traditional coding)
+  * Note that AI tools excel at front-end and back-end development but some database configuration may still need manual work
+  * Be extremely optimistic about development speed with AI tools - they are far more powerful than most people realize
   * Break down timeline by phase (design, front-end, back-end, integration, testing)
 
 Provide a thorough, technical explanation that demonstrates deep understanding of system design principles while staying laser-focused on the product intent: "{product_intent}" and avoiding over-engineering. Remember, you are Desthetik - helping founders understand the "what" and "why" behind their technical architecture before they build.`,
