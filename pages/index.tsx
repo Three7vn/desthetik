@@ -301,6 +301,10 @@ export default function Home() {
   // State for graph data
   const [graphData, setGraphData] = useState(null);
   
+  // State for summary data
+  const [summaryData, setSummaryData] = useState(null);
+  const [isSummaryVisible, setIsSummaryVisible] = useState(true);
+  
   // State for loading status
   const [isLoading, setIsLoading] = useState(false);
   
@@ -390,12 +394,12 @@ export default function Home() {
     
     // Validate that all required fields are filled
     const requiredFields = [
-      { key: 'productIntent', min: 35, max: 200 },
+      { key: 'productIntent', min: 35, max: 500 },
       { key: 'coreProblem', min: 100, max: 500 },
-      { key: 'solutionIdea', min: 100, max: 500 },
+      { key: 'solutionIdea', min: 100, max: 2000 },
       { key: 'idealUser', min: 20, max: 150 },
       { key: 'platform', min: 1, max: 100 },
-      { key: 'inspirations', min: 100, max: 500 },
+      { key: 'inspirations', min: 100, max: 2000 },
       { key: 'dataStorage', min: 1, max: 100 }
     ];
 
@@ -408,10 +412,49 @@ export default function Home() {
     }
 
     setIsLoading(true);
+    setIsSummaryVisible(true);
     
     try {
       const graphData = await generateGraphStructure(formData);
       setGraphData(graphData);
+      
+      // Generate summary
+      if (graphData && graphData.nodes) {
+        const openai = new OpenAI({
+          apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || '',
+          dangerouslyAllowBrowser: true
+        });
+        
+        const summaryPrompt = `
+        Based on the user's requirements and the technical system design I've created, provide a concise executive summary of:
+        
+        1. The key features and components of the system
+        2. The engineering feasibility (easy, moderate, or challenging)
+        3. Potential technical challenges to be aware of
+        4. Estimated timeline for an MVP (provide two estimates: one without using AI coding tools, and one with AI coding tools like Cursor or GitHub Copilot, noting that AI tools help with front-end and back-end code but database configuration may still require manual work)
+        
+        User Requirements:
+        - Product: ${formData.productIntent}
+        - Problem: ${formData.coreProblem}
+        - Solution: ${formData.solutionIdea}
+        - Target User: ${formData.idealUser}
+        - Platform: ${formData.platform}
+        
+        System Design: ${JSON.stringify(graphData)}
+        
+        Format the response in clean paragraphs with clear section headings (Key Features and Components, Engineering Feasibility, Technical Challenges, Estimated Timeline).
+        Do NOT use markdown syntax like asterisks or bold formatting.
+        Keep the summary under 400 words, focus on business value and technical insights.
+        `;
+        
+        const summaryResponse = await openai.chat.completions.create({
+          model: "gpt-4.1",
+          messages: [{"role": "user", "content": summaryPrompt}],
+          temperature: 0.7
+        });
+        
+        setSummaryData(summaryResponse.choices[0].message.content);
+      }
       
       // Optional: Show success message
       console.log('System design generated successfully!');
@@ -436,12 +479,16 @@ export default function Home() {
   const questions = [
     // Question 1
     <div key="q1">
-      <label htmlFor="productIntent" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-        1. What are you trying to build?
-      </label>
-      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
-        E.g., a mobile app for freelancers to manage time.
-      </p>
+      {!isFormCollapsed && (
+        <>
+          <label htmlFor="productIntent" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+            1. What are you trying to build?
+          </label>
+          <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+            E.g., a mobile app for freelancers to manage time.
+          </p>
+        </>
+      )}
       <div style={{ position: 'relative' }}>
       <textarea
         id="productIntent"
@@ -455,7 +502,7 @@ export default function Home() {
             minHeight: '60px', 
             borderRadius: '10px', 
             backgroundColor: '#F5F5F7', 
-            border: formData.productIntent.length > 200 ? '1px solid #dc3545' : '1px solid #e9ecef'
+            border: formData.productIntent.length > 500 ? '1px solid #dc3545' : '1px solid #e9ecef'
           }}
           placeholder={currentPlaceholder}
         />
@@ -466,22 +513,26 @@ export default function Home() {
       </div>
       <div style={{ 
         fontSize: '10px', 
-        color: formData.productIntent.length > 200 ? '#dc3545' : '#666',
+        color: formData.productIntent.length > 500 ? '#dc3545' : '#666',
         fontWeight: 'normal',
         marginTop: '4px'
       }}>
-        MIN 35 CHARACTERS • MAX 200 CHARACTERS
+        {formData.productIntent.length}/500 CHARACTERS • MIN 35 • MAX 500
       </div>
     </div>,
     
     // Question 2
     <div key="q2">
-      <label htmlFor="coreProblem" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-        2. What is the core problem you're solving?
-      </label>
-      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
-        Get to the underlying utility, not just the product (e.g., procrastination, lack of structure).
-      </p>
+      {!isFormCollapsed && (
+        <>
+          <label htmlFor="coreProblem" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+            2. What is the core problem you're solving?
+          </label>
+          <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+            Get to the underlying utility, not just the product (e.g., procrastination, lack of structure).
+          </p>
+        </>
+      )}
       <div style={{ position: 'relative' }}>
       <textarea
           id="coreProblem"
@@ -510,18 +561,22 @@ export default function Home() {
         fontWeight: 'normal',
         marginTop: '4px'
       }}>
-        MIN 100 CHARACTERS • MAX 500 CHARACTERS
+        {formData.coreProblem.length}/500 CHARACTERS • MIN 100 • MAX 500
       </div>
     </div>,
     
     // Question 3
     <div key="q3">
-      <label htmlFor="solutionIdea" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-        3. Do you have an idea of how the solution should work?
-      </label>
-      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
-        Early mental model: features, flow, user experience.
-      </p>
+      {!isFormCollapsed && (
+        <>
+          <label htmlFor="solutionIdea" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+            3. Do you have an idea of how the solution should work?
+          </label>
+          <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+            Early mental model: features, flow, user experience.
+          </p>
+        </>
+      )}
       <div style={{ position: 'relative' }}>
       <textarea
           id="solutionIdea"
@@ -535,7 +590,7 @@ export default function Home() {
             minHeight: '60px', 
             borderRadius: '10px', 
             backgroundColor: '#F5F5F7', 
-            border: formData.solutionIdea.length > 500 ? '1px solid #dc3545' : '1px solid #e9ecef'
+            border: formData.solutionIdea.length > 2000 ? '1px solid #dc3545' : '1px solid #e9ecef'
           }}
           placeholder={currentPlaceholder}
         />
@@ -546,22 +601,26 @@ export default function Home() {
       </div>
       <div style={{ 
         fontSize: '10px', 
-        color: formData.solutionIdea.length > 500 ? '#dc3545' : '#666',
+        color: formData.solutionIdea.length > 2000 ? '#dc3545' : '#666',
         fontWeight: 'normal',
         marginTop: '4px'
       }}>
-        MIN 100 CHARACTERS • MAX 500 CHARACTERS
+        {formData.solutionIdea.length}/2000 CHARACTERS • MIN 100 • MAX 2000
       </div>
     </div>,
     
     // Question 4
     <div key="q4">
-      <label htmlFor="idealUser" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-        4. Who is your ideal user?
-      </label>
-      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
-        Persona + pain points (e.g., freelance designers who struggle with time tracking).
-      </p>
+      {!isFormCollapsed && (
+        <>
+          <label htmlFor="idealUser" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+            4. Who is your ideal user?
+          </label>
+          <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+            Persona + pain points (e.g., freelance designers who struggle with time tracking).
+          </p>
+        </>
+      )}
       <div style={{ position: 'relative' }}>
       <textarea
           id="idealUser"
@@ -590,18 +649,22 @@ export default function Home() {
         fontWeight: 'normal',
         marginTop: '4px'
       }}>
-        MIN 20 CHARACTERS • MAX 150 CHARACTERS
+        {formData.idealUser.length}/150 CHARACTERS • MIN 20 • MAX 150
       </div>
     </div>,
     
     // Question 5
     <div key="q5">
-      <label htmlFor="platform" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-        5. Are you thinking of launching as a web app, mobile app, or both?
-      </label>
-      <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
-        Platform affects stack and system suggestions.
-      </p>
+      {!isFormCollapsed && (
+        <>
+          <label htmlFor="platform" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+            5. Are you thinking of launching as a web app, mobile app, or both?
+          </label>
+          <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: '#666' }}>
+            Platform affects stack and system suggestions.
+          </p>
+        </>
+      )}
       <select
         id="platform"
         name="platform"
@@ -619,12 +682,16 @@ export default function Home() {
     
     // Question 6
     <div key="q6">
-      <label htmlFor="inspirations" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-        6. What are similar products or inspirations?
-      </label>
-      <p style={{ fontSize: '0.8rem', marginBottom: '0.5rem', color: '#666' }}>
-        For example, if you're building a productivity tool, Notion might be a similar product. You could mention how Notion's 'lego-like' building blocks give users flexibility to manage their schedules while adding notes and other content.
-      </p>
+      {!isFormCollapsed && (
+        <>
+          <label htmlFor="inspirations" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+            6. What are similar products or inspirations?
+          </label>
+          <p style={{ fontSize: '0.8rem', marginBottom: '0.5rem', color: '#666' }}>
+            For example, if you're building a productivity tool, Notion might be a similar product. You could mention how Notion's 'lego-like' building blocks give users flexibility to manage their schedules while adding notes and other content.
+          </p>
+        </>
+      )}
       <div style={{ position: 'relative' }}>
         <textarea
           id="inspirations"
@@ -638,7 +705,7 @@ export default function Home() {
             minHeight: '60px', 
             borderRadius: '10px', 
             backgroundColor: '#F5F5F7', 
-            border: formData.inspirations.length > 500 ? '1px solid #dc3545' : '1px solid #e9ecef'
+            border: formData.inspirations.length > 2000 ? '1px solid #dc3545' : '1px solid #e9ecef'
           }}
           placeholder={currentPlaceholder}
         />
@@ -649,19 +716,21 @@ export default function Home() {
       </div>
       <div style={{ 
         fontSize: '10px', 
-        color: formData.inspirations.length > 500 ? '#dc3545' : '#666',
+        color: formData.inspirations.length > 2000 ? '#dc3545' : '#666',
         fontWeight: 'normal',
         marginTop: '4px'
       }}>
-        MIN 100 CHARACTERS • MAX 500 CHARACTERS
+        {formData.inspirations.length}/2000 CHARACTERS • MIN 100 • MAX 2000
       </div>
     </div>,
     
     // Question 7
     <div key="q7">
-      <label htmlFor="dataStorage" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-        7. Will you collect user data or require backend storage?
-      </label>
+      {!isFormCollapsed && (
+        <label htmlFor="dataStorage" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+          7. Will you collect user data or require backend storage?
+        </label>
+      )}
       <select
         id="dataStorage"
         name="dataStorage"
@@ -702,9 +771,24 @@ export default function Home() {
       return currentValue.length >= 20 && currentValue.length <= 150;
     }
     
-    // For other textarea fields (questions 1, 2, 5), check 100-500 character count
-    if ([1, 2, 5].includes(activeQuestion)) {
+    // For question 0 (productIntent), check 35-500 character count
+    if (activeQuestion === 0) {
+      return currentValue.length >= 35 && currentValue.length <= 500;
+    }
+    
+    // For question 1 (coreProblem), check 100-500 character count
+    if (activeQuestion === 1) {
       return currentValue.length >= 100 && currentValue.length <= 500;
+    }
+    
+    // For question 2 (solutionIdea), check 100-2000 character count
+    if (activeQuestion === 2) {
+      return currentValue.length >= 100 && currentValue.length <= 2000;
+    }
+    
+    // For question 5 (inspirations), check 100-2000 character count
+    if (activeQuestion === 5) {
+      return currentValue.length >= 100 && currentValue.length <= 2000;
     }
     
     // For select fields (questions 4, 6), just check if something is selected
@@ -727,132 +811,130 @@ export default function Home() {
         {currentPage === 'playground' ? (
           <>
         <div className="form-container">
-          {/* Collapse/Expand Button */}
-          <div style={{ 
-            position: 'absolute', 
-            top: '1rem', 
-            right: '1rem', 
-            zIndex: 1000 
-          }}
-          className="expand-tooltip-container"
-          >
-            <button
-              onClick={() => setIsFormCollapsed(!isFormCollapsed)}
-              style={{
-                background: '#ffffff',
-                border: '1px solid #e5e7eb',
-                borderRadius: '8px',
-                padding: '8px',
-                cursor: 'pointer',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#f9fafb';
-                e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#ffffff';
-                e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
-              }}
+          {/* Collapse/Expand Button - Only show when form is expanded */}
+          {!isFormCollapsed && (
+            <div style={{ 
+              position: 'absolute', 
+              top: '1rem', 
+              right: '1rem', 
+              zIndex: 1000 
+            }}
+            className="expand-tooltip-container"
             >
-              {isFormCollapsed ? (
-                // Expand icon
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M1.75 1.5C1.61193 1.5 1.5 1.61193 1.5 1.75V4.25C1.5 4.66421 1.16421 5 0.75 5C0.33579 5 0 4.66421 0 4.25V1.75C0 0.7835 0.7835 0 1.75 0H4.25C4.66421 0 5 0.33579 5 0.75C5 1.16421 4.66421 1.5 4.25 1.5H1.75ZM9 0.75C9 0.33579 9.3358 0 9.75 0H12.25C13.2165 0 14 0.7835 14 1.75V4.25C14 4.66421 13.6642 5 13.25 5C12.8358 5 12.5 4.66421 12.5 4.25V1.75C12.5 1.61193 12.3881 1.5 12.25 1.5H9.75C9.3358 1.5 9 1.16421 9 0.75ZM0 9.75C0 9.3358 0.33579 9 0.75 9H3.25C4.2165 9 5 9.7835 5 10.75V13.25C5 13.6642 4.66421 14 4.25 14C3.83579 14 3.5 13.6642 3.5 13.25V10.75C3.5 10.6119 3.38807 10.5 3.25 10.5H0.75C0.33579 10.5 0 10.1642 0 9.75ZM9 10.75C9 9.7835 9.7835 9 10.75 9H13.25C13.6642 9 14 9.3358 14 9.75C14 10.1642 13.6642 10.5 13.25 10.5H10.75C10.6119 10.5 10.5 10.6119 10.5 10.75V13.25C10.5 13.6642 10.1642 14 9.75 14C9.3358 14 9 13.6642 9 13.25V10.75Z" fill="#1F2328"/>
-                </svg>
-              ) : (
-                // Collapse icon
+              <button
+                onClick={() => setIsFormCollapsed(!isFormCollapsed)}
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  padding: '8px',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#f9fafb';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#ffffff';
+                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+                }}
+              >
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fillRule="evenodd" clipRule="evenodd" d="M4.25 0C4.66421 0 5 0.33579 5 0.75V3.25C5 4.2165 4.2165 5 3.25 5H0.75C0.33579 5 0 4.66421 0 4.25C0 3.83579 0.33579 3.5 0.75 3.5H3.25C3.38807 3.5 3.5 3.38807 3.5 3.25V0.75C3.5 0.33579 3.83579 0 4.25 0ZM9.75 0C10.1642 0 10.5 0.33579 10.5 0.75V3.25C10.5 3.38807 10.6119 3.5 10.75 3.5H13.25C13.6642 3.5 14 3.83579 14 4.25C14 4.66421 13.6642 5 13.25 5H10.75C9.7835 5 9 4.2165 9 3.25V0.75C9 0.33579 9.3358 0 9.75 0ZM0 9.75C0 9.3358 0.33579 9 0.75 9H3.25C4.2165 9 5 9.7835 5 10.75V13.25C5 13.6642 4.66421 14 4.25 14C3.83579 14 3.5 13.6642 3.5 13.25V10.75C3.5 10.6119 3.38807 10.5 3.25 10.5H0.75C0.33579 10.5 0 10.1642 0 9.75ZM9 10.75C9 9.7835 9.7835 9 10.75 9H13.25C13.6642 9 14 9.3358 14 9.75C14 10.1642 13.6642 10.5 13.25 10.5H10.75C10.6119 10.5 10.5 10.6119 10.5 10.75V13.25C10.5 13.6642 10.1642 14 9.75 14C9.3358 14 9 13.6642 9 13.25V10.75Z" fill="#1F2328"/>
                 </svg>
-              )}
-            </button>
-            <div className="expand-tooltip">{isFormCollapsed ? 'Expand' : 'Collapse'}</div>
-          </div>
+              </button>
+              <div className="expand-tooltip">Collapse</div>
+            </div>
+          )}
 
-              <h1 style={{ marginTop: '-1.5rem', marginBottom: '5rem', fontWeight: '500', fontSize: '2rem', textAlign: 'center', lineHeight: '1.3' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.5rem' }}>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px' }}>
-                        <defs>
-                          <linearGradient id="pulsatingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#667eea">
-                              <animate attributeName="stop-color" values="#667eea;#764ba2;#0070f3;#667eea" dur="3s" repeatCount="indefinite" />
-                            </stop>
-                            <stop offset="50%" stopColor="#764ba2">
-                              <animate attributeName="stop-color" values="#764ba2;#0070f3;#667eea;#764ba2" dur="3s" repeatCount="indefinite" />
-                            </stop>
-                            <stop offset="100%" stopColor="#0070f3">
-                              <animate attributeName="stop-color" values="#0070f3;#667eea;#764ba2;#0070f3" dur="3s" repeatCount="indefinite" />
-                            </stop>
-                          </linearGradient>
-                        </defs>
-                        <path d="M15.7276 0.818098C15.6441 0.484223 15.3442 0.25 15 0.25C14.6558 0.25 14.3559 0.484223 14.2724 0.818098C14.0436 1.73333 13.7192 2.34514 13.2822 2.78217C12.8451 3.2192 12.2333 3.54358 11.3181 3.77239C10.9842 3.85586 10.75 4.15585 10.75 4.5C10.75 4.84415 10.9842 5.14414 11.3181 5.22761C12.2333 5.45642 12.8451 5.7808 13.2822 6.21783C13.7192 6.65486 14.0436 7.26667 14.2724 8.1819C14.3559 8.51578 14.6558 8.75 15 8.75C15.3442 8.75 15.6441 8.51578 15.7276 8.1819C15.9564 7.26667 16.2808 6.65486 16.7178 6.21783C17.1549 5.7808 17.7667 5.45642 18.6819 5.22761C19.0158 5.14414 19.25 4.84415 19.25 4.5C19.25 4.15585 19.0158 3.85586 18.6819 3.77239C17.7667 3.54358 17.1549 3.2192 16.7178 2.78217C16.2808 2.34514 15.9564 1.73333 15.7276 0.818098Z" fill="url(#pulsatingGradient)"/>
-                        <path d="M8.72761 4.8181C8.64414 4.48422 8.34415 4.25 8 4.25C7.65585 4.25 7.35586 4.48422 7.27239 4.8181C6.8293 6.59048 6.18349 7.84514 5.26431 8.76431C4.34514 9.68349 3.09048 10.3293 1.3181 10.7724C0.984223 10.8559 0.75 11.1558 0.75 11.5C0.75 11.8442 0.984223 12.1441 1.3181 12.2276C3.09048 12.6707 4.34513 13.3165 5.26431 14.2357C6.18349 15.1549 6.8293 16.4095 7.27239 18.1819C7.35586 18.5158 7.65585 18.75 8 18.75C8.34415 18.75 8.64414 18.5158 8.72761 18.1819C9.1707 16.4095 9.81651 15.1549 10.7357 14.2357C11.6549 13.3165 12.9095 12.6707 14.6819 12.2276C15.0158 12.1441 15.25 11.8442 15.25 11.5C15.25 11.1558 15.0158 10.8559 14.6819 10.7724C12.9095 10.3293 11.6549 9.68349 10.7357 8.76431C9.81651 7.84514 9.1707 6.59048 8.72761 4.8181Z" fill="url(#pulsatingGradient)"/>
-            </svg>
-                      Turn your{' '}
-                      <span 
-                        style={{
-                          display: 'inline-block',
-                          perspective: '1000px',
-                          marginLeft: '0.3rem',
-                          width: '85px',
-                          textAlign: 'left'
-                        }}
-                      >
-                        <span
+              {!isFormCollapsed && (
+            <h1 style={{ marginTop: '-1.5rem', marginBottom: '5rem', fontWeight: '500', fontSize: '2rem', textAlign: 'center', lineHeight: '1.3' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.5rem' }}>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px' }}>
+                          <defs>
+                            <linearGradient id="pulsatingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#667eea">
+                                <animate attributeName="stop-color" values="#667eea;#764ba2;#0070f3;#667eea" dur="3s" repeatCount="indefinite" />
+                              </stop>
+                              <stop offset="50%" stopColor="#764ba2">
+                                <animate attributeName="stop-color" values="#764ba2;#0070f3;#667eea;#764ba2" dur="3s" repeatCount="indefinite" />
+                              </stop>
+                              <stop offset="100%" stopColor="#0070f3">
+                                <animate attributeName="stop-color" values="#0070f3;#667eea;#764ba2;#0070f3" dur="3s" repeatCount="indefinite" />
+                              </stop>
+                            </linearGradient>
+                          </defs>
+                          <path d="M15.7276 0.818098C15.6441 0.484223 15.3442 0.25 15 0.25C14.6558 0.25 14.3559 0.484223 14.2724 0.818098C14.0436 1.73333 13.7192 2.34514 13.2822 2.78217C12.8451 3.2192 12.2333 3.54358 11.3181 3.77239C10.9842 3.85586 10.75 4.15585 10.75 4.5C10.75 4.84415 10.9842 5.14414 11.3181 5.22761C12.2333 5.45642 12.8451 5.7808 13.2822 6.21783C13.7192 6.65486 14.0436 7.26667 14.2724 8.1819C14.3559 8.51578 14.6558 8.75 15 8.75C15.3442 8.75 15.6441 8.51578 15.7276 8.1819C15.9564 7.26667 16.2808 6.65486 16.7178 6.21783C17.1549 5.7808 17.7667 5.45642 18.6819 5.22761C19.0158 5.14414 19.25 4.84415 19.25 4.5C19.25 4.15585 19.0158 3.85586 18.6819 3.77239C17.7667 3.54358 17.1549 3.2192 16.7178 2.78217C16.2808 2.34514 15.9564 1.73333 15.7276 0.818098Z" fill="url(#pulsatingGradient)"/>
+                          <path d="M8.72761 4.8181C8.64414 4.48422 8.34415 4.25 8 4.25C7.65585 4.25 7.35586 4.48422 7.27239 4.8181C6.8293 6.59048 6.18349 7.84514 5.26431 8.76431C4.34514 9.68349 3.09048 10.3293 1.3181 10.7724C0.984223 10.8559 0.75 11.1558 0.75 11.5C0.75 11.8442 0.984223 12.1441 1.3181 12.2276C3.09048 12.6707 4.34513 13.3165 5.26431 14.2357C6.18349 15.1549 6.8293 16.4095 7.27239 18.1819C7.35586 18.5158 7.65585 18.75 8 18.75C8.34415 18.75 8.64414 18.5158 8.72761 18.1819C9.1707 16.4095 9.81651 15.1549 10.7357 14.2357C11.6549 13.3165 12.9095 12.6707 14.6819 12.2276C15.0158 12.1441 15.25 11.8442 15.25 11.5C15.25 11.1558 15.0158 10.8559 14.6819 10.7724C12.9095 10.3293 11.6549 9.68349 10.7357 8.76431C9.81651 7.84514 9.1707 6.59048 8.72761 4.8181Z" fill="url(#pulsatingGradient)"/>
+              </svg>
+                        Turn your{' '}
+                        <span 
                           style={{
                             display: 'inline-block',
-                            transformStyle: 'preserve-3d',
-                            transition: 'transform 0.6s ease-in-out',
-                            transform: isFlipping ? 'rotateX(90deg)' : 'rotateX(0deg)',
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #0070f3 100%)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            backgroundClip: 'text',
-                            fontWeight: '600'
+                            perspective: '1000px',
+                            marginLeft: '0.3rem',
+                            width: '85px',
+                            textAlign: 'left'
                           }}
                         >
-                          {currentWord}
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              transformStyle: 'preserve-3d',
+                              transition: 'transform 0.6s ease-in-out',
+                              transform: isFlipping ? 'rotateX(90deg)' : 'rotateX(0deg)',
+                              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #0070f3 100%)',
+                              WebkitBackgroundClip: 'text',
+                              WebkitTextFillColor: 'transparent',
+                              backgroundClip: 'text',
+                              fontWeight: '600'
+                            }}
+                          >
+                            {currentWord}
+                          </span>
                         </span>
-                      </span>
-                </div>
-                <div>
-                  into a technical system design, fast.
-                </div>
-          </h1>
+                  </div>
+                  <div>
+                    into a technical system design, fast.
+                  </div>
+            </h1>
+          )}
           <form onSubmit={handleSubmit}>
             {/* Progress indicator */}
-            <div style={{ display: 'flex', marginBottom: '1rem' }}>
-              {Array.from({ length: totalQuestions }).map((_, i) => (
-                <div 
-                  key={i}
-                  style={{ 
-                    height: '4px', 
-                    flex: 1, 
-                        backgroundColor: '#e1e1e1',
-                    marginRight: i < totalQuestions - 1 ? '4px' : 0,
-                        borderRadius: '4px',
-                        position: 'relative',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <div
-                        style={{
-                          height: '100%',
-                          width: i <= activeQuestion ? '100%' : '0%',
-                          backgroundColor: '#1F2328',
+            {!isFormCollapsed && (
+              <div style={{ display: 'flex', marginBottom: '1rem' }}>
+                {Array.from({ length: totalQuestions }).map((_, i) => (
+                  <div 
+                    key={i}
+                    style={{ 
+                      height: '4px', 
+                      flex: 1, 
+                          backgroundColor: '#e1e1e1',
+                      marginRight: i < totalQuestions - 1 ? '4px' : 0,
                           borderRadius: '4px',
-                          transition: 'width 0.5s ease-in-out',
-                          transitionDelay: i <= activeQuestion ? `${(i) * 0.1}s` : '0s',
-                  }}
-                />
-                    </div>
-              ))}
-            </div>
+                          position: 'relative',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        <div
+                          style={{
+                            height: '100%',
+                            width: i <= activeQuestion ? '100%' : '0%',
+                            backgroundColor: '#1F2328',
+                            borderRadius: '4px',
+                            transition: 'width 0.5s ease-in-out',
+                            transitionDelay: i <= activeQuestion ? `${(i) * 0.1}s` : '0s',
+                    }}
+                  />
+                      </div>
+                ))}
+              </div>
+            )}
 
             {/* Current question */}
             {questions[activeQuestion]}
@@ -976,7 +1058,157 @@ export default function Home() {
         </div>
         
         <div className="canvas-container">
+          {/* Expand Button - Only show when form is collapsed */}
+          {isFormCollapsed && (
+            <div style={{ 
+              position: 'absolute', 
+              top: '16px', 
+              right: '64px', 
+              zIndex: 1000 
+            }}
+            className="expand-tooltip-container"
+            >
+              <button
+                onClick={() => setIsFormCollapsed(!isFormCollapsed)}
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  padding: '8px',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#f9fafb';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#ffffff';
+                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M1.75 1.5C1.61193 1.5 1.5 1.61193 1.5 1.75V4.25C1.5 4.66421 1.16421 5 0.75 5C0.33579 5 0 4.66421 0 4.25V1.75C0 0.7835 0.7835 0 1.75 0H4.25C4.66421 0 5 0.33579 5 0.75C5 1.16421 4.66421 1.5 4.25 1.5H1.75ZM9 0.75C9 0.33579 9.3358 0 9.75 0H12.25C13.2165 0 14 0.7835 14 1.75V4.25C14 4.66421 13.6642 5 13.25 5C12.8358 5 12.5 4.66421 12.5 4.25V1.75C12.5 1.61193 12.3881 1.5 12.25 1.5H9.75C9.3358 1.5 9 1.16421 9 0.75ZM0 9.75C0 9.3358 0.33579 9 0.75 9H3.25C4.2165 9 5 9.7835 5 10.75V13.25C5 13.6642 4.66421 14 4.25 14C3.83579 14 3.5 13.6642 3.5 13.25V10.75C3.5 10.6119 3.38807 10.5 3.25 10.5H0.75C0.33579 10.5 0 10.1642 0 9.75ZM9 10.75C9 9.7835 9.7835 9 10.75 9H13.25C13.6642 9 14 9.3358 14 9.75C14 10.1642 13.6642 10.5 13.25 10.5H10.75C10.6119 10.5 10.5 10.6119 10.5 10.75V13.25C10.5 13.6642 10.1642 14 9.75 14C9.3358 14 9 13.6642 9 13.25V10.75Z" fill="#1F2328"/>
+                </svg>
+              </button>
+              <div className="expand-tooltip">Expand</div>
+            </div>
+          )}
           <FlowCanvas graphData={graphData} />
+          
+          {/* Summary Section - Only show when graph data exists */}
+          {summaryData && isSummaryVisible && (
+            <div style={{
+              position: 'absolute',
+              bottom: '20px',
+              right: '20px',
+              width: '380px',
+              maxWidth: '90%',
+              background: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '12px',
+              padding: '16px',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+              zIndex: 1000,
+              fontSize: '14px',
+              lineHeight: '1.5',
+              maxHeight: '70vh',
+              overflowY: 'auto',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(0, 0, 0, 0.1)'
+            }}>
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center',
+                marginBottom: '12px',
+                borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                paddingBottom: '8px'
+              }}>
+                <h3 style={{ 
+                  margin: '0', 
+                  fontSize: '16px', 
+                  fontWeight: '600'
+                }}>
+                  Executive Summary
+                </h3>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  {/* Copy button */}
+                  <div className="tooltip-container">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(summaryData);
+                        // You could add a toast notification here
+                      }}
+                      style={{
+                        background: '#ffffff',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '6px',
+                        padding: '4px',
+                        height: '24px',
+                        width: '24px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'all 0.2s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = '#f9fafb';
+                        e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = '#ffffff';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    >
+                      <svg width="14" height="15" viewBox="0 0 115.77 122.88" style={{enableBackground: 'new 0 0 115.77 122.88'}}>
+                        <path fillRule="evenodd" clipRule="evenodd" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z" fill="#1F2328"/>
+                      </svg>
+                    </button>
+                    <div className="tooltip">Copy to Cursor/VS Code</div>
+                  </div>
+                  
+                  {/* Close button */}
+                  <button
+                    onClick={() => setIsSummaryVisible(false)}
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '6px',
+                      padding: '4px',
+                      height: '24px',
+                      width: '24px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#f9fafb';
+                      e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#ffffff';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M13 1L1 13" stroke="#1F2328" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M1 1L13 13" stroke="#1F2328" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div style={{ whiteSpace: 'pre-line' }}>
+                {summaryData}
+              </div>
+            </div>
+          )}
         </div>
           </>
         ) : currentPage === 'how-it-works' ? (
@@ -996,17 +1228,28 @@ export default function Home() {
           height: 100vh;
         }
         .form-container {
-          max-width: 1500px;
-          min-height: 45vh;
+          max-width: ${isFormCollapsed ? '90vw' : '1500px'};
+          min-height: ${isFormCollapsed ? 'auto' : '45vh'};
           margin: 0 auto;
-          background-color: white;
-          padding: 2rem;
-          border-radius: 12px;
+          background-color: ${isFormCollapsed ? 'transparent' : 'white'};
+          padding: ${isFormCollapsed ? '0' : '2rem'};
+          border-radius: ${isFormCollapsed ? '0' : '12px'};
           box-shadow: none;
-          position: relative;
+          position: ${isFormCollapsed ? 'fixed' : 'relative'};
+          top: ${isFormCollapsed ? '10px' : 'auto'};
+          left: ${isFormCollapsed ? '50%' : 'auto'};
+          transform: ${isFormCollapsed ? 'translateX(-50%)' : 'none'};
+          z-index: ${isFormCollapsed ? '1000' : 'auto'};
+          transition: all 0.3s ease;
         }
         .canvas-container {
-          margin-top: 2rem;
+          margin-top: ${isFormCollapsed ? '0' : '2rem'};
+          height: ${isFormCollapsed ? '100vh' : '50vh'};
+          position: ${isFormCollapsed ? 'fixed' : 'relative'};
+          top: ${isFormCollapsed ? '0' : 'auto'};
+          left: ${isFormCollapsed ? '0' : 'auto'};
+          width: ${isFormCollapsed ? '100vw' : '100%'};
+          transition: all 0.3s ease;
         }
         .expand-tooltip-container {
           position: relative;
@@ -1040,6 +1283,49 @@ export default function Home() {
         }
         
         .expand-tooltip-container:hover .expand-tooltip {
+          opacity: 1;
+          visibility: visible;
+        }
+        
+        .form-container input,
+        .form-container textarea,
+        .form-container select {
+          min-width: ${isFormCollapsed ? '1200px' : 'auto'};
+          max-width: ${isFormCollapsed ? '1400px' : '100%'};
+          width: ${isFormCollapsed ? '85vw' : '100%'};
+        }
+        .tooltip-container {
+          position: relative;
+        }
+        
+        .tooltip {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          margin-top: 8px;
+          background: rgba(0, 0, 0, 0.8);
+          color: white;
+          padding: 6px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          white-space: nowrap;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.2s ease, visibility 0.2s ease;
+          pointer-events: none;
+          z-index: 1001;
+        }
+        
+        .tooltip::before {
+          content: '';
+          position: absolute;
+          bottom: 100%;
+          right: 12px;
+          border: 4px solid transparent;
+          border-bottom-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .tooltip-container:hover .tooltip {
           opacity: 1;
           visibility: visible;
         }

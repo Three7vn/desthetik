@@ -9,6 +9,9 @@ import {
   addEdge,
   BackgroundVariant,
   Node,
+  useReactFlow,
+  getNodesBounds,
+  getViewportForBounds,
 } from '@xyflow/react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -114,42 +117,101 @@ export default function FlowCanvas({ graphData }) {
     [setEdges],
   );
 
-  // Download diagram as PDF
+  // Download diagram as PDF - Complete rewrite for proper capture
   const downloadPDF = useCallback(async () => {
     if (!flowRef.current) return;
     
     try {
-      // Hide controls and minimap temporarily for cleaner PDF
-      const controls = flowRef.current.querySelector('.react-flow__controls');
-      const minimap = flowRef.current.querySelector('.react-flow__minimap');
-      const originalControlsDisplay = controls ? (controls as HTMLElement).style.display : '';
-      const originalMinimapDisplay = minimap ? (minimap as HTMLElement).style.display : '';
+      console.log('Starting PDF generation...');
       
-      if (controls) (controls as HTMLElement).style.display = 'none';
-      if (minimap) (minimap as HTMLElement).style.display = 'none';
-
-      // Capture the canvas
-      const canvas = await html2canvas(flowRef.current, {
+      // Get the entire React Flow container (includes background, nodes, edges)
+      const reactFlowElement = flowRef.current;
+      
+      // Temporarily hide UI elements that shouldn't be in PDF
+      const downloadButton = document.querySelector('[class*="tooltip-container"]') as HTMLElement;
+      const expandButton = document.querySelector('[class*="expand-tooltip-container"]') as HTMLElement;
+      const controls = reactFlowElement.querySelector('.react-flow__controls') as HTMLElement;
+      const minimap = reactFlowElement.querySelector('.react-flow__minimap') as HTMLElement;
+      const attribution = reactFlowElement.querySelector('.react-flow__attribution') as HTMLElement;
+      
+      const originalDownloadDisplay = downloadButton?.style.display || '';
+      const originalExpandDisplay = expandButton?.style.display || '';
+      const originalControlsDisplay = controls?.style.display || '';
+      const originalMinimapDisplay = minimap?.style.display || '';
+      const originalAttributionDisplay = attribution?.style.display || '';
+      
+      if (downloadButton) downloadButton.style.display = 'none';
+      if (expandButton) expandButton.style.display = 'none';
+      if (controls) controls.style.display = 'none';
+      if (minimap) minimap.style.display = 'none';
+      if (attribution) attribution.style.display = 'none';
+      
+      // Wait a moment for UI changes to apply
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Capture the entire React Flow container with all its content
+      const canvas = await html2canvas(reactFlowElement, {
+        background: null, // Let the actual background show through
+        width: reactFlowElement.offsetWidth,
+        height: reactFlowElement.offsetHeight,
         useCORS: true,
         allowTaint: true,
+        logging: false,
       });
-
-      // Restore controls and minimap
-      if (controls) (controls as HTMLElement).style.display = originalControlsDisplay;
-      if (minimap) (minimap as HTMLElement).style.display = originalMinimapDisplay;
-
-      // Create PDF
-      const imgData = canvas.toDataURL('image/png');
+      
+      // Restore UI elements
+      if (downloadButton) downloadButton.style.display = originalDownloadDisplay;
+      if (expandButton) expandButton.style.display = originalExpandDisplay;
+      if (controls) controls.style.display = originalControlsDisplay;
+      if (minimap) minimap.style.display = originalMinimapDisplay;
+      if (attribution) attribution.style.display = originalAttributionDisplay;
+      
+      console.log('Canvas captured:', canvas.width, 'x', canvas.height);
+      
+      // Convert canvas to high-quality image
+      const imgData = canvas.toDataURL('image/png', 1.0);
+      
+      // Calculate PDF dimensions based on canvas size
+      const pixelsToMM = 0.264583;
+      const canvasWidthMM = canvas.width * pixelsToMM;
+      const canvasHeightMM = canvas.height * pixelsToMM;
+      
+      // Ensure minimum A4 size but scale up if content is larger
+      const minWidth = 210; // A4 width
+      const minHeight = 297; // A4 height
+      
+      const pdfWidth = Math.max(minWidth, canvasWidthMM);
+      const pdfHeight = Math.max(minHeight, canvasHeightMM);
+      
+      console.log('Creating PDF:', pdfWidth, 'x', pdfHeight, 'mm');
+      
+      // Create PDF document
       const pdf = new jsPDF({
-        orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
-        unit: 'px',
-        format: [canvas.width, canvas.height]
+        orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
+        unit: 'mm',
+        format: [pdfWidth, pdfHeight],
+        compress: false
       });
-
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      
+      // Add the captured image to PDF at full size
+      pdf.addImage(
+        imgData,
+        'PNG',
+        0,
+        0,
+        pdfWidth,
+        pdfHeight,
+        undefined,
+        'FAST'
+      );
+      
+      // Save the PDF
       pdf.save('system-design.pdf');
+      console.log('PDF saved successfully');
+      
     } catch (error) {
       console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
     }
   }, []);
  
@@ -219,9 +281,8 @@ export default function FlowCanvas({ graphData }) {
             style: { strokeWidth: 2, stroke: '#64748B' }
           }}
         >
-          <Controls style={{ marginBottom: 80 }} />
+          <Controls />
           <MiniMap 
-            style={{ marginBottom: 80 }}
             nodeColor={(node: Node) => {
               const bg = node.style?.background;
               if (!bg || bg === 'transparent') return '#d1d5db';

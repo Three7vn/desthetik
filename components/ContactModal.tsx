@@ -27,7 +27,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
           
           <div className="contact-email">
             <span>Email </span>
-            <strong>contact@desthetik.com</strong>
+            <strong>avram@besomebodi.com</strong>
             <span> for inquiries.</span>
           </div>
         </div>
