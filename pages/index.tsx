@@ -80,19 +80,45 @@ const generateGraphStructure = async (formData: any) => {
   // Helper function to extract JSON from GPT response
   const extractJSON = (text: string) => {
     try {
+      // First try to parse the text directly
       return JSON.parse(text);
     } catch (e) {
+      // If direct parsing fails, try to find JSON in code blocks
       const jsonMatch = text.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
       if (jsonMatch) {
         try {
           return JSON.parse(jsonMatch[1]);
         } catch (e2) {
-          const objectMatch = text.match(/\{[\s\S]*\}/);
-          if (objectMatch) {
-            return JSON.parse(objectMatch[0]);
+          console.log("Failed to parse JSON from code block:", e2);
+        }
+      }
+      
+      // Try to extract the largest JSON object in the text
+      const objectMatch = text.match(/\{[\s\S]*\}/);
+      if (objectMatch) {
+        try {
+          return JSON.parse(objectMatch[0]);
+        } catch (e3) {
+          console.log("Failed to parse JSON from object match:", e3);
+          
+          // Last resort: try to clean up the JSON string and parse again
+          try {
+            const cleanedText = objectMatch[0]
+              .replace(/[\u201C\u201D]/g, '"') // Replace smart quotes
+              .replace(/[\n\r]+/g, ' ')        // Replace newlines with spaces
+              .replace(/,\s*}/g, '}')          // Remove trailing commas
+              .replace(/,\s*]/g, ']')          // Remove trailing commas in arrays
+              .replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2":'); // Ensure property names are quoted
+              
+            return JSON.parse(cleanedText);
+          } catch (e4) {
+            console.log("Failed to parse cleaned JSON:", e4);
           }
         }
       }
+      
+      // If all parsing attempts fail, log the response for debugging
+      console.error("Raw response that couldn't be parsed:", text);
       throw new Error('Could not extract valid JSON from response');
     }
   };
@@ -131,7 +157,8 @@ const generateGraphStructure = async (formData: any) => {
   const graphResponse = await openai.chat.completions.create({
     model: "gpt-4.1",
     messages: [{"role": "user", "content": graphPrompt}],
-    temperature: 0.3
+    temperature: 0.1,
+    response_format: { type: "json_object" }
   });
 
   return extractJSON(graphResponse.choices[0].message.content);
