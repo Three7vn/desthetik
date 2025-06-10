@@ -285,8 +285,8 @@ Return ONLY valid JSON in this exact format:
 - Minimum 200px spacing between node rows within sections vertically
 - Section headers positioned at y: 20 for clear visual separation
 - All nodes clearly readable without overlap
-- SECTIONS MUST BE DYNAMIC AND BUSINESS-RELEVANT, NOT STATIC TEMPLATE SECTIONS
-- RETURN ONLY VALID JSON WITH NO ADDITIONAL TEXT OR COMMENTS`
+  - SECTIONS MUST BE DYNAMIC AND BUSINESS-RELEVANT, NOT STATIC TEMPLATE SECTIONS
+  - RETURN ONLY VALID JSON WITH NO ADDITIONAL TEXT OR COMMENTS`
   };
 
   res.status(200).json(prompts);

@@ -23,9 +23,9 @@ Desthetik combines a multi-turn input flow—like a conversational form—with b
 </p>
 
 <p align="center">
-  <img src="./Screenshot 2025-05-31 at 20.24.32.png" alt="AI scam detection system architecture" width="700" />
+  <img src="./Screenshot 2025-06-10 at 20.59.04.png" alt="Voice-driven learning app architecture" width="700" />
   <br />
-  <em>From abstract concept to concrete architecture: The business idea was to solve the emerging problem of AI-powered phone scams that will be indistinguishable from legitimate calls—whether from banks, institutions, or services. As AI becomes sophisticated enough to reason and sound completely human, people won't know what's real anymore. Desthetik transforms this abstract business idea into a comprehensive technical product: a real-time AI scam detection system with authentication layers, voice analysis, user verification flows, and privacy safeguards—complete with exportable architecture ready for implementation in AI IDEs like Cursor and Windsurf</em>
+  <em>From abstract concept to concrete architecture: The proposed system is a mobile-first, voice-driven learning app inspired by the Feynman learning technique, tailored for users with low attention spans who prefer speaking over reading. The front end leverages React Native for rapid cross-platform deployment, featuring a voice-first user interface and gamified elements such as points, streaks, and badges. The backend manages real-time audio processing, instant feedback, and a personalization engine that adapts content to each user. Conversational AI is powered by OpenAI GPT-4o for context-aware dialogue, with Deepgram providing instant speech-to-text transcription and Amazon Polly converting AI replies to natural-sounding speech. User authentication is handled via passwordless Magic.link, and user data—including audio and progress—is stored in Supabase with encrypted audio storage for privacy. Engagement and retention are driven by OneSignal push notifications and Gameball's gamification SDK. The infrastructure is fully serverless and auto-scaling for seamless growth.</em>
 </p>
 
 ### Technical Implementation
