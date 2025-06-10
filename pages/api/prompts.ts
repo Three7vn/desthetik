@@ -87,6 +87,11 @@ Please provide a detailed system design that includes:
 - EXPLAIN the behavioral reasoning behind each technical choice
 - KEEP THE SOLUTION SIMPLE - DO NOT ADD UNNECESSARY COMPLEXITY
 - FOCUS ON THE MINIMUM VIABLE ARCHITECTURE that solves the core problem
+- PROVIDE A DETAILED IMPLEMENTATION TIMELINE, including:
+  * Timeline for an 8-person development team WITHOUT AI coding tools
+  * Timeline WITH AI coding tools like Cursor or GitHub Copilot, emphasizing dramatic acceleration (at least 70-80% faster)
+  * Note that AI tools dramatically accelerate front-end and back-end development but database configuration may still need manual work
+  * Break down timeline by phase (design, front-end, back-end, integration, testing)
 
 Provide a thorough, technical explanation that demonstrates deep understanding of system design principles while staying laser-focused on the product intent: "{product_intent}" and avoiding over-engineering. Remember, you are Desthetik - helping founders understand the "what" and "why" behind their technical architecture before they build.`,
 
@@ -285,8 +290,8 @@ Return ONLY valid JSON in this exact format:
 - Minimum 200px spacing between node rows within sections vertically
 - Section headers positioned at y: 20 for clear visual separation
 - All nodes clearly readable without overlap
-  - SECTIONS MUST BE DYNAMIC AND BUSINESS-RELEVANT, NOT STATIC TEMPLATE SECTIONS
-  - RETURN ONLY VALID JSON WITH NO ADDITIONAL TEXT OR COMMENTS`
+- SECTIONS MUST BE DYNAMIC AND BUSINESS-RELEVANT, NOT STATIC TEMPLATE SECTIONS
+- RETURN ONLY VALID JSON WITH NO ADDITIONAL TEXT OR COMMENTS`
   };
 
   res.status(200).json(prompts);
