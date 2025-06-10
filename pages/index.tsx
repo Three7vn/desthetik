@@ -459,9 +459,7 @@ export default function Home() {
         1. The key features and components of the system
         2. The engineering feasibility (easy, moderate, or challenging)
         3. Potential technical challenges to be aware of
-        4. Estimated timeline for an MVP under two scenarios:
-           - Without AI coding tools: Assume a traditional development approach with a team of 8 engineers
-           - With AI coding tools: Assume the same team of 8 engineers using Cursor, GitHub Copilot, or similar AI coding tools. DRAMATICALLY REDUCE the timeline (by 3-4x) for front-end and back-end development, emphasizing how much faster development can be. Note that database configuration and infrastructure setup will still require some manual work.
+        4. Estimated timeline for an MVP (provide two estimates: one without using AI coding tools, and one with AI coding tools like Cursor or GitHub Copilot, noting that AI tools help with front-end and back-end code but database configuration may still require manual work)
         
         User Requirements:
         - Product: ${formData.productIntent}
