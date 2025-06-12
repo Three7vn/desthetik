@@ -416,6 +416,23 @@ export default function Home() {
     }
   };
 
+  // Handle key press events (for Enter key navigation)
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    // If Enter key is pressed and current question is valid, go to next question
+    if (e.key === 'Enter' && !e.shiftKey && isCurrentQuestionValid()) {
+      // Prevent default behavior (which might submit the form)
+      e.preventDefault();
+      
+      // If not on the last question, go to the next question
+      if (activeQuestion < totalQuestions - 1) {
+        nextQuestion();
+      } else {
+        // On the last question, submit the form
+        handleSubmit(e as unknown as React.FormEvent);
+      }
+    }
+  };
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -523,6 +540,7 @@ export default function Home() {
         name="productIntent"
         value={formData.productIntent}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
           style={{ 
             width: '100%', 
             padding: '0.5rem', 
@@ -567,6 +585,7 @@ export default function Home() {
           name="coreProblem"
           value={formData.coreProblem}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
           style={{ 
             width: '100%', 
             padding: '0.5rem', 
@@ -611,6 +630,7 @@ export default function Home() {
           name="solutionIdea"
           value={formData.solutionIdea}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
           style={{ 
             width: '100%', 
             padding: '0.5rem', 
@@ -655,6 +675,7 @@ export default function Home() {
           name="idealUser"
           value={formData.idealUser}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
           style={{ 
             width: '100%', 
             padding: '0.5rem', 
@@ -698,6 +719,7 @@ export default function Home() {
         name="platform"
         value={formData.platform}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
         style={{ width: '100%', padding: '0.5rem', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
       >
         <option value="">Select platform</option>
@@ -725,7 +747,8 @@ export default function Home() {
           id="inspirations"
           name="inspirations"
           value={formData.inspirations}
-        onChange={handleInputChange}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           style={{ 
             width: '100%', 
             padding: '0.5rem', 
@@ -764,6 +787,7 @@ export default function Home() {
         name="dataStorage"
         value={formData.dataStorage}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
         style={{ width: '100%', padding: '0.5rem', borderRadius: '10px', backgroundColor: '#F5F5F7', border: '1px solid #e9ecef' }}
       >
         <option value="">Select option</option>
