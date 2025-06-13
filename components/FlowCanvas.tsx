@@ -109,11 +109,6 @@ const decodeAndDecompressData = (encodedData) => {
   try {
     console.log('Decoding data length:', encodedData.length);
     
-    if (!encodedData || encodedData.trim() === '') {
-      console.error('Empty encoded data received');
-      return null;
-    }
-    
     // Use LZ-String for URL-safe decoding and decompression
     const jsonString = LZString.decompressFromEncodedURIComponent(encodedData);
     
@@ -124,28 +119,11 @@ const decodeAndDecompressData = (encodedData) => {
     
     console.log('Decoded JSON length:', jsonString.length);
     
-    try {
-      const parsed = JSON.parse(jsonString);
-      
-      if (!parsed || typeof parsed !== 'object') {
-        console.error('Parsed result is not a valid object');
-        return null;
-      }
-      
-      if (!Array.isArray(parsed.nodes) || !Array.isArray(parsed.edges)) {
-        console.error('Parsed result missing nodes or edges arrays:', parsed);
-        return null;
-      }
-      
-      console.log('Decoded nodes count:', parsed.nodes.length);
-      console.log('Decoded edges count:', parsed.edges.length);
-      
-      return parsed;
-    } catch (parseError) {
-      console.error('JSON parsing error:', parseError);
-      console.error('JSON string (first 100 chars):', jsonString.substring(0, 100));
-      return null;
-    }
+    const parsed = JSON.parse(jsonString);
+    console.log('Decoded nodes count:', parsed.nodes?.length);
+    console.log('Decoded edges count:', parsed.edges?.length);
+    
+    return parsed;
   } catch (error) {
     console.error('Error decoding diagram data:', error);
     return null;
@@ -182,79 +160,79 @@ export default function FlowCanvas({ graphData }) {
   // Check URL hash for encoded diagram data on component mount
   useEffect(() => {
     const hash = window.location.hash;
-    console.log('FlowCanvas: Current URL hash:', hash);
+    console.log('Current URL hash:', hash);
+    console.log('Current full URL:', window.location.href);
+    console.log('Current hostname:', window.location.hostname);
+    console.log('Current port:', window.location.port);
     
     if (hash && hash.startsWith('#playground/')) {
       try {
         const encodedData = hash.substring('#playground/'.length);
         console.log('Found encoded data in URL, length:', encodedData.length);
         
-        if (!encodedData || encodedData.trim() === '') {
-          console.error('Empty encoded data in URL hash');
-          return;
-        }
-        
-        const decodedData = decodeAndDecompressData(encodedData);
-        if (decodedData && decodedData.nodes && decodedData.edges) {
-          console.log('Successfully decoded data from URL');
-          setNodes(decodedData.nodes);
-          setEdges(decodedData.edges);
+        if (encodedData) {
+          console.log('Attempting to decode data from URL...');
+          const decodedData = decodeAndDecompressData(encodedData);
           
-          // Show a notification that the design was loaded from URL
-          setTimeout(() => {
-            // Create more visible notification
-            const notification = document.createElement('div');
-            notification.style.position = 'fixed';
-            notification.style.top = '50%';
-            notification.style.left = '50%';
-            notification.style.transform = 'translate(-50%, -50%)';
-            notification.style.background = 'rgba(0, 0, 0, 0.8)';
-            notification.style.color = '#fff';
-            notification.style.padding = '20px 30px';
-            notification.style.borderRadius = '10px';
-            notification.style.fontSize = '16px';
-            notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
-            notification.style.zIndex = '9999';
-            notification.style.opacity = '0';
-            notification.style.transition = 'opacity 0.3s ease';
-            notification.style.textAlign = 'center';
-            notification.style.maxWidth = '80%';
+          if (decodedData) {
+            console.log('Successfully decoded data from URL');
+            console.log('Decoded data has nodes:', !!decodedData.nodes, 'edges:', !!decodedData.edges);
             
-            // Create a title for the notification
-            const title = document.createElement('div');
-            title.style.fontWeight = 'bold';
-            title.style.marginBottom = '10px';
-            title.style.fontSize = '18px';
-            title.textContent = 'Design Loaded Successfully!';
-            notification.appendChild(title);
-            
-            // Create message content
-            const message = document.createElement('div');
-            message.textContent = 'This design was loaded from a shared link. You can modify it or create your own shareable link.';
-            notification.appendChild(message);
-            
-            document.body.appendChild(notification);
-            
-            // Fade in
-            setTimeout(() => {
-              notification.style.opacity = '1';
-            }, 10);
-            
-            // Remove notification after 3 seconds
-            setTimeout(() => {
-              notification.style.opacity = '0';
+            if (decodedData.nodes && decodedData.edges) {
+              console.log('Setting nodes and edges from URL data');
+              setNodes(decodedData.nodes);
+              setEdges(decodedData.edges);
+              
+              // Show a subtle notification that the design was loaded from URL
               setTimeout(() => {
-                document.body.removeChild(notification);
-              }, 300);
-            }, 3000);
-          }, 500);
-        } else {
-          console.error('Failed to decode data from URL or missing nodes/edges');
-          
-          // Show error notification
-          setTimeout(() => {
-            alert('Failed to load design from URL. The link may be invalid or corrupted.');
-          }, 500);
+                const notification = document.createElement('div');
+                notification.style.position = 'fixed';
+                notification.style.bottom = '20px';
+                notification.style.left = '50%';
+                notification.style.transform = 'translateX(-50%)';
+                notification.style.background = '#222';
+                notification.style.color = '#fff';
+                notification.style.padding = '6px 14px';
+                notification.style.borderRadius = '6px';
+                notification.style.fontSize = '13px';
+                notification.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+                notification.style.zIndex = '9999';
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.3s ease';
+                notification.textContent = 'Design loaded from shared link';
+                
+                document.body.appendChild(notification);
+                
+                // Fade in
+                setTimeout(() => {
+                  notification.style.opacity = '1';
+                }, 10);
+                
+                // Remove notification after 2 seconds
+                setTimeout(() => {
+                  notification.style.opacity = '0';
+                  setTimeout(() => {
+                    document.body.removeChild(notification);
+                  }, 300);
+                }, 2000);
+              }, 500);
+            } else {
+              console.error('Failed to decode data from URL or missing nodes/edges');
+              console.error('Decoded data:', JSON.stringify(decodedData).substring(0, 200) + '...');
+              
+              // Show error notification
+              setTimeout(() => {
+                alert('Failed to load design from URL. The link may be invalid or corrupted.');
+              }, 500);
+            }
+          } else {
+            console.error('Failed to decode data from URL - null result');
+            
+            // Show error notification
+            setTimeout(() => {
+              alert('Failed to load design from URL. The link may be invalid or corrupted.');
+            }, 500);
+          }
         }
       } catch (error) {
         console.error('Error loading diagram from URL:', error);
@@ -264,8 +242,6 @@ export default function FlowCanvas({ graphData }) {
           alert('Failed to load design from URL. The link may be invalid or corrupted.');
         }, 500);
       }
-    } else {
-      console.log('No encoded data in URL hash');
     }
   }, [setNodes, setEdges]);
 
@@ -389,11 +365,12 @@ export default function FlowCanvas({ graphData }) {
     
     const encodedData = compressAndEncodeData(diagramData);
     if (encodedData) {
-      // Always use the current window.location.origin which includes the correct port
-      const currentOrigin = window.location.origin;
-      const shareableUrl = `${currentOrigin}/#playground/${encodedData}`;
+      // Always use the current window location to ensure correct protocol, hostname and port
+      const currentUrl = new URL(window.location.href);
+      const shareableUrl = `${currentUrl.protocol}//${currentUrl.host}/#playground/${encodedData}`;
       
-      console.log('Generated shareable URL:', shareableUrl.substring(0, 100) + '...');
+      console.log('Generated shareable URL with host:', currentUrl.host);
+      console.log('Full URL (truncated):', shareableUrl.substring(0, 100) + '...');
       console.log('URL length:', shareableUrl.length);
       
       // Copy to clipboard
@@ -401,36 +378,22 @@ export default function FlowCanvas({ graphData }) {
         .then(() => {
           console.log('URL copied to clipboard successfully');
           
-          // Create more visible notification
+          // Create subtle notification (similar to download notification)
           const notification = document.createElement('div');
           notification.style.position = 'fixed';
-          notification.style.top = '50%';
+          notification.style.bottom = '20px';
           notification.style.left = '50%';
-          notification.style.transform = 'translate(-50%, -50%)';
-          notification.style.background = 'rgba(0, 0, 0, 0.8)';
+          notification.style.transform = 'translateX(-50%)';
+          notification.style.background = '#222';
           notification.style.color = '#fff';
-          notification.style.padding = '20px 30px';
-          notification.style.borderRadius = '10px';
-          notification.style.fontSize = '16px';
-          notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+          notification.style.padding = '6px 14px';
+          notification.style.borderRadius = '6px';
+          notification.style.fontSize = '13px';
+          notification.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
           notification.style.zIndex = '9999';
           notification.style.opacity = '0';
           notification.style.transition = 'opacity 0.3s ease';
-          notification.style.textAlign = 'center';
-          notification.style.maxWidth = '80%';
-          
-          // Create a title for the notification
-          const title = document.createElement('div');
-          title.style.fontWeight = 'bold';
-          title.style.marginBottom = '10px';
-          title.style.fontSize = '18px';
-          title.textContent = 'Shareable Link Created!';
-          notification.appendChild(title);
-          
-          // Create message content
-          const message = document.createElement('div');
-          message.textContent = 'A link to this design has been copied to your clipboard. You can share it with others or save it for later.';
-          notification.appendChild(message);
+          notification.textContent = 'Link copied to clipboard';
           
           document.body.appendChild(notification);
           
@@ -439,13 +402,13 @@ export default function FlowCanvas({ graphData }) {
             notification.style.opacity = '1';
           }, 10);
           
-          // Remove notification after 3 seconds
+          // Remove notification after 2 seconds
           setTimeout(() => {
             notification.style.opacity = '0';
             setTimeout(() => {
               document.body.removeChild(notification);
             }, 300);
-          }, 3000);
+          }, 2000);
         })
         .catch(err => {
           console.error('Failed to copy link:', err);
