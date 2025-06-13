@@ -142,7 +142,7 @@ const generateGraphStructure = async (formData: any) => {
     .replace('{data_storage}', formData.dataStorage);
 
   const detailedResponse = await openai.chat.completions.create({
-    model: "o3",
+    model: "gpt-4.1",
     messages: [{"role": "user", "content": detailedPrompt}],
     temperature: 0.7
   });
@@ -155,7 +155,7 @@ const generateGraphStructure = async (formData: any) => {
     .replace('{product_intent}', formData.productIntent);
 
   const graphResponse = await openai.chat.completions.create({
-    model: "o3",
+    model: "gpt-4.1",
     messages: [{"role": "user", "content": graphPrompt}],
     temperature: 0.1,
     response_format: { type: "json_object" }
@@ -453,9 +453,9 @@ export default function Home() {
     // Validate that all required fields are filled
     const requiredFields = [
       { key: 'productIntent', min: 35, max: 500 },
-      { key: 'coreProblem', min: 100, max: 500 },
-      { key: 'solutionIdea', min: 100, max: 2000 },
-      { key: 'idealUser', min: 20, max: 150 },
+      { key: 'coreProblem', min: 100, max: 5000 },
+      { key: 'solutionIdea', min: 100, max: 25000 },
+      { key: 'idealUser', min: 20, max: 750 },
       { key: 'platform', min: 1, max: 100 },
       { key: 'inspirations', min: 100, max: 2000 },
       { key: 'dataStorage', min: 1, max: 100 }
@@ -506,7 +506,7 @@ export default function Home() {
         `;
         
         const summaryResponse = await openai.chat.completions.create({
-          model: "o3",
+          model: "gpt-4.1",
           messages: [{"role": "user", "content": summaryPrompt}],
           temperature: 0.7
         });
@@ -606,7 +606,7 @@ export default function Home() {
             minHeight: '60px', 
             borderRadius: '10px', 
             backgroundColor: '#F5F5F7', 
-            border: formData.coreProblem.length > 500 ? '1px solid #dc3545' : '1px solid #e9ecef'
+            border: formData.coreProblem.length > 5000 ? '1px solid #dc3545' : '1px solid #e9ecef'
           }}
           placeholder={currentPlaceholder}
         />
@@ -617,11 +617,11 @@ export default function Home() {
       </div>
       <div style={{ 
         fontSize: '10px', 
-        color: formData.coreProblem.length > 500 ? '#dc3545' : '#666',
+        color: formData.coreProblem.length > 5000 ? '#dc3545' : '#666',
         fontWeight: 'normal',
         marginTop: '4px'
       }}>
-        {formData.coreProblem.length}/500 CHARACTERS • MIN 100 • MAX 500
+        {formData.coreProblem.length}/5000 CHARACTERS • MIN 100 • MAX 5000
       </div>
     </div>,
     
@@ -651,7 +651,7 @@ export default function Home() {
             minHeight: '60px', 
             borderRadius: '10px', 
             backgroundColor: '#F5F5F7', 
-            border: formData.solutionIdea.length > 2000 ? '1px solid #dc3545' : '1px solid #e9ecef'
+            border: formData.solutionIdea.length > 25000 ? '1px solid #dc3545' : '1px solid #e9ecef'
           }}
           placeholder={currentPlaceholder}
         />
@@ -662,11 +662,11 @@ export default function Home() {
       </div>
       <div style={{ 
         fontSize: '10px', 
-        color: formData.solutionIdea.length > 2000 ? '#dc3545' : '#666',
+        color: formData.solutionIdea.length > 25000 ? '#dc3545' : '#666',
         fontWeight: 'normal',
         marginTop: '4px'
       }}>
-        {formData.solutionIdea.length}/2000 CHARACTERS • MIN 100 • MAX 2000
+        {formData.solutionIdea.length}/25000 CHARACTERS • MIN 100 • MAX 25000
       </div>
     </div>,
     
@@ -696,7 +696,7 @@ export default function Home() {
             minHeight: '60px', 
             borderRadius: '10px', 
             backgroundColor: '#F5F5F7', 
-            border: formData.idealUser.length > 150 ? '1px solid #dc3545' : '1px solid #e9ecef'
+            border: formData.idealUser.length > 750 ? '1px solid #dc3545' : '1px solid #e9ecef'
           }}
           placeholder={currentPlaceholder}
         />
@@ -707,11 +707,11 @@ export default function Home() {
       </div>
       <div style={{ 
         fontSize: '10px', 
-        color: formData.idealUser.length > 150 ? '#dc3545' : '#666',
+        color: formData.idealUser.length > 750 ? '#dc3545' : '#666',
         fontWeight: 'normal',
         marginTop: '4px'
       }}>
-        {formData.idealUser.length}/150 CHARACTERS • MIN 20 • MAX 150
+        {formData.idealUser.length}/750 CHARACTERS • MIN 20 • MAX 750
       </div>
     </div>,
     
@@ -826,29 +826,24 @@ export default function Home() {
     const currentField = fieldMapping[activeQuestion];
     const currentValue = formData[currentField as keyof typeof formData];
     
-    // For productIntent field (question 0), check 35-200 character count
-    if (activeQuestion === 0) {
-      return currentValue.length >= 35 && currentValue.length <= 200;
-    }
-    
-    // For idealUser field (question 3), check 20-150 character count
-    if (activeQuestion === 3) {
-      return currentValue.length >= 20 && currentValue.length <= 150;
-    }
-    
-    // For question 0 (productIntent), check 35-500 character count
+    // For productIntent field (question 0), check 35-500 character count
     if (activeQuestion === 0) {
       return currentValue.length >= 35 && currentValue.length <= 500;
     }
     
-    // For question 1 (coreProblem), check 100-500 character count
-    if (activeQuestion === 1) {
-      return currentValue.length >= 100 && currentValue.length <= 500;
+    // For idealUser field (question 3), check 20-750 character count
+    if (activeQuestion === 3) {
+      return currentValue.length >= 20 && currentValue.length <= 750;
     }
     
-    // For question 2 (solutionIdea), check 100-2000 character count
+    // For question 1 (coreProblem), check 100-5000 character count
+    if (activeQuestion === 1) {
+      return currentValue.length >= 100 && currentValue.length <= 5000;
+    }
+    
+    // For question 2 (solutionIdea), check 100-25000 character count
     if (activeQuestion === 2) {
-      return currentValue.length >= 100 && currentValue.length <= 2000;
+      return currentValue.length >= 100 && currentValue.length <= 25000;
     }
     
     // For question 5 (inspirations), check 100-2000 character count
