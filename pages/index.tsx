@@ -225,7 +225,7 @@ const HowItWorksPage = () => {
           maxWidth: '800px',
           margin: '0 auto 3rem auto'
         }}>
-          You can also import previous designs as JSON files to instantly visualize and continue working on them, move components around in the playground, and export your current diagram as JSON. This makes it easy to save, share, and use your system designs in AI-powered code editors or other tools.
+          You can also generate shareable links to instantly share your designs with others via URL, import previous designs as JSON files to visualize and continue working on them, move components around in the playground, and export your current diagram as JSON. This makes it easy to collaborate, save, share, and use your system designs in AI-powered code editors or other tools.
         </p>
 
         {/* CTA Button */}
@@ -297,7 +297,7 @@ const HowItWorksPage = () => {
         </p>
         
         <p style={{ marginBottom: '2rem' }}>
-          AI tools like Cursor or Copilot can generate code, but they don't understand why something should be built a certain way. They don't know your customer, your goals, or your edge. That contextual intelligence—the "why" behind each system component—is what Desthetik captures. Through a conversational multi-step input flow, it maps your responses to pre-defined graph types and outputs a dynamic, editable system diagram in a Figma-style interface. You're not just getting code snippets—you're getting a blueprint for how your product should work based on your actual business intent.
+          AI tools like Cursor or Copilot can generate code, but they don't understand why something should be built a certain way. They don't know your customer, your goals, or your edge. That contextual intelligence—the "why" behind each system component—is what Desthetik captures. Through a conversational multi-step input flow, it maps your responses to pre-defined graph types and outputs a dynamic, editable system diagram in a Figma-style interface. You're not just getting code snippets—you're getting a blueprint for how your product should work based on your actual business intent. And with our new shareable links feature, you can instantly collaborate with team members, advisors, or investors by sending them a URL that contains your entire system design.
         </p>
 
         <p style={{ marginBottom: '2rem' }}>

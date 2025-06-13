@@ -16,7 +16,12 @@ Many founders, especially non-technical ones, either spend too much time trying 
 
 Desthetik combines a multi-turn input flow—like a conversational form—with backend logic that turns structured responses into flowchart-like visual diagrams. The system dynamically chooses a graph structure based on the user's context (e.g., experience level, goal, etc.), with predefined graph "types" that map user inputs to the right visualization.
 
-**New!** You can now **import a JSON file** to instantly load and visualize a previous system design, or **export your current diagram as a JSON file**. This makes it easy to save, share, and iterate on your designs, or to use them in other tools and AI-powered code editors.
+**New!** You can now:
+- **Generate shareable links** to instantly share your system design with others via URL
+- **Import a JSON file** to instantly load and visualize a previous system design
+- **Export your current diagram as a JSON file**
+
+These features make it easy to collaborate, save, share, and iterate on your designs, or to use them in other tools and AI-powered code editors.
 
 <p align="center">
   <img src="./Desthetik.png" alt="Desthetik system design screenshot" width="700" />
@@ -39,12 +44,19 @@ The stack includes:
 - Backend: Handles prompt generation and LLM interaction
 - Voice Input: Captures natural speech to eliminate typing bottlenecks and enable stream-of-consciousness ideation
 - **Import/Export JSON:** Instantly load previous designs or export your current diagram for use in other tools or AI code editors.
+- **Shareable Links:** Generate and share URL links that contain your entire system design, allowing others to view and modify your designs.
 
 ## How It Works
 
 1. **Conversational Input:** Users answer a series of questions (or use voice input) to describe their product idea, user, and requirements.
 2. **Automated System Design:** Desthetik generates a detailed, structured system architecture and visualizes it as a flowchart.
-3. **Playground Mode:** Users can use the playground to import previous designs (via JSON), move components around, and experiment with different architectures. You can also export your current diagram as a JSON file—perfect for sharing, saving, or importing into your AI-powered code editor or other development tools to kickstart implementation.
+3. **Playground Mode:** Users can use the playground to:
+   - Create shareable links to instantly share their designs with others
+   - Import previous designs (via JSON)
+   - Move components around and experiment with different architectures
+   - Export the current diagram as a JSON file
+
+All these features make it perfect for collaboration, sharing design ideas with team members, or importing into your AI-powered code editor to kickstart implementation.
 
 ## Getting Started
 
