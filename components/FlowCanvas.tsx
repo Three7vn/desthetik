@@ -14,8 +14,8 @@ import {
   getViewportForBounds,
 } from '@xyflow/react';
 import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
- 
+import { jsPDF } from 'jspdf';
+import LZString from 'lz-string';
 import '@xyflow/react/dist/style.css';
 
 // Function to determine if a color is light or dark
@@ -91,8 +91,13 @@ const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 const compressAndEncodeData = (data) => {
   try {
     const jsonString = JSON.stringify(data);
-    // Use Base64 encoding to make it URL-safe
-    return btoa(encodeURIComponent(jsonString));
+    console.log('Encoding data length:', jsonString.length);
+    
+    // Use LZ-String for compression and URL-safe encoding
+    const compressed = LZString.compressToEncodedURIComponent(jsonString);
+    
+    console.log('Compressed data length:', compressed.length);
+    return compressed;
   } catch (error) {
     console.error('Error encoding diagram data:', error);
     return null;
@@ -102,8 +107,23 @@ const compressAndEncodeData = (data) => {
 // Decode and decompress diagram data from URL
 const decodeAndDecompressData = (encodedData) => {
   try {
-    const jsonString = decodeURIComponent(atob(encodedData));
-    return JSON.parse(jsonString);
+    console.log('Decoding data length:', encodedData.length);
+    
+    // Use LZ-String for URL-safe decoding and decompression
+    const jsonString = LZString.decompressFromEncodedURIComponent(encodedData);
+    
+    if (!jsonString) {
+      console.error('Decompression failed - null or empty result');
+      return null;
+    }
+    
+    console.log('Decoded JSON length:', jsonString.length);
+    
+    const parsed = JSON.parse(jsonString);
+    console.log('Decoded nodes count:', parsed.nodes?.length);
+    console.log('Decoded edges count:', parsed.edges?.length);
+    
+    return parsed;
   } catch (error) {
     console.error('Error decoding diagram data:', error);
     return null;
@@ -140,32 +160,52 @@ export default function FlowCanvas({ graphData }) {
   // Check URL hash for encoded diagram data on component mount
   useEffect(() => {
     const hash = window.location.hash;
+    console.log('Current URL hash:', hash);
+    
     if (hash && hash.startsWith('#playground/')) {
       try {
         const encodedData = hash.substring('#playground/'.length);
+        console.log('Found encoded data in URL, length:', encodedData.length);
+        
         if (encodedData) {
           const decodedData = decodeAndDecompressData(encodedData);
           if (decodedData && decodedData.nodes && decodedData.edges) {
+            console.log('Successfully decoded data from URL');
             setNodes(decodedData.nodes);
             setEdges(decodedData.edges);
             
-            // Show a subtle notification that the design was loaded from URL
+            // Show a notification that the design was loaded from URL
             setTimeout(() => {
+              // Create more visible notification
               const notification = document.createElement('div');
               notification.style.position = 'fixed';
-              notification.style.bottom = '20px';
+              notification.style.top = '50%';
               notification.style.left = '50%';
-              notification.style.transform = 'translateX(-50%)';
-              notification.style.background = '#222';
+              notification.style.transform = 'translate(-50%, -50%)';
+              notification.style.background = 'rgba(0, 0, 0, 0.8)';
               notification.style.color = '#fff';
-              notification.style.padding = '6px 14px';
-              notification.style.borderRadius = '6px';
-              notification.style.fontSize = '13px';
-              notification.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+              notification.style.padding = '20px 30px';
+              notification.style.borderRadius = '10px';
+              notification.style.fontSize = '16px';
+              notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
               notification.style.zIndex = '9999';
               notification.style.opacity = '0';
               notification.style.transition = 'opacity 0.3s ease';
-              notification.textContent = 'Design loaded from shared link';
+              notification.style.textAlign = 'center';
+              notification.style.maxWidth = '80%';
+              
+              // Create a title for the notification
+              const title = document.createElement('div');
+              title.style.fontWeight = 'bold';
+              title.style.marginBottom = '10px';
+              title.style.fontSize = '18px';
+              title.textContent = 'Design Loaded Successfully!';
+              notification.appendChild(title);
+              
+              // Create message content
+              const message = document.createElement('div');
+              message.textContent = 'This design was loaded from a shared link. You can modify it or create your own shareable link.';
+              notification.appendChild(message);
               
               document.body.appendChild(notification);
               
@@ -174,18 +214,30 @@ export default function FlowCanvas({ graphData }) {
                 notification.style.opacity = '1';
               }, 10);
               
-              // Remove notification after 2 seconds
+              // Remove notification after 3 seconds
               setTimeout(() => {
                 notification.style.opacity = '0';
                 setTimeout(() => {
                   document.body.removeChild(notification);
                 }, 300);
-              }, 2000);
+              }, 3000);
+            }, 500);
+          } else {
+            console.error('Failed to decode data from URL or missing nodes/edges');
+            
+            // Show error notification
+            setTimeout(() => {
+              alert('Failed to load design from URL. The link may be invalid or corrupted.');
             }, 500);
           }
         }
       } catch (error) {
         console.error('Error loading diagram from URL:', error);
+        
+        // Show error notification
+        setTimeout(() => {
+          alert('Failed to load design from URL. The link may be invalid or corrupted.');
+        }, 500);
       }
     }
   }, [setNodes, setEdges]);
@@ -306,29 +358,53 @@ export default function FlowCanvas({ graphData }) {
       }
     };
     
+    console.log('Generating shareable link for nodes:', nodes.length, 'edges:', edges.length);
+    
     const encodedData = compressAndEncodeData(diagramData);
     if (encodedData) {
-      const shareableUrl = `${window.location.origin}/#playground/${encodedData}`;
+      // Use desthetik.com for production links, fall back to current origin for development
+      const isProd = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1');
+      const domain = isProd ? 'https://desthetik.com' : window.location.origin;
+      const shareableUrl = `${domain}/#playground/${encodedData}`;
+      
+      console.log('Generated shareable URL:', shareableUrl.substring(0, 100) + '...');
+      console.log('URL length:', shareableUrl.length);
       
       // Copy to clipboard
       navigator.clipboard.writeText(shareableUrl)
         .then(() => {
-          // Create subtle notification
+          console.log('URL copied to clipboard successfully');
+          
+          // Create more visible notification
           const notification = document.createElement('div');
           notification.style.position = 'fixed';
-          notification.style.bottom = '20px';
+          notification.style.top = '50%';
           notification.style.left = '50%';
-          notification.style.transform = 'translateX(-50%)';
-          notification.style.background = '#222';
+          notification.style.transform = 'translate(-50%, -50%)';
+          notification.style.background = 'rgba(0, 0, 0, 0.8)';
           notification.style.color = '#fff';
-          notification.style.padding = '6px 14px';
-          notification.style.borderRadius = '6px';
-          notification.style.fontSize = '13px';
-          notification.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+          notification.style.padding = '20px 30px';
+          notification.style.borderRadius = '10px';
+          notification.style.fontSize = '16px';
+          notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
           notification.style.zIndex = '9999';
           notification.style.opacity = '0';
           notification.style.transition = 'opacity 0.3s ease';
-          notification.textContent = 'Link copied to clipboard';
+          notification.style.textAlign = 'center';
+          notification.style.maxWidth = '80%';
+          
+          // Create a title for the notification
+          const title = document.createElement('div');
+          title.style.fontWeight = 'bold';
+          title.style.marginBottom = '10px';
+          title.style.fontSize = '18px';
+          title.textContent = 'Shareable Link Created!';
+          notification.appendChild(title);
+          
+          // Create message content
+          const message = document.createElement('div');
+          message.textContent = 'A link to this design has been copied to your clipboard. You can share it with others or save it for later.';
+          notification.appendChild(message);
           
           document.body.appendChild(notification);
           
@@ -337,18 +413,21 @@ export default function FlowCanvas({ graphData }) {
             notification.style.opacity = '1';
           }, 10);
           
-          // Remove notification after 2 seconds
+          // Remove notification after 3 seconds
           setTimeout(() => {
             notification.style.opacity = '0';
             setTimeout(() => {
               document.body.removeChild(notification);
             }, 300);
-          }, 2000);
+          }, 3000);
         })
         .catch(err => {
           console.error('Failed to copy link:', err);
-          // Silent fallback - no notification for error
+          alert('Failed to copy link to clipboard. Please try again.');
         });
+    } else {
+      console.error('Failed to encode diagram data');
+      alert('Failed to create shareable link. Please try again.');
     }
   }, [nodes, edges]);
 

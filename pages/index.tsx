@@ -383,15 +383,22 @@ export default function Home() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
+      console.log('Hash changed:', hash);
+      
       if (hash === '#how-it-works') {
         setCurrentPage('how-it-works');
       } else if (hash.startsWith('#playground')) {
+        console.log('Switching to playground view');
         setCurrentPage('playground');
         
         // If the URL contains diagram data, we'll let FlowCanvas handle it
         // The FlowCanvas component will check for and load any encoded diagram data
+        if (hash.startsWith('#playground/')) {
+          console.log('URL contains encoded diagram data');
+        }
       } else {
         // Default to 'how-it-works' when no hash is present
+        console.log('No specific hash, defaulting to how-it-works');
         setCurrentPage('how-it-works');
       }
     };
