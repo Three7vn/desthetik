@@ -86,6 +86,29 @@ const initialNodes = [
   },
 ];
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
+
+// Compress and encode diagram data for URL sharing
+const compressAndEncodeData = (data) => {
+  try {
+    const jsonString = JSON.stringify(data);
+    // Use Base64 encoding to make it URL-safe
+    return btoa(encodeURIComponent(jsonString));
+  } catch (error) {
+    console.error('Error encoding diagram data:', error);
+    return null;
+  }
+};
+
+// Decode and decompress diagram data from URL
+const decodeAndDecompressData = (encodedData) => {
+  try {
+    const jsonString = decodeURIComponent(atob(encodedData));
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.error('Error decoding diagram data:', error);
+    return null;
+  }
+};
  
 export default function FlowCanvas({ graphData }) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -93,6 +116,7 @@ export default function FlowCanvas({ graphData }) {
   const flowRef = useRef<HTMLDivElement>(null);
   const exportTooltipRef = useRef<HTMLDivElement>(null);
   const importTooltipRef = useRef<HTMLDivElement>(null);
+  const shareTooltipRef = useRef<HTMLDivElement>(null);
  
   // This effect watches for new graph data from form submission
   // When form is submitted, the placeholder nodes are replaced with 
@@ -112,6 +136,59 @@ export default function FlowCanvas({ graphData }) {
       setEdges(graphData.edges);
     }
   }, [graphData, setNodes, setEdges]);
+
+  // Check URL hash for encoded diagram data on component mount
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#playground/')) {
+      try {
+        const encodedData = hash.substring('#playground/'.length);
+        if (encodedData) {
+          const decodedData = decodeAndDecompressData(encodedData);
+          if (decodedData && decodedData.nodes && decodedData.edges) {
+            setNodes(decodedData.nodes);
+            setEdges(decodedData.edges);
+            
+            // Show a subtle notification that the design was loaded from URL
+            setTimeout(() => {
+              const notification = document.createElement('div');
+              notification.style.position = 'fixed';
+              notification.style.bottom = '20px';
+              notification.style.left = '50%';
+              notification.style.transform = 'translateX(-50%)';
+              notification.style.background = '#222';
+              notification.style.color = '#fff';
+              notification.style.padding = '6px 14px';
+              notification.style.borderRadius = '6px';
+              notification.style.fontSize = '13px';
+              notification.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+              notification.style.zIndex = '9999';
+              notification.style.opacity = '0';
+              notification.style.transition = 'opacity 0.3s ease';
+              notification.textContent = 'Design loaded from shared link';
+              
+              document.body.appendChild(notification);
+              
+              // Fade in
+              setTimeout(() => {
+                notification.style.opacity = '1';
+              }, 10);
+              
+              // Remove notification after 2 seconds
+              setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                  document.body.removeChild(notification);
+                }, 300);
+              }, 2000);
+            }, 500);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading diagram from URL:', error);
+      }
+    }
+  }, [setNodes, setEdges]);
 
   // Handle connecting nodes manually if user wants to adjust the diagram
   const onConnect = useCallback(
@@ -137,13 +214,56 @@ export default function FlowCanvas({ graphData }) {
     const blob = new Blob([jsonString], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     
+    // Create filename with current date and time
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const timestamp = `${year}${month}${day}_${hours}${minutes}${seconds}`;
+    const filename = `design_${timestamp}.json`;
+    
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'system-design.json';
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    
+    // Show subtle notification
+    const notification = document.createElement('div');
+    notification.style.position = 'fixed';
+    notification.style.bottom = '20px';
+    notification.style.left = '50%';
+    notification.style.transform = 'translateX(-50%)';
+    notification.style.background = '#222';
+    notification.style.color = '#fff';
+    notification.style.padding = '6px 14px';
+    notification.style.borderRadius = '6px';
+    notification.style.fontSize = '13px';
+    notification.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+    notification.style.zIndex = '9999';
+    notification.style.opacity = '0';
+    notification.style.transition = 'opacity 0.3s ease';
+    notification.textContent = 'JSON downloaded. Import into your AI coding environment to implement.';
+    
+    document.body.appendChild(notification);
+    
+    // Fade in
+    setTimeout(() => {
+      notification.style.opacity = '1';
+    }, 10);
+    
+    // Remove notification after 3 seconds (slightly longer for this message)
+    setTimeout(() => {
+      notification.style.opacity = '0';
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 300);
+    }, 3000);
   }, [nodes, edges]);
 
   // Import diagram from JSON
@@ -171,6 +291,66 @@ export default function FlowCanvas({ graphData }) {
     };
     reader.readAsText(file);
   }, [setNodes, setEdges]);
+
+  // Generate shareable link
+  const shareDesign = useCallback(() => {
+    if (!nodes || !edges) return;
+    
+    const diagramData = {
+      nodes,
+      edges,
+      viewport: {
+        zoom: 1,
+        x: 0,
+        y: 0
+      }
+    };
+    
+    const encodedData = compressAndEncodeData(diagramData);
+    if (encodedData) {
+      const shareableUrl = `${window.location.origin}/#playground/${encodedData}`;
+      
+      // Copy to clipboard
+      navigator.clipboard.writeText(shareableUrl)
+        .then(() => {
+          // Create subtle notification
+          const notification = document.createElement('div');
+          notification.style.position = 'fixed';
+          notification.style.bottom = '20px';
+          notification.style.left = '50%';
+          notification.style.transform = 'translateX(-50%)';
+          notification.style.background = '#222';
+          notification.style.color = '#fff';
+          notification.style.padding = '6px 14px';
+          notification.style.borderRadius = '6px';
+          notification.style.fontSize = '13px';
+          notification.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+          notification.style.zIndex = '9999';
+          notification.style.opacity = '0';
+          notification.style.transition = 'opacity 0.3s ease';
+          notification.textContent = 'Link copied to clipboard';
+          
+          document.body.appendChild(notification);
+          
+          // Fade in
+          setTimeout(() => {
+            notification.style.opacity = '1';
+          }, 10);
+          
+          // Remove notification after 2 seconds
+          setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => {
+              document.body.removeChild(notification);
+            }, 300);
+          }, 2000);
+        })
+        .catch(err => {
+          console.error('Failed to copy link:', err);
+          // Silent fallback - no notification for error
+        });
+    }
+  }, [nodes, edges]);
 
   // Download diagram as PDF - Complete rewrite for proper capture
   const downloadPDF = useCallback(async () => {
@@ -277,7 +457,7 @@ export default function FlowCanvas({ graphData }) {
       cursor: 'url("data:image/svg+xml;charset=utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 16 16\'%3E%3Cpath fill=\'white\' stroke=\'black\' stroke-width=\'0.5\' d=\'M0,0 L0,10 L3,7 L5,9 L7,7 L3,3 Z\'/%3E%3C/svg%3E") 1 1, auto',
       position: 'relative'
     }}>
-      {/* Export/Import Buttons */}
+      {/* Export/Import/Share Buttons */}
       <div
         style={{
           position: 'absolute',
@@ -289,6 +469,64 @@ export default function FlowCanvas({ graphData }) {
         }}
         className="tooltip-container"
       >
+        {/* Share Button */}
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <button
+            onClick={shareDesign}
+            style={{
+              background: '#ffffff',
+              border: '1px solid #e5e7eb',
+              borderRadius: '8px',
+              padding: '8px',
+              cursor: 'pointer',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={() => {
+              if (shareTooltipRef.current) {
+                shareTooltipRef.current.style.opacity = '1';
+                shareTooltipRef.current.style.visibility = 'visible';
+              }
+            }}
+            onMouseLeave={() => {
+              if (shareTooltipRef.current) {
+                shareTooltipRef.current.style.opacity = '0';
+                shareTooltipRef.current.style.visibility = 'hidden';
+              }
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </button>
+          <div ref={shareTooltipRef} style={{
+            position: 'absolute',
+            bottom: '-36px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#222',
+            color: '#fff',
+            padding: '6px 14px',
+            borderRadius: '6px',
+            fontSize: '13px',
+            whiteSpace: 'nowrap',
+            opacity: 0,
+            visibility: 'hidden',
+            pointerEvents: 'none',
+            transition: 'opacity 0.2s',
+            zIndex: 1001
+          }}>
+            Create shareable link
+          </div>
+        </div>
+
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
           <button
             onClick={exportJSON}
@@ -439,51 +677,49 @@ export default function FlowCanvas({ graphData }) {
 
       {/* Tooltip CSS */}
       <style jsx>{`
-        .tooltip-container {
-          position: relative;
+        @keyframes pulse-outer {
+          0% {
+            transform: scale(0.8);
+            opacity: 0.3;
+          }
+          50% {
+            transform: scale(1.2);
+            opacity: 0.1;
+          }
+          100% {
+            transform: scale(0.8);
+            opacity: 0.3;
+          }
         }
         
-        .tooltip {
-          position: absolute;
-          top: 100%;
-          right: 0;
-          margin-top: 8px;
-          background: rgba(0, 0, 0, 0.8);
-          color: white;
-          padding: 6px 8px;
-          border-radius: 4px;
-          font-size: 12px;
-          white-space: nowrap;
-          opacity: 0;
-          visibility: hidden;
-          transition: opacity 0.2s ease, visibility 0.2s ease;
-          pointer-events: none;
-          z-index: 1001;
-          user-select: none;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
+        @keyframes pulse-middle {
+          0% {
+            transform: scale(0.85);
+            opacity: 0.5;
+          }
+          50% {
+            transform: scale(1.15);
+            opacity: 0.25;
+          }
+          100% {
+            transform: scale(0.85);
+            opacity: 0.5;
+          }
         }
         
-        .tooltip::before {
-          content: '';
-          position: absolute;
-          bottom: 100%;
-          right: 12px;
-          border: 4px solid transparent;
-          border-bottom-color: rgba(0, 0, 0, 0.8);
-        }
-        
-        .tooltip-container:hover .tooltip {
-          opacity: 1;
-          visibility: visible;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        .react-flow__minimap .minimap-node {
-          transform: scale(0.5);
-          transform-origin: center;
+        @keyframes pulse-inner {
+          0% {
+            transform: scale(0.9);
+            opacity: 0.7;
+          }
+          50% {
+            transform: scale(1.1);
+            opacity: 0.5;
+          }
+          100% {
+            transform: scale(0.9);
+            opacity: 0.7;
+          }
         }
       `}</style>
     </div>

@@ -385,8 +385,11 @@ export default function Home() {
       const hash = window.location.hash;
       if (hash === '#how-it-works') {
         setCurrentPage('how-it-works');
-      } else if (hash === '#playground') {
+      } else if (hash.startsWith('#playground')) {
         setCurrentPage('playground');
+        
+        // If the URL contains diagram data, we'll let FlowCanvas handle it
+        // The FlowCanvas component will check for and load any encoded diagram data
       } else {
         // Default to 'how-it-works' when no hash is present
         setCurrentPage('how-it-works');

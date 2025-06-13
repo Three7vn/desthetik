@@ -17,7 +17,7 @@ const Sidebar = () => {
       const hash = window.location.hash;
       if (hash === '#how-it-works') {
         setCurrentPage('how-it-works');
-      } else if (hash === '#playground') {
+      } else if (hash.startsWith('#playground')) {
         setCurrentPage('playground');
       } else {
         // Default to 'how-it-works' when no hash is present
