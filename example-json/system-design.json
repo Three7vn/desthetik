@@ -1,0 +1,1283 @@
+{
+  "nodes": [
+    {
+      "id": "frontend-header",
+      "position": {
+        "x": 100,
+        "y": 20
+      },
+      "data": {
+        "label": "FRONTEND",
+        "color": "#1F2328"
+      },
+      "style": {
+        "background": "#1F2328",
+        "color": "#ffffff",
+        "border": "2px solid #1F2328",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 42
+      }
+    },
+    {
+      "id": "backend-header",
+      "position": {
+        "x": 800,
+        "y": 20
+      },
+      "data": {
+        "label": "BACKEND",
+        "color": "#1F2328"
+      },
+      "style": {
+        "background": "#1F2328",
+        "color": "#ffffff",
+        "border": "2px solid #1F2328",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 42
+      }
+    },
+    {
+      "id": "ai-header",
+      "position": {
+        "x": 1500,
+        "y": 20
+      },
+      "data": {
+        "label": "AI/ML",
+        "color": "#1F2328"
+      },
+      "style": {
+        "background": "#1F2328",
+        "color": "#ffffff",
+        "border": "2px solid #1F2328",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 42
+      }
+    },
+    {
+      "id": "database-header",
+      "position": {
+        "x": 2200,
+        "y": 20
+      },
+      "data": {
+        "label": "DATABASE",
+        "color": "#1F2328"
+      },
+      "style": {
+        "background": "#1F2328",
+        "color": "#ffffff",
+        "border": "2px solid #1F2328",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 42
+      }
+    },
+    {
+      "id": "integration-header",
+      "position": {
+        "x": 2900,
+        "y": 20
+      },
+      "data": {
+        "label": "INTEGRATIONS",
+        "color": "#1F2328"
+      },
+      "style": {
+        "background": "#1F2328",
+        "color": "#ffffff",
+        "border": "2px solid #1F2328",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 42
+      }
+    },
+    {
+      "id": "infra-header",
+      "position": {
+        "x": 100,
+        "y": 900
+      },
+      "data": {
+        "label": "INFRASTRUCTURE",
+        "color": "#1F2328"
+      },
+      "style": {
+        "background": "#1F2328",
+        "color": "#ffffff",
+        "border": "2px solid #1F2328",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 42
+      }
+    },
+    {
+      "id": "frontend-app",
+      "position": {
+        "x": 100,
+        "y": 120
+      },
+      "data": {
+        "label": "React Native App - Cross-platform mobile app for iOS & Android",
+        "color": "#3B82F6"
+      },
+      "style": {
+        "background": "#3B82F6",
+        "color": "#ffffff",
+        "border": "2px solid #3B82F6",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "frontend-app-explain",
+      "position": {
+        "x": 100,
+        "y": 270
+      },
+      "data": {
+        "label": "What is React Native? - Lets developers build native-feeling mobile apps using JavaScript/TypeScript",
+        "color": "#93C5FD"
+      },
+      "style": {
+        "background": "#93C5FD",
+        "color": "#000000",
+        "border": "2px solid #93C5FD",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "frontend-voice-ui",
+      "position": {
+        "x": 400,
+        "y": 170
+      },
+      "data": {
+        "label": "Voice-First Minimal UI - Users interact by speaking, not typing, reducing friction",
+        "color": "#60A5FA"
+      },
+      "style": {
+        "background": "#60A5FA",
+        "color": "#000000",
+        "border": "2px solid #60A5FA",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "frontend-voice-ui-feature",
+      "position": {
+        "x": 500,
+        "y": 270
+      },
+      "data": {
+        "label": "Hold-to-Talk & Waveform - Familiar, low-cognitive-load input; users feel in control and less anxious",
+        "color": "#DBEAFE"
+      },
+      "style": {
+        "background": "#DBEAFE",
+        "color": "#000000",
+        "border": "2px solid #DBEAFE",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "frontend-notifications",
+      "position": {
+        "x": 100,
+        "y": 470
+      },
+      "data": {
+        "label": "Expo Notifications - Push notifications for real-time feedback",
+        "color": "#60A5FA"
+      },
+      "style": {
+        "background": "#60A5FA",
+        "color": "#000000",
+        "border": "2px solid #60A5FA",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "frontend-notifications-explain",
+      "position": {
+        "x": 100,
+        "y": 620
+      },
+      "data": {
+        "label": "What is Expo Notifications? - Service for sending push notifications to mobile devices",
+        "color": "#93C5FD"
+      },
+      "style": {
+        "background": "#93C5FD",
+        "color": "#000000",
+        "border": "2px solid #93C5FD",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "frontend-notifications-feature",
+      "position": {
+        "x": 400,
+        "y": 570
+      },
+      "data": {
+        "label": "Minimal, Actionable Alerts - Only critical updates shown; reduces digital clutter and open-loop anxiety",
+        "color": "#DBEAFE"
+      },
+      "style": {
+        "background": "#DBEAFE",
+        "color": "#000000",
+        "border": "2px solid #DBEAFE",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "backend-voice-capture",
+      "position": {
+        "x": 800,
+        "y": 120
+      },
+      "data": {
+        "label": "AssemblyAI - Speech-to-text API for real-time voice transcription",
+        "color": "#10B981"
+      },
+      "style": {
+        "background": "#10B981",
+        "color": "#000000",
+        "border": "2px solid #10B981",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "backend-voice-capture-explain",
+      "position": {
+        "x": 800,
+        "y": 270
+      },
+      "data": {
+        "label": "What is AssemblyAI? - Cloud service that converts spoken audio into accurate text",
+        "color": "#6EE7B7"
+      },
+      "style": {
+        "background": "#6EE7B7",
+        "color": "#000000",
+        "border": "2px solid #6EE7B7",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "backend-voice-capture-feature",
+      "position": {
+        "x": 1100,
+        "y": 170
+      },
+      "data": {
+        "label": "Fast, Accurate Transcription - Users trust the system because it 'just works' and understands them",
+        "color": "#A7F3D0"
+      },
+      "style": {
+        "background": "#A7F3D0",
+        "color": "#000000",
+        "border": "2px solid #A7F3D0",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "backend-orchestration",
+      "position": {
+        "x": 800,
+        "y": 470
+      },
+      "data": {
+        "label": "Temporal - Orchestrates multi-step AI workflows and automations",
+        "color": "#34D399"
+      },
+      "style": {
+        "background": "#34D399",
+        "color": "#000000",
+        "border": "2px solid #34D399",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "backend-orchestration-explain",
+      "position": {
+        "x": 800,
+        "y": 620
+      },
+      "data": {
+        "label": "What is Temporal? - Platform for managing reliable, long-running background tasks",
+        "color": "#6EE7B7"
+      },
+      "style": {
+        "background": "#6EE7B7",
+        "color": "#000000",
+        "border": "2px solid #6EE7B7",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "backend-orchestration-feature",
+      "position": {
+        "x": 1100,
+        "y": 570
+      },
+      "data": {
+        "label": "Set-and-Forget Automation - Users delegate tasks and see progress, reducing follow-up stress",
+        "color": "#A7F3D0"
+      },
+      "style": {
+        "background": "#A7F3D0",
+        "color": "#000000",
+        "border": "2px solid #A7F3D0",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "ai-intent-engine",
+      "position": {
+        "x": 1500,
+        "y": 120
+      },
+      "data": {
+        "label": "OpenAI GPT-4o API - Natural language understanding and intent extraction",
+        "color": "#F59E0B"
+      },
+      "style": {
+        "background": "#F59E0B",
+        "color": "#000000",
+        "border": "2px solid #F59E0B",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "ai-intent-engine-explain",
+      "position": {
+        "x": 1500,
+        "y": 270
+      },
+      "data": {
+        "label": "What is GPT-4o? - Advanced AI model that understands context and generates human-like responses",
+        "color": "#FBBF24"
+      },
+      "style": {
+        "background": "#FBBF24",
+        "color": "#000000",
+        "border": "2px solid #FBBF24",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "ai-intent-engine-feature",
+      "position": {
+        "x": 1800,
+        "y": 170
+      },
+      "data": {
+        "label": "Context-Aware Understanding - Feels like a real assistant; users feel 'understood' and not micromanaged",
+        "color": "#FCD34D"
+      },
+      "style": {
+        "background": "#FCD34D",
+        "color": "#000000",
+        "border": "2px solid #FCD34D",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 112
+      }
+    },
+    {
+      "id": "ai-copilot",
+      "position": {
+        "x": 1500,
+        "y": 470
+      },
+      "data": {
+        "label": "GitHub Copilot - AI pair programmer for rapid development",
+        "color": "#FBBF24"
+      },
+      "style": {
+        "background": "#FBBF24",
+        "color": "#000000",
+        "border": "2px solid #FBBF24",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "ai-copilot-explain",
+      "position": {
+        "x": 1500,
+        "y": 620
+      },
+      "data": {
+        "label": "What is Copilot? - AI tool that suggests and writes code, speeding up development",
+        "color": "#FCD34D"
+      },
+      "style": {
+        "background": "#FCD34D",
+        "color": "#000000",
+        "border": "2px solid #FCD34D",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "ai-copilot-feature",
+      "position": {
+        "x": 1800,
+        "y": 570
+      },
+      "data": {
+        "label": "Accelerated Delivery - Faster feature releases; users get improvements quickly",
+        "color": "#FEF3C7"
+      },
+      "style": {
+        "background": "#FEF3C7",
+        "color": "#000000",
+        "border": "2px solid #FEF3C7",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "database-supabase",
+      "position": {
+        "x": 2200,
+        "y": 120
+      },
+      "data": {
+        "label": "Supabase - Managed Postgres database with built-in Auth and Realtime",
+        "color": "#8B5CF6"
+      },
+      "style": {
+        "background": "#8B5CF6",
+        "color": "#ffffff",
+        "border": "2px solid #8B5CF6",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "database-supabase-explain",
+      "position": {
+        "x": 2200,
+        "y": 270
+      },
+      "data": {
+        "label": "What is Supabase? - Open-source backend for storing user data, preferences, and workflow history",
+        "color": "#A78BFA"
+      },
+      "style": {
+        "background": "#A78BFA",
+        "color": "#000000",
+        "border": "2px solid #A78BFA",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "database-supabase-feature",
+      "position": {
+        "x": 2500,
+        "y": 170
+      },
+      "data": {
+        "label": "Secure, Transparent Storage - Builds user trust; users know their data is safe and accessible",
+        "color": "#C4B5FD"
+      },
+      "style": {
+        "background": "#C4B5FD",
+        "color": "#000000",
+        "border": "2px solid #C4B5FD",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "database-auth",
+      "position": {
+        "x": 2200,
+        "y": 470
+      },
+      "data": {
+        "label": "Supabase Auth - Passwordless authentication for easy, secure login",
+        "color": "#A78BFA"
+      },
+      "style": {
+        "background": "#A78BFA",
+        "color": "#000000",
+        "border": "2px solid #A78BFA",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "database-auth-explain",
+      "position": {
+        "x": 2200,
+        "y": 620
+      },
+      "data": {
+        "label": "What is Supabase Auth? - Provides magic link/email login, reducing friction and password fatigue",
+        "color": "#C4B5FD"
+      },
+      "style": {
+        "background": "#C4B5FD",
+        "color": "#000000",
+        "border": "2px solid #C4B5FD",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "database-auth-feature",
+      "position": {
+        "x": 2500,
+        "y": 570
+      },
+      "data": {
+        "label": "Frictionless Onboarding - Users can start quickly, boosting adoption and retention",
+        "color": "#EDE9FE"
+      },
+      "style": {
+        "background": "#EDE9FE",
+        "color": "#000000",
+        "border": "2px solid #EDE9FE",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "integration-nylas",
+      "position": {
+        "x": 2900,
+        "y": 120
+      },
+      "data": {
+        "label": "Nylas - Unified API for calendar and email integrations",
+        "color": "#6B7280"
+      },
+      "style": {
+        "background": "#6B7280",
+        "color": "#ffffff",
+        "border": "2px solid #6B7280",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "integration-nylas-explain",
+      "position": {
+        "x": 2900,
+        "y": 270
+      },
+      "data": {
+        "label": "What is Nylas? - Connects to Gmail, Outlook, and more with one setup, enabling automation",
+        "color": "#9CA3AF"
+      },
+      "style": {
+        "background": "#9CA3AF",
+        "color": "#000000",
+        "border": "2px solid #9CA3AF",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "integration-nylas-feature",
+      "position": {
+        "x": 3200,
+        "y": 170
+      },
+      "data": {
+        "label": "One-Click Account Linking - Reduces onboarding pain; users feel instant value and ownership",
+        "color": "#D1D5DB"
+      },
+      "style": {
+        "background": "#D1D5DB",
+        "color": "#000000",
+        "border": "2px solid #D1D5DB",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "infra-temporal-cloud",
+      "position": {
+        "x": 100,
+        "y": 1000
+      },
+      "data": {
+        "label": "Temporal Cloud - Scalable workflow orchestration infrastructure",
+        "color": "#9CA3AF"
+      },
+      "style": {
+        "background": "#9CA3AF",
+        "color": "#000000",
+        "border": "2px solid #9CA3AF",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 77
+      }
+    },
+    {
+      "id": "infra-expo",
+      "position": {
+        "x": 500,
+        "y": 1000
+      },
+      "data": {
+        "label": "Expo Managed Services - Simplifies mobile build, deployment, and notifications",
+        "color": "#D1D5DB"
+      },
+      "style": {
+        "background": "#D1D5DB",
+        "color": "#000000",
+        "border": "2px solid #D1D5DB",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 94
+      }
+    },
+    {
+      "id": "infra-supabase-cloud",
+      "position": {
+        "x": 900,
+        "y": 1000
+      },
+      "data": {
+        "label": "Supabase Cloud - Managed, scalable Postgres hosting",
+        "color": "#A78BFA"
+      },
+      "style": {
+        "background": "#A78BFA",
+        "color": "#000000",
+        "border": "2px solid #A78BFA",
+        "borderRadius": "8px",
+        "padding": "10px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "minWidth": "200px",
+        "textAlign": "center"
+      },
+      "measured": {
+        "width": 200,
+        "height": 59
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-frontend-header-app",
+      "source": "frontend-header",
+      "target": "frontend-app",
+      "type": "default",
+      "label": "Section: Mobile UI"
+    },
+    {
+      "id": "e-frontend-app-explain",
+      "source": "frontend-app",
+      "target": "frontend-app-explain",
+      "type": "default",
+      "label": "Technology Explanation"
+    },
+    {
+      "id": "e-frontend-app-voice-ui",
+      "source": "frontend-app",
+      "target": "frontend-voice-ui",
+      "type": "smoothstep",
+      "label": "User Interaction"
+    },
+    {
+      "id": "e-frontend-voice-ui-feature",
+      "source": "frontend-voice-ui",
+      "target": "frontend-voice-ui-feature",
+      "type": "step",
+      "label": "Behavioral UX"
+    },
+    {
+      "id": "e-frontend-header-notifications",
+      "source": "frontend-header",
+      "target": "frontend-notifications",
+      "type": "default",
+      "label": "Section: Feedback"
+    },
+    {
+      "id": "e-frontend-notifications-explain",
+      "source": "frontend-notifications",
+      "target": "frontend-notifications-explain",
+      "type": "default",
+      "label": "Technology Explanation"
+    },
+    {
+      "id": "e-frontend-notifications-feature",
+      "source": "frontend-notifications",
+      "target": "frontend-notifications-feature",
+      "type": "step",
+      "label": "User Feedback Loop"
+    },
+    {
+      "id": "e-backend-header-voice-capture",
+      "source": "backend-header",
+      "target": "backend-voice-capture",
+      "type": "default",
+      "label": "Section: Voice Processing"
+    },
+    {
+      "id": "e-backend-voice-capture-explain",
+      "source": "backend-voice-capture",
+      "target": "backend-voice-capture-explain",
+      "type": "default",
+      "label": "Technology Explanation"
+    },
+    {
+      "id": "e-backend-voice-capture-feature",
+      "source": "backend-voice-capture",
+      "target": "backend-voice-capture-feature",
+      "type": "step",
+      "label": "Trust & Accuracy"
+    },
+    {
+      "id": "e-backend-header-orchestration",
+      "source": "backend-header",
+      "target": "backend-orchestration",
+      "type": "default",
+      "label": "Section: Automation"
+    },
+    {
+      "id": "e-backend-orchestration-explain",
+      "source": "backend-orchestration",
+      "target": "backend-orchestration-explain",
+      "type": "default",
+      "label": "Technology Explanation"
+    },
+    {
+      "id": "e-backend-orchestration-feature",
+      "source": "backend-orchestration",
+      "target": "backend-orchestration-feature",
+      "type": "step",
+      "label": "Delegation Workflow"
+    },
+    {
+      "id": "e-ai-header-intent",
+      "source": "ai-header",
+      "target": "ai-intent-engine",
+      "type": "default",
+      "label": "Section: Language Understanding"
+    },
+    {
+      "id": "e-ai-intent-engine-explain",
+      "source": "ai-intent-engine",
+      "target": "ai-intent-engine-explain",
+      "type": "default",
+      "label": "Technology Explanation"
+    },
+    {
+      "id": "e-ai-intent-engine-feature",
+      "source": "ai-intent-engine",
+      "target": "ai-intent-engine-feature",
+      "type": "step",
+      "label": "Contextual Understanding"
+    },
+    {
+      "id": "e-ai-header-copilot",
+      "source": "ai-header",
+      "target": "ai-copilot",
+      "type": "default",
+      "label": "Section: AI-Accelerated Dev"
+    },
+    {
+      "id": "e-ai-copilot-explain",
+      "source": "ai-copilot",
+      "target": "ai-copilot-explain",
+      "type": "default",
+      "label": "Technology Explanation"
+    },
+    {
+      "id": "e-ai-copilot-feature",
+      "source": "ai-copilot",
+      "target": "ai-copilot-feature",
+      "type": "step",
+      "label": "Rapid Delivery"
+    },
+    {
+      "id": "e-database-header-supabase",
+      "source": "database-header",
+      "target": "database-supabase",
+      "type": "default",
+      "label": "Section: Data Storage"
+    },
+    {
+      "id": "e-database-supabase-explain",
+      "source": "database-supabase",
+      "target": "database-supabase-explain",
+      "type": "default",
+      "label": "Technology Explanation"
+    },
+    {
+      "id": "e-database-supabase-feature",
+      "source": "database-supabase",
+      "target": "database-supabase-feature",
+      "type": "step",
+      "label": "User Trust"
+    },
+    {
+      "id": "e-database-header-auth",
+      "source": "database-header",
+      "target": "database-auth",
+      "type": "default",
+      "label": "Section: Authentication"
+    },
+    {
+      "id": "e-database-auth-explain",
+      "source": "database-auth",
+      "target": "database-auth-explain",
+      "type": "default",
+      "label": "Technology Explanation"
+    },
+    {
+      "id": "e-database-auth-feature",
+      "source": "database-auth",
+      "target": "database-auth-feature",
+      "type": "step",
+      "label": "Onboarding Experience"
+    },
+    {
+      "id": "e-integration-header-nylas",
+      "source": "integration-header",
+      "target": "integration-nylas",
+      "type": "default",
+      "label": "Section: Calendar & Email"
+    },
+    {
+      "id": "e-integration-nylas-explain",
+      "source": "integration-nylas",
+      "target": "integration-nylas-explain",
+      "type": "default",
+      "label": "Technology Explanation"
+    },
+    {
+      "id": "e-integration-nylas-feature",
+      "source": "integration-nylas",
+      "target": "integration-nylas-feature",
+      "type": "step",
+      "label": "Instant Value"
+    },
+    {
+      "id": "e-infra-header-temporal",
+      "source": "infra-header",
+      "target": "infra-temporal-cloud",
+      "type": "default",
+      "label": "Workflow Infrastructure"
+    },
+    {
+      "id": "e-infra-header-expo",
+      "source": "infra-header",
+      "target": "infra-expo",
+      "type": "default",
+      "label": "Mobile Infra"
+    },
+    {
+      "id": "e-infra-header-supabase",
+      "source": "infra-header",
+      "target": "infra-supabase-cloud",
+      "type": "default",
+      "label": "Database Infra"
+    },
+    {
+      "id": "e-flow-voice-to-ai",
+      "source": "frontend-app",
+      "target": "backend-voice-capture",
+      "type": "step",
+      "label": "Audio Sent for Transcription"
+    },
+    {
+      "id": "e-flow-transcript-to-ai",
+      "source": "backend-voice-capture",
+      "target": "ai-intent-engine",
+      "type": "sine",
+      "label": "Transcribed Text for Intent"
+    },
+    {
+      "id": "e-flow-ai-to-orchestration",
+      "source": "ai-intent-engine",
+      "target": "backend-orchestration",
+      "type": "step",
+      "label": "Intent & Action Plan"
+    },
+    {
+      "id": "e-flow-orchestration-to-integration",
+      "source": "backend-orchestration",
+      "target": "integration-nylas",
+      "type": "straight",
+      "label": "Automated Task Execution"
+    },
+    {
+      "id": "e-flow-orchestration-to-db",
+      "source": "backend-orchestration",
+      "target": "database-supabase",
+      "type": "sine",
+      "label": "Workflow State Storage"
+    },
+    {
+      "id": "e-flow-db-to-frontend",
+      "source": "database-supabase",
+      "target": "frontend-notifications",
+      "type": "smoothstep",
+      "label": "Task Status Updates"
+    },
+    {
+      "id": "e-flow-orchestration-to-frontend",
+      "source": "backend-orchestration",
+      "target": "frontend-notifications",
+      "type": "smoothstep",
+      "label": "Completion Notification"
+    },
+    {
+      "id": "e-flow-integration-to-db",
+      "source": "integration-nylas",
+      "target": "database-supabase",
+      "type": "straight",
+      "label": "Sync Calendar/Email Data"
+    }
+  ],
+  "viewport": {
+    "zoom": 1,
+    "x": 0,
+    "y": 0
+  }
+}

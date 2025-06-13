@@ -91,6 +91,8 @@ export default function FlowCanvas({ graphData }) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const flowRef = useRef<HTMLDivElement>(null);
+  const exportTooltipRef = useRef<HTMLDivElement>(null);
+  const importTooltipRef = useRef<HTMLDivElement>(null);
  
   // This effect watches for new graph data from form submission
   // When form is submitted, the placeholder nodes are replaced with 
@@ -116,6 +118,59 @@ export default function FlowCanvas({ graphData }) {
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges],
   );
+
+  // Export diagram as JSON
+  const exportJSON = useCallback(() => {
+    if (!nodes || !edges) return;
+    
+    const diagramData = {
+      nodes,
+      edges,
+      viewport: {
+        zoom: 1,
+        x: 0,
+        y: 0
+      }
+    };
+    
+    const jsonString = JSON.stringify(diagramData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'system-design.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, [nodes, edges]);
+
+  // Import diagram from JSON
+  const importJSON = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const diagramData = JSON.parse(e.target?.result as string);
+        if (diagramData.nodes && diagramData.edges) {
+          setNodes(diagramData.nodes);
+          setEdges(diagramData.edges);
+          if (diagramData.viewport) {
+            // Apply viewport settings if available
+            const { zoom, x, y } = diagramData.viewport;
+            // You might need to implement viewport setting logic here
+          }
+        }
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+        alert('Invalid diagram JSON file');
+      }
+    };
+    reader.readAsText(file);
+  }, [setNodes, setEdges]);
 
   // Download diagram as PDF - Complete rewrite for proper capture
   const downloadPDF = useCallback(async () => {
@@ -148,7 +203,7 @@ export default function FlowCanvas({ graphData }) {
       
       // Wait a moment for UI changes to apply
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       // Capture the entire React Flow container with all its content
       const canvas = await html2canvas(reactFlowElement, {
         background: null, // Let the actual background show through
@@ -158,7 +213,7 @@ export default function FlowCanvas({ graphData }) {
         allowTaint: true,
         logging: false,
       });
-      
+
       // Restore UI elements
       if (downloadButton) downloadButton.style.display = originalDownloadDisplay;
       if (expandButton) expandButton.style.display = originalExpandDisplay;
@@ -167,7 +222,7 @@ export default function FlowCanvas({ graphData }) {
       if (attribution) attribution.style.display = originalAttributionDisplay;
       
       console.log('Canvas captured:', canvas.width, 'x', canvas.height);
-      
+
       // Convert canvas to high-quality image
       const imgData = canvas.toDataURL('image/png', 1.0);
       
@@ -222,45 +277,131 @@ export default function FlowCanvas({ graphData }) {
       cursor: 'url("data:image/svg+xml;charset=utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 16 16\'%3E%3Cpath fill=\'white\' stroke=\'black\' stroke-width=\'0.5\' d=\'M0,0 L0,10 L3,7 L5,9 L7,7 L3,3 Z\'/%3E%3C/svg%3E") 1 1, auto',
       position: 'relative'
     }}>
-      {/* Download PDF Button */}
+      {/* Export/Import Buttons */}
       <div
         style={{
           position: 'absolute',
           top: '16px',
           right: '16px',
           zIndex: 1000,
+          display: 'flex',
+          gap: '8px'
         }}
         className="tooltip-container"
       >
-        <button
-          onClick={downloadPDF}
-          style={{
-            background: '#ffffff',
-            border: '1px solid #e5e7eb',
-            borderRadius: '8px',
-            padding: '8px',
-            cursor: 'pointer',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#f9fafb';
-            e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = '#ffffff';
-            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
-          }}
-        >
-          <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" clipRule="evenodd" d="M1.75 13C0.783501 13 1.51525e-07 12.2165 1.09278e-07 11.25L0 8.74998C-1.81059e-08 8.33576 0.335786 7.99998 0.75 7.99998C1.16421 7.99998 1.5 8.33576 1.5 8.74998L1.5 11.25C1.5 11.388 1.61193 11.5 1.75 11.5H12.25C12.3881 11.5 12.5 11.388 12.5 11.25V8.74998C12.5 8.33576 12.8358 7.99998 13.25 7.99998C13.6642 7.99998 14 8.33576 14 8.74998V11.25C14 12.2165 13.2165 13 12.25 13H1.75Z" fill="#1F2328"/>
-            <path d="M6.25 6.68932L6.25 1C6.25 0.585787 6.58578 0.25 7 0.25C7.41421 0.25 7.75 0.585786 7.75 1L7.75 6.68932L9.71967 4.71965C10.0126 4.42675 10.4874 4.42675 10.7803 4.71965C11.0732 5.01254 11.0732 5.48741 10.7803 5.78031L7.53033 9.03031C7.23744 9.3232 6.76256 9.3232 6.46967 9.03031L3.21967 5.78031C2.92678 5.48741 2.92678 5.01254 3.21967 4.71965C3.51256 4.42675 3.98744 4.42675 4.28033 4.71965L6.25 6.68932Z" fill="#1F2328"/>
-          </svg>
-        </button>
-        <div className="tooltip">Download as PDF</div>
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <button
+            onClick={exportJSON}
+            style={{
+              background: '#ffffff',
+              border: '1px solid #e5e7eb',
+              borderRadius: '8px',
+              padding: '8px',
+              cursor: 'pointer',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={() => {
+              if (exportTooltipRef.current) {
+                exportTooltipRef.current.style.opacity = '1';
+                exportTooltipRef.current.style.visibility = 'visible';
+              }
+            }}
+            onMouseLeave={() => {
+              if (exportTooltipRef.current) {
+                exportTooltipRef.current.style.opacity = '0';
+                exportTooltipRef.current.style.visibility = 'hidden';
+              }
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          </button>
+          <div ref={exportTooltipRef} style={{
+            position: 'absolute',
+            bottom: '-36px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#222',
+            color: '#fff',
+            padding: '6px 14px',
+            borderRadius: '6px',
+            fontSize: '13px',
+            whiteSpace: 'nowrap',
+            opacity: 0,
+            visibility: 'hidden',
+            pointerEvents: 'none',
+            transition: 'opacity 0.2s',
+            zIndex: 1001
+          }}>
+            Export as JSON
+          </div>
+        </div>
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <label
+            style={{
+              background: '#ffffff',
+              border: '1px solid #e5e7eb',
+              borderRadius: '8px',
+              padding: '8px',
+              cursor: 'pointer',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={() => {
+              if (importTooltipRef.current) {
+                importTooltipRef.current.style.opacity = '1';
+                importTooltipRef.current.style.visibility = 'visible';
+              }
+            }}
+            onMouseLeave={() => {
+              if (importTooltipRef.current) {
+                importTooltipRef.current.style.opacity = '0';
+                importTooltipRef.current.style.visibility = 'hidden';
+              }
+            }}
+          >
+            <input
+              type="file"
+              accept=".json"
+              onChange={importJSON}
+              style={{ display: 'none' }}
+            />
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+          </label>
+          <div ref={importTooltipRef} style={{
+            position: 'absolute',
+            bottom: '-36px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#222',
+            color: '#fff',
+            padding: '6px 14px',
+            borderRadius: '6px',
+            fontSize: '13px',
+            whiteSpace: 'nowrap',
+            opacity: 0,
+            visibility: 'hidden',
+            pointerEvents: 'none',
+            transition: 'opacity 0.2s',
+            zIndex: 1001
+          }}>
+            Import existing JSON design and visualize
+          </div>
+        </div>
       </div>
 
       {/* 
