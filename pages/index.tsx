@@ -386,19 +386,20 @@ export default function Home() {
       console.log('Hash changed:', hash);
       
       if (hash === '#how-it-works') {
+        console.log('Setting page to how-it-works');
         setCurrentPage('how-it-works');
       } else if (hash.startsWith('#playground')) {
-        console.log('Switching to playground view');
+        console.log('Setting page to playground');
         setCurrentPage('playground');
         
         // If the URL contains diagram data, we'll let FlowCanvas handle it
         // The FlowCanvas component will check for and load any encoded diagram data
         if (hash.startsWith('#playground/')) {
-          console.log('URL contains encoded diagram data');
+          console.log('URL contains encoded diagram data, length:', hash.substring('#playground/'.length).length);
         }
       } else {
         // Default to 'how-it-works' when no hash is present
-        console.log('No specific hash, defaulting to how-it-works');
+        console.log('No specific hash or empty hash, defaulting to how-it-works');
         setCurrentPage('how-it-works');
       }
     };
@@ -406,7 +407,8 @@ export default function Home() {
     // Listen for hash changes
     window.addEventListener('hashchange', handleHashChange);
     
-    // Check initial hash
+    // Check initial hash on page load
+    console.log('Initial hash check on page load:', window.location.hash);
     handleHashChange();
 
     return () => {
